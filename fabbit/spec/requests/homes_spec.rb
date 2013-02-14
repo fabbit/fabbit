@@ -5,6 +5,6 @@ describe "Home" do
   before { visit root_path }
 
   describe "sanity tests" do
-    it { should have_content("home") }
+    it { should have_selector("h1", text: "Fabbit") }
   end
 end
