@@ -1,0 +1,12 @@
+<div class="row">
+  <h1><%= @folder %></h1>
+  <h3><%= link_to "Back", navigate_path(parent_link(@parent)) %></h3>
+</div>
+<div class="row">
+  <% @contents.each do |content| %>
+    <p>
+      <%= link_to to_link(content), model_path(to_link(content)) if not content["is_dir"] %>
+      <b><%= link_to "#{to_link(content)} >", navigate_path(to_link(content)) if content["is_dir"] %></b>
+    </p>
+  <% end %>
+</div>

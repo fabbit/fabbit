@@ -2,12 +2,7 @@ require 'spec_helper'
 
 describe User do
 
-  let (:user) { User.new(
-    first_name:            "Joe",
-    last_name:             "Tester",
-    email:                 "joetester@testing.org",
-    password:              "foobar",
-  ) }
+  let (:user) { FactoryGirl.create(:user) }
   subject { user }
 
   describe "responses" do
@@ -27,10 +22,7 @@ describe User do
   end
 
   describe "#autheticate" do
-    before do
-      user.password_confirmation = "foobar"
-      user.save!
-    end
+    before { user.save! }
     let(:found_user) { User.find_by_email(user.email) }
 
     describe "sanity check" do
@@ -52,9 +44,9 @@ describe User do
       it { should_not == found_user.authenticate(user.password) }
     end
 
-    describe "with a wrong user" do
-      before { user = User.new(first_name: "Test", password: "foobar") } # change to a FactoryGirl call
-      it { should_not == found_user.authenticate(user.password) }
+    describe "with a wrong user with the same password" do
+      let(:other_user) { FactoryGirl.create(:user) }
+      it { should_not == other_user.authenticate(user.password) }
     end
   end
 
