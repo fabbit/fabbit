@@ -28,4 +28,8 @@ module DropboxHelper
     parent
   end
 
+  def parent_dir_of(path)
+    path.split('/')[0..-2].join('/')
+  end
+
 end

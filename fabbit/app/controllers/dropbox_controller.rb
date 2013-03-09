@@ -28,7 +28,7 @@ class DropboxController < ApplicationController
     end
     meta = dropbox_client.metadata(path)
     @meta = meta
-    @parent = path.split('/')[0..-2].join('/')
+    @parent = parent_dir_of path
     @folder = meta["path"]
     @contents = meta["contents"]
   end
