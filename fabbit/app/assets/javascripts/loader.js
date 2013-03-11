@@ -32,20 +32,26 @@ THREE.STLLoader.prototype = {
 
   constructor: THREE.STLLoader,
 
-  load: function ( url, callback, isString) {
+  load: function ( url, isString) {
 
     var scope = this;
-    var request = new XMLHttpRequest();
+    var isString = (typeof isString === 'undefined') ? false: isString; //if isString is not passed, assume false!
 
-    if (!isString){
+    if (isString){
+      //Just assume ascii and go straight
+      var g = scope.parseASCII(url);
+      scope.dispatchEvent({type: 'load', content: g});
+
+    } else {
+      
+      //if its not a string then load it the regular way
+      var request = new XMLHttpRequest();
       request.addEventListener( 'load', function ( event ) {
 
               var geometry;
               geometry = scope.parse( event.target.response, isString );
 
         scope.dispatchEvent( { type: 'load', content: geometry } );
-
-        if ( callback ) callback( geometry );
 
       }, false );
 
@@ -65,9 +71,7 @@ THREE.STLLoader.prototype = {
       request.open( 'GET', url, true );
       request.responseType = "arraybuffer";
       request.send( null );
-    } else {
-      var g = scope.parse(url, isString);
-      scope.dispatchEvent({type: 'load', content: g});
+
     }
   },
 
@@ -94,11 +98,8 @@ THREE.STLLoader.prototype = {
     },
 
   parse: function (buf, isString) {
-    if (isString){
-      return this.parseASCII(buf);
-    } else {
 
-      if( this.isASCII(buf) )
+      if(this.isASCII(buf))
       {
 
         var str = this.bin2str(buf);
@@ -109,12 +110,10 @@ THREE.STLLoader.prototype = {
         return this.parseBinary(buf);
       }
 
-    }
     },
 
   parseASCII: function ( data ) {
 
-    console.log(data);
     var geometry = new THREE.Geometry();
 
     var patternFace = /facet([\s\S]*?)endfacet/g;
@@ -155,7 +154,6 @@ THREE.STLLoader.prototype = {
   },
 
   parseBinary: function (buf) {
-    console.log(buf);
 
     // STL binary format specification, as per http://en.wikipedia.org/wiki/STL_(file_format)
     //
