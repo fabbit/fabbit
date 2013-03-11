@@ -27,6 +27,7 @@ modelViewer = function() {
 	var annot_camera = [];
 	var annot_text = [];
 	var currentlyactive = 0;
+	var initLoad = true;
 
 	//Helper methods
 	function v3(a,b,c) {
@@ -51,8 +52,21 @@ modelViewer = function() {
 		camera.updateMatrix();
 	}
 
-	function annotate(pos){
+	function loadAnnotations(){
+		//get annotation from database
+
+		var list = [];
+		for (var i = 0; i< list.length; i++){
+			annotate(list[i]["pos"],list[i]["camera"], list[i]["name"]);
+		}
+		initLoad = false;
+	}
+
+	function annotate(pos, cameraPos, name ){
+
 		pos = typeof pos !== 'undefined' ? pos: v3(0,0,0);
+		cameraPos = typeof cameraPos !== 'undefined' ? cameraPos: camera.position.clone();
+		name = typeof name !== 'undefined' ? name: getAnnotationText();
 		
 		var sphereMaterial = new THREE.MeshLambertMaterial({ color: annotColor, shading: THREE.FlatShading });
 		var sphere = new THREE.Mesh(
@@ -62,11 +76,10 @@ modelViewer = function() {
 		    100), //rings
 		  sphereMaterial);
 		
-
 		sphere.position = pos;
-		var name = getAnnotationText();
+		
 		if (name != null)
-			addAnnotationObject(name, camera.position.clone(), sphere);
+			addAnnotationObject(name, cameraPos, sphere);
 	}
 
 	function getAnnotationText(){
@@ -83,6 +96,11 @@ modelViewer = function() {
 		annot_camera.push(camera);
 		annot_obj.push(obj);
 		$("#annotation_list").append("<li>" + name + "</li>");
+
+		if(!initLoad){
+			//add to databas
+		}
+
 		scene.add(obj);
 	}
 
@@ -218,6 +236,7 @@ modelViewer = function() {
 
 		drawPlane();
 
+		loadAnnotations();
 
 		$("#annotation_list").on("click", "li", function(){
 			viewAnnotation($("#annotation_list li").index(this));
@@ -228,7 +247,7 @@ modelViewer = function() {
 
 	this.loadObject = function(stlString, isString){
 
-
+		alert("isString is" + isString);
 		//set up the loader and load in an object. 
 		var loader = new THREE.STLLoader();
 
