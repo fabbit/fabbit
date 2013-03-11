@@ -6,4 +6,10 @@ FactoryGirl.define do
     password "foobar"
     password_confirmation "foobar"
   end
+
+  factory :model_file do
+    path [Faker::Lorem.characters(10), ".stl"].join
+    cached_revision Random.rand(9)
+    user Faker::Internet.user_name
+  end
 end

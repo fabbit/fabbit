@@ -5,8 +5,8 @@
 <div class="row">
   <% @contents.each do |content| %>
     <p>
-      <%= link_to to_link(content), model_path(to_link(content)) if not content["is_dir"] %>
-      <b><%= link_to "#{to_link(content)} >", navigate_path(to_link(content)) if content["is_dir"] %></b>
+      <%= link_to content[:content], content[:link] %>
+      <b><%= " >" if content[:is_dir] %></b>
     </p>
   <% end %>
 </div>

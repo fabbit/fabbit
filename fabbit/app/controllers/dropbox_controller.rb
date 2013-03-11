@@ -14,7 +14,7 @@ class DropboxController < ApplicationController
       session[:dropbox_session] = dbsession.serialize
 
       flash[:success] = "You've signed into Dropbox!"
-      redirect_to root_path
+      redirect_to navigate_path
     end
   end
 
@@ -30,13 +30,13 @@ class DropboxController < ApplicationController
     @meta = meta
     @parent = parent_dir_of path
     @folder = meta["path"]
-    @contents = meta["contents"]
+    @contents = meta["contents"].map do |content|
+      link = navigate_url(to_link(content))
+      if not content["is_dir"]
+        link = initialize_url(to_link(content))
+      end
+      { content: to_link(content), link: link, is_dir: content["is_dir"] }
+    end
   end
 
-  def display
-    client = dropbox_client
-    @parent = params[:filename].split('/')[0..-2]
-    @modelname = params[:filename].split('/').last
-    @file = client.get_file(params[:filename])
-  end
 end
