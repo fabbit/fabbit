@@ -247,7 +247,6 @@ modelViewer = function() {
 
 	this.loadObject = function(stlString, isString){
 
-		alert("isString is" + isString);
 		//set up the loader and load in an object. 
 		var loader = new THREE.STLLoader();
 

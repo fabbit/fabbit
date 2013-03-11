@@ -37,7 +37,6 @@ THREE.STLLoader.prototype = {
     var scope = this;
     var isString = (typeof isString === 'undefined') ? false: isString; //if isString is not passed, assume false!
 
-    alert("isString is" + isString);
     if (isString){
       //Just assume ascii and go straight
       var g = scope.parseASCII(url);
