@@ -6,6 +6,7 @@ class ModelFilesController < ApplicationController
     @parent = model_file.path.split('/')[0..-2]
     @modelname = model_file.path.split('/').last
     @file = model_file.latest
+    @revision = model_file.revisions.first
   end
 
   def init_model_file
