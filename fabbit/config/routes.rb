@@ -8,4 +8,5 @@ Fabbit::Application.routes.draw do
   resources :model_files, only: [:show] do
     resources :annotations, only: [:index, :create]
   end
+  resource :discussions, only: [:index, :create]
 end

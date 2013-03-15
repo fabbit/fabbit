@@ -1,8 +1,8 @@
 class AnnotationsController < ApplicationController
 
   def index
-    @annotations = ModelFile.find(params[:model_file_id]).revisions.first.annotations
-    p @annotations
+    model_file = ModelFile.find(params[:model_file_id])
+    @annotations = model_file.revisions.first.annotations
     respond_to do |format|
       format.html { redirect_to ModelFile.find(params[:model_file_id]) }
       format.json { render json: @annotations }
