@@ -3,7 +3,6 @@
   <h3><%= link_to "Back", navigate_path(@parent) %></h3>
   <p id="stlstring"><%= @file %></p>
   <script>
-
     $(document).ready(function(){
       var text = $("#stlstring").html();
       var viewer = new modelViewer();

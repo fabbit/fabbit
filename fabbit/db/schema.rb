@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130311212501) do
+ActiveRecord::Schema.define(:version => 20130315230810) do
 
   create_table "annotations", :force => true do |t|
     t.integer  "revision_id"
@@ -23,6 +23,14 @@ ActiveRecord::Schema.define(:version => 20130311212501) do
   end
 
   add_index "annotations", ["revision_id"], :name => "index_annotations_on_revision_id"
+
+  create_table "discussions", :force => true do |t|
+    t.integer  "annotation_id"
+    t.string   "uid"
+    t.string   "text"
+    t.datetime "created_at",    :null => false
+    t.datetime "updated_at",    :null => false
+  end
 
   create_table "model_files", :force => true do |t|
     t.string   "user"
