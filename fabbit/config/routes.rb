@@ -7,6 +7,9 @@ Fabbit::Application.routes.draw do
   resources :dropbox, only: [:new]
   resources :model_files, only: [:show] do
     resources :annotations, only: [:index, :create]
+    resources :revisions, only: [:show] do
+      resources :annotations, only: [:index, :create]
+    end
   end
   resource :discussions, only: [:index, :create]
 end

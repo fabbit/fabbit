@@ -17,6 +17,7 @@ class ModelFile < ActiveRecord::Base
   # The test_rev argument is used for testing to simulate a revision number
   # from dropbox. Similarly, the test_content simulates the contents of a file
   # loaded from dropbox.
+
   def latest(test_rev=nil, test_content=nil)
     dropbox_rev = test_rev || @dropbox_client.metadata(self.path)["revision"]
     if self.cached_revision == dropbox_rev

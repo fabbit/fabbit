@@ -2,7 +2,9 @@ class AnnotationsController < ApplicationController
 
   def index
     model_file = ModelFile.find(params[:model_file_id])
-    @annotations = model_file.revisions.first.annotations
+    revision = model_file.revisions.first
+    revision = Revisions.find(params[:revision_id]) if params[:revision_id]
+    @annotations = revision.annotations
     respond_to do |format|
       format.html { redirect_to ModelFile.find(params[:model_file_id]) }
       format.json { render json: @annotations }
@@ -10,8 +12,9 @@ class AnnotationsController < ApplicationController
   end
 
   def create
-    model_file = ModelFile.find(params[:model_file_id])
-    model_file.revisions.first.annotations.create!(
+    revision = model_file.revisions.first
+    revision = Revisions.find(params[:revision_id]) if params[:revision_id]
+    revision.annotations.create!(
       coordinates: params[:pos],
       camera: params[:camera],
       text: params[:text]
