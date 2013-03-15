@@ -5,6 +5,7 @@ Fabbit::Application.routes.draw do
   match "/model_file/:filename", to: "model_files#init_model_file", filename: /.+/, as: "initialize"
 
   resources :dropbox, only: [:new]
-  resources :model_files, only: [:show]
-  resources :annotations, only: [:create]
+  resources :model_files, only: [:show] do
+    resources :annotations, only: [:index, :create]
+  end
 end

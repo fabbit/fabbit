@@ -19,8 +19,6 @@ class ModelFile < ActiveRecord::Base
   # loaded from dropbox.
   def latest(test_rev=nil, test_content=nil)
     dropbox_rev = test_rev || @dropbox_client.metadata(self.path)["revision"]
-    p dropbox_rev
-    p self.cached_revision
     if self.cached_revision == dropbox_rev
       return load_cached
     else
@@ -48,8 +46,8 @@ class ModelFile < ActiveRecord::Base
   #   self.revisions.find_by_revision_number(revision_number)
   # end
 
-  def client=(client)
-    @dropbox_client = client
+  def dropbox=(dropbox_client)
+    @dropbox_client = dropbox_client
   end
 
   private

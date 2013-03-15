@@ -2,13 +2,7 @@
   <h1><%= @modelname %></h1>
   <h3><%= link_to "Back", navigate_path(@parent) %></h3>
   <p id="stlstring"><%= @file %></p>
-  <script>
 
-    $(document).ready(function(){
-      var text = $("#stlstring").html();
-      startThis(text);
-    })
-  </script>
   <div id="container">
   </div>
   <div> Loader status: <span id="loader_status"> </span> </div>
