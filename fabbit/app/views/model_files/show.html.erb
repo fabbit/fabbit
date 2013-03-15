@@ -6,7 +6,9 @@
 
     $(document).ready(function(){
       var text = $("#stlstring").html();
-      startThis(text);
+      var viewer = new modelViewer();
+      viewer.init("container");
+      viewer.loadObject(text, true);
     })
   </script>
   <div id="container">

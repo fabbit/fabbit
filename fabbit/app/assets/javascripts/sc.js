@@ -1,11 +1,9 @@
 modelViewer = function() {
 	
 	scope = this;
-	//just kidding we don't even use this
-	//this.containerId = typeof containerId !== 'undefined' ? containerId : "";
-	//var container = document.getElementById(containerId);
 
 	var annotId = "annotations";
+	var annotNum; 
 
 	//Basic setup variables
 	var WIDTH, HEIGHT;
@@ -23,17 +21,38 @@ modelViewer = function() {
 
 	//Annotation handling variables
 	var objects = [];
-	var annot_obj = [];
-	var annot_camera = [];
-	var annot_text = [];
+	var annotations = [];
+	var annot_obj = []; 
 	var currentlyactive = 0;
 	var initLoad = true;
 
-	//Helper methods
+	this.objects = objects;
+
+	//****** Helper methods *******
+	function error(s){
+		alert(s);
+	}
+	function debug(s){
+		console.log(s);
+	}
+
 	function v3(a,b,c) {
 		return new THREE.Vector3(a,b,c);
 	}
 
+	function v3ToString(v){
+		return v.x + ',' + v.y + ',' + v.z;
+	}
+
+	function stringToV3(s){
+		s = s.split(',');
+		if (s.length != 3){
+			console.log("something got fucked");
+			return;
+		} else{
+			return v3(s[0], s[1], s[2]);
+		}
+	}
 	function positionCamera(pos) {
 	
 		var oldpos = { x : camera.position.x, y: camera.position.y, z: camera.position.z };
@@ -52,22 +71,26 @@ modelViewer = function() {
 		camera.updateMatrix();
 	}
 
+	//****** Annotation methods *******
 	function loadAnnotations(){
-		//get annotation from database
-
+		//get annotations from database
 		var list = [];
 		for (var i = 0; i< list.length; i++){
-			annotate(list[i]["pos"],list[i]["camera"], list[i]["name"]);
+			
 		}
 		initLoad = false;
 	}
 
-	function annotate(pos, cameraPos, name ){
-
-		pos = typeof pos !== 'undefined' ? pos: v3(0,0,0);
-		cameraPos = typeof cameraPos !== 'undefined' ? cameraPos: camera.position.clone();
-		name = typeof name !== 'undefined' ? name: getAnnotationText();
+	function annotate(annotation){
 		
+		debug("Reached annotation");
+
+		var camera = typeof annotation.camera !== 'undefined' ? annotation.camera: v3(0,0,0);
+		var coordinates = typeof annotation.coordinates !== 'undefined' ? annotation.coordinates: camera.position.clone();
+		var text = typeof annotation.text !== 'undefined' ? annotation.text: getAnnotationText(); //TODO: have user annotations in a different place, maybe use the same function. this is not a good way
+		
+		debug("Camera" + camera + " coordinates" + coordinates);
+
 		var sphereMaterial = new THREE.MeshLambertMaterial({ color: annotColor, shading: THREE.FlatShading });
 		var sphere = new THREE.Mesh(
 		  new THREE.SphereGeometry(
@@ -76,11 +99,12 @@ modelViewer = function() {
 		    100), //rings
 		  sphereMaterial);
 		
-		sphere.position = pos;
+		sphere.position = coordinates;
 		
 		if (name != null)
-			addAnnotationObject(name, cameraPos, sphere);
+			addAnnotationObject(camera, coordinates, text, sphere);
 	}
+
 
 	function getAnnotationText(){
 		var name = prompt("Please enter an annotation","");
@@ -91,32 +115,38 @@ modelViewer = function() {
 		}
 	}
 
-	function addAnnotationObject(name, camera, obj){
-		annot_text.push(name);
-		annot_camera.push(camera);
-		annot_obj.push(obj);
-		$("#annotation_list").append("<li>" + name + "</li>");
-
-		if(!initLoad){
-			//add to databas
-		}
-
+	function addAnnotationObject(camera, coordinates, text, obj){
+		annotations.push({ "camera": camera, "coordinates": coordinates, "text": text});
+		annot_obj.push(obj); 
+		annotNum ++;
+		$("#annotation_list").append("<li>" + text + "</li>");
 		scene.add(obj);
 	}
 
-	function viewAnnotation(annotPos) {
-		var index = annotPos;
-		positionCamera(annot_camera[index]);
-		
-		var annot_selector = "#" + annotId + " ul li:nth-child(" + (currentlyactive + 1) + ")";
-		$(annot_selector).removeClass("active");
+	function viewAnnotation(obj) {
+		var objPos = annot_obj.indexOf(obj);
+		if(objPos >= 0){
+			debug("viewing annotation" + objPos);
+			debug(annotations);
+			positionCamera(annotations[objPos].camera);
+			highlightAnnotation(annotations[objPos].text, objPos);
+		} 
+	}
+	function highlightAnnotation(text, pos){
 
-		currentlyactive = index;
-		annot_selector = "#" + annotId + " ul li:nth-child(" + (currentlyactive + 1) + ")";
-		$(annot_selector).addClass("active");
+		$("#" + annotId + " ul li").each(function(index){ 
+			var el = $(this);
+			if(index === pos) {
+				el.addClass("active");
+			} else {
+				el.removeClass("active");
+			}
+
+		});
 	}
 
 	
+	//**** Render methods ********
 	function animate() {
 		requestAnimationFrame(animate);
 		controls.update();
@@ -132,10 +162,17 @@ modelViewer = function() {
 		event.preventDefault();
 
 	    var vector = new THREE.Vector3(
-	        ( event.clientX / WIDTH ) * 2 - 1,
-	      - ( event.clientY / HEIGHT ) * 2 + 1,
+	        ( event.offsetX / WIDTH ) * 2 - 1,
+	      - ( event.offsetY / HEIGHT ) * 2 + 1,
 	       	.5
 	    );
+
+	    if(false){
+		    console.log(event);
+		    console.log("X:" + event.clientX + " Y:" + event.clientY);
+		    console.log("Vector is");
+		    console.log(vector);
+	    }
 
 	   	projector.unprojectVector( vector, camera );
 
@@ -143,22 +180,28 @@ modelViewer = function() {
 	   	ray.precision = 0.001;
 	    var intersects_annots = ray.intersectObjects(annot_obj);
 	    var intersects_objects = ray.intersectObjects(objects);
-
 	    if (intersects_annots.length > 0 ){
-	    	var annotIndex = annot_obj.indexOf(intersects_annots[0].object);
-	    	if (annotIndex >= 0 )viewAnnotation(annotIndex); 
-	    	else alert("Something weird is happening");
+	    	
+	    	var intersectAnnot = intersects_annots[0].object;
+
+	    	if( intersectAnnot != null){
+	    		viewAnnotation(intersectAnnot);
+	    	}
+	    	else error("Clicked on null object");
 	    } 
 	    else if (intersects_objects.length > 0){
-	    	annotate(intersects_objects[0].point);
+	    	annotate({"camera": camera.position.clone(), "coordinates": intersects_objects[0].point});
+	    	//TODO: replace with getUserAnnotation
 	    }
     }
+
+
+    //********** Public methods **************
 
     this.init = function(containerId){
 		// set the scene size 
 		WIDTH = 600;
 		HEIGHT = 400;
-
 		// set some camera attributes
 		VIEW_ANGLE = 45;
 		ASPECT = WIDTH / HEIGHT;
