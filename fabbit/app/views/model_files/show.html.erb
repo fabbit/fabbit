@@ -6,7 +6,7 @@
     $(document).ready(function(){
       var text = $("#stlstring").html();
       var viewer = new modelViewer();
-      viewer.init("container");
+      viewer.init("container", <%= @model.id %>);
       viewer.loadObject(text, true);
     })
   </script>

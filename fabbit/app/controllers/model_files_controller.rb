@@ -7,6 +7,7 @@ class ModelFilesController < ApplicationController
     @modelname = model_file.path.split('/').last
     @file = model_file.latest
     @revision = model_file.revisions.first
+    @model = model_file
   end
 
   def init_model_file
@@ -14,6 +15,7 @@ class ModelFilesController < ApplicationController
       user: dropbox_client.account_info["uid"],
       path: params[:filename],
       cached_revision: dropbox_client.metadata(params[:filename])["revision"]
+
     ).first_or_initialize
     model_file.dropbox = dropbox_client
     model_file.save

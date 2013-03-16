@@ -4,6 +4,8 @@ modelViewer = function() {
 
 	var annotId = "annotations";
 	var annotNum; 
+	var objId;
+
 
 	//Basic setup variables
 	var WIDTH, HEIGHT;
@@ -72,21 +74,20 @@ modelViewer = function() {
 	}
 
 	//****** Annotation methods *******
-	function loadAnnotations(){
-		//get annotations from database
-		var list = [];
-		for (var i = 0; i< list.length; i++){
-			
+	function loadAnnotations(list){
+		
+		for(var i =0; i< list.length; i++){
+			console.log(list[i]);
+			annotate(stringToV3(list[i].camera), stringToV3(list[i].coordinates), list[i].text);
 		}
-		initLoad = false;
 	}
 
 	function annotate(annotation){
 		
 		debug("Reached annotation");
 
-		var camera = typeof annotation.camera !== 'undefined' ? annotation.camera: v3(0,0,0);
-		var coordinates = typeof annotation.coordinates !== 'undefined' ? annotation.coordinates: camera.position.clone();
+		var camera = typeof annotation.camera !== 'undefined' ? annotation.camera: camera.position.clone();
+		var coordinates = typeof annotation.coordinates !== 'undefined' ? annotation.coordinates: v3(0,0,0);
 		var text = typeof annotation.text !== 'undefined' ? annotation.text: getAnnotationText(); //TODO: have user annotations in a different place, maybe use the same function. this is not a good way
 		
 		debug("Camera" + camera + " coordinates" + coordinates);
@@ -119,6 +120,11 @@ modelViewer = function() {
 		annotations.push({ "camera": camera, "coordinates": coordinates, "text": text});
 		annot_obj.push(obj); 
 		annotNum ++;
+		if(!initLoad){
+			console.log("Posting" + camera + " " + coordinates + " " + text);
+			$.post('/model_files/' + objId + '/annotations', {"camera": v3ToString(camera), "coordinates": v3ToString(coordinates), "text": text});
+		}
+
 		$("#annotation_list").append("<li>" + text + "</li>");
 		scene.add(obj);
 	}
@@ -198,7 +204,10 @@ modelViewer = function() {
 
     //********** Public methods **************
 
-    this.init = function(containerId){
+    this.init = function(containerId, id){
+
+    	objId = id;
+
 		// set the scene size 
 		WIDTH = 600;
 		HEIGHT = 400;
@@ -279,7 +288,11 @@ modelViewer = function() {
 
 		drawPlane();
 
-		loadAnnotations();
+		$.getJSON('/model_files/' + objId + '/annotations', function (data){
+			loadAnnotations(data);
+		})
+		
+		initLoad = false;
 
 		$("#annotation_list").on("click", "li", function(){
 			viewAnnotation($("#annotation_list li").index(this));
