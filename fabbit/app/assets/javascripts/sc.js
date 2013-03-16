@@ -32,10 +32,10 @@ modelViewer = function() {
 
 	//****** Helper methods *******
 	function error(s){
-		alert(s);
+		console.log("ERROR: " + s);
 	}
 	function debug(s){
-		console.log(s);
+		//console.log(s);
 	}
 
 	function v3(a,b,c) {
@@ -49,7 +49,7 @@ modelViewer = function() {
 	function stringToV3(s){
 		s = s.split(',');
 		if (s.length != 3){
-			console.log("something got fucked");
+			error("string length wasn't 3 in stringToV3");
 			return;
 		} else{
 			return v3(s[0], s[1], s[2]);
@@ -75,22 +75,23 @@ modelViewer = function() {
 
 	//****** Annotation methods *******
 	function loadAnnotations(list){
-		
 		for(var i =0; i< list.length; i++){
-			console.log(list[i]);
 			annotate({"camera":stringToV3(list[i].camera), "coordinates":stringToV3(list[i].coordinates), "text":list[i].text});
 		}
 	}
 
 	function annotate(annotation){
 		
-		debug("Reached annotation");
+		debug("Reached annotate function");
 
 		var cameraPos = typeof annotation.camera !== 'undefined' ? annotation.camera: camera.position.clone();
 		var coordinates = typeof annotation.coordinates !== 'undefined' ? annotation.coordinates: v3(0,0,0);
 		var text = typeof annotation.text !== 'undefined' ? annotation.text: getAnnotationText(); //TODO: have user annotations in a different place, maybe use the same function. this is not a good way
 		
-		debug("Camera" + cameraPos + " coordinates" + coordinates);
+		if (text === "" || text === null){
+			return;
+		}
+		debug("Annotation camera" + cameraPos + " coordinates" + coordinates + " text " + text);
 
 		var sphereMaterial = new THREE.MeshLambertMaterial({ color: annotColor, shading: THREE.FlatShading });
 		var sphere = new THREE.Mesh(
@@ -102,8 +103,7 @@ modelViewer = function() {
 		
 		sphere.position = coordinates;
 		
-		if (name != null)
-			addAnnotationObject(cameraPos, coordinates, text, sphere);
+		addAnnotationObject(cameraPos, coordinates, text, sphere);
 	}
 
 
@@ -121,7 +121,7 @@ modelViewer = function() {
 		annot_obj.push(obj); 
 		annotNum ++;
 		if(!initLoad){
-			console.log("Posting" + cameraPos + " " + coordinates + " " + text);
+			debug("Posting" + cameraPos + " " + coordinates + " " + text);
 			$.post('/model_files/' + objId + '/annotations', {"camera": v3ToString(cameraPos), "coordinates": v3ToString(coordinates), "text": text});
 		}
 
@@ -132,7 +132,7 @@ modelViewer = function() {
 	function viewAnnotation(obj) {
 		var objPos = annot_obj.indexOf(obj);
 		if(objPos >= 0){
-			debug("viewing annotation" + objPos);
+			debug("Viewing annotation" + objPos + " it is : ");
 			debug(annotations);
 			positionCamera(annotations[objPos].camera);
 			highlightAnnotation(annotations[objPos].text, objPos);
@@ -164,42 +164,38 @@ modelViewer = function() {
 		renderer.render(scene, camera);
 	}
 
-	function viewMouseDown(event) {
-		event.preventDefault();
+	function viewMouseUp(event){
+		if(moveFlag === 0){
+			event.preventDefault();
 
-	    var vector = new THREE.Vector3(
-	        ( event.offsetX / WIDTH ) * 2 - 1,
-	      - ( event.offsetY / HEIGHT ) * 2 + 1,
-	       	.5
-	    );
+		    var vector = new THREE.Vector3(
+		        ( event.offsetX / WIDTH ) * 2 - 1,
+		      - ( event.offsetY / HEIGHT ) * 2 + 1,
+		       	.5
+		    );
 
-	    if(false){
-		    console.log(event);
-		    console.log("X:" + event.clientX + " Y:" + event.clientY);
-		    console.log("Vector is");
-		    console.log(vector);
+
+		   	projector.unprojectVector( vector, camera );
+
+		    var ray = new THREE.Raycaster(camera.position, vector.sub(camera.position).normalize());
+		   	ray.precision = 0.001;
+		    var intersects_annots = ray.intersectObjects(annot_obj);
+		    var intersects_objects = ray.intersectObjects(objects);
+		    if (intersects_annots.length > 0 ){
+		    	
+		    	var intersectAnnot = intersects_annots[0].object;
+
+		    	if( intersectAnnot != null){
+		    		viewAnnotation(intersectAnnot);
+		    	}
+		    	else error("Clicked on null object");
+		    } 
+		    else if (intersects_objects.length > 0){
+		    	annotate({"camera": camera.position.clone(), "coordinates": intersects_objects[0].point});
+		    	//TODO: replace with getUserAnnotation
+		    }
 	    }
-
-	   	projector.unprojectVector( vector, camera );
-
-	    var ray = new THREE.Raycaster(camera.position, vector.sub(camera.position).normalize());
-	   	ray.precision = 0.001;
-	    var intersects_annots = ray.intersectObjects(annot_obj);
-	    var intersects_objects = ray.intersectObjects(objects);
-	    if (intersects_annots.length > 0 ){
-	    	
-	    	var intersectAnnot = intersects_annots[0].object;
-
-	    	if( intersectAnnot != null){
-	    		viewAnnotation(intersectAnnot);
-	    	}
-	    	else error("Clicked on null object");
-	    } 
-	    else if (intersects_objects.length > 0){
-	    	annotate({"camera": camera.position.clone(), "coordinates": intersects_objects[0].point});
-	    	//TODO: replace with getUserAnnotation
-	    }
-    }
+	}
 
 
     //********** Public methods **************
@@ -221,7 +217,9 @@ modelViewer = function() {
 		projector = new THREE.Projector();
 		renderer = new THREE.WebGLRenderer();
 		renderer.setSize(WIDTH, HEIGHT);
-		renderer.domElement.addEventListener('mousedown', viewMouseDown, false);
+		renderer.domElement.addEventListener('mousedown', function(){ moveFlag = 0;}, false);
+		renderer.domElement.addEventListener('mouseup', viewMouseUp, false);
+		renderer.domElement.addEventListener('mousemove', function(){moveFlag = 1;}, false);
 
 		// camera = view angle, aspect, near, far
 		camera = new THREE.PerspectiveCamera(VIEW_ANGLE, ASPECT, NEAR, FAR);
@@ -295,7 +293,7 @@ modelViewer = function() {
 		
 
 		$("#annotation_list").on("click", "li", function(){
-			viewAnnotation($("#annotation_list li").index(this));
+			viewAnnotation(annot_obj[$("#annotation_list li").index(this)]);
 		});
 
 		animate();
