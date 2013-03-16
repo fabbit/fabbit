@@ -1,5 +1,7 @@
 class ModelFilesController < ApplicationController
 
+  before_filter :live_dropbox_session
+
   def show
     model_file = ModelFile.find(params[:id])
     model_file.dropbox = dropbox_client
