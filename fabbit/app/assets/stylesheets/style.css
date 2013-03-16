@@ -42,6 +42,7 @@
 			padding-left: 10px;
 			color: rgb(150,150,150);
 			font-weight: normal;
+			cursor: pointer;
 		}
 
 		#annotations ul li.active {

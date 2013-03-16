@@ -330,13 +330,16 @@ THREE.TrackballControls = function ( object, domElement ) {
 
 		if ( ! _this.enabled ) return;
 
+		return; 
+		
 		event.preventDefault();
 		event.stopPropagation();
 
 		if ( _state === STATE.NONE ) {
 
 			_state = event.button;
-			console.log(event.button);
+
+
 
 			if ( _state === STATE.ROTATE && !_this.noRotate ) {
 
