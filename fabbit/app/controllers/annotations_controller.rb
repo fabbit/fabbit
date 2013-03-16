@@ -12,13 +12,12 @@ class AnnotationsController < ApplicationController
   def create
     model_file = ModelFile.find(params[:model_file_id])
     model_file.revisions.first.annotations.create!(
-      coordinates: params[:pos],
+      coordinates: params[:coordinates],
       camera: params[:camera],
       text: params[:text]
     )
     respond_to do |format|
-      format.html { redirect_to model_file }
-      format.js {}
+      format.js
     end
   end
 
