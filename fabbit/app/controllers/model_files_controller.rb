@@ -5,6 +5,7 @@ class ModelFilesController < ApplicationController
   def show
     model_file = ModelFile.find(params[:id])
     model_file.dropbox = dropbox_client
+    @model = model_file
     @parent = model_file.path.split('/')[0..-2]
     @modelname = model_file.path.split('/').last
     @file = model_file.latest
