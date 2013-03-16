@@ -4,5 +4,5 @@ class Revision < ActiveRecord::Base
   validates :model_file_id, :revision_number, presence: true
 
   belongs_to :model_file
-  has_many :annotations
+  has_many :annotations, dependent: :destroy
 end
