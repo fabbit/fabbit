@@ -14,12 +14,16 @@ class ModelFilesController < ApplicationController
 
   def init_model_file
     model_file = ModelFile.where(
-      user: dropbox_client.account_info["uid"],
+      user: dropbox_client.account_info["uid"].to_s,
       path: params[:filename],
       cached_revision: dropbox_client.metadata(params[:filename])["revision"]
     ).first_or_initialize
+    if model_file.new_record?
+      p "\n\nadfasdfsad\n\n"
+    end
     model_file.dropbox = dropbox_client
     model_file.save
     redirect_to model_file
   end
+
 end

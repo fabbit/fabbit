@@ -3,7 +3,7 @@ class ModelFile < ActiveRecord::Base
 
   validates :path, :cached_revision, :user, presence: true
 
-  has_many :revisions
+  has_many :revisions, dependent: :destroy
 
   before_create :initial_cache
   after_create { self.revisions.create!(revision_number: self.cached_revision) }
@@ -63,7 +63,7 @@ class ModelFile < ActiveRecord::Base
     end
 
     def initial_cache
-      File.open(cache_file_name, "w") { |f| f.write(@dropbox_client.get_file self.path) }
+      File.open(cache_file_name, 'w') { |f| f.write(@dropbox_client.get_file self.path) }
     end
 
 end

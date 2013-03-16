@@ -78,7 +78,7 @@ modelViewer = function() {
 		
 		for(var i =0; i< list.length; i++){
 			console.log(list[i]);
-			annotate(stringToV3(list[i].camera), stringToV3(list[i].coordinates), list[i].text);
+			annotate({"camera":stringToV3(list[i].camera), "coordinates":stringToV3(list[i].coordinates), "text":list[i].text});
 		}
 	}
 
@@ -86,11 +86,11 @@ modelViewer = function() {
 		
 		debug("Reached annotation");
 
-		var camera = typeof annotation.camera !== 'undefined' ? annotation.camera: camera.position.clone();
+		var cameraPos = typeof annotation.camera !== 'undefined' ? annotation.camera: camera.position.clone();
 		var coordinates = typeof annotation.coordinates !== 'undefined' ? annotation.coordinates: v3(0,0,0);
 		var text = typeof annotation.text !== 'undefined' ? annotation.text: getAnnotationText(); //TODO: have user annotations in a different place, maybe use the same function. this is not a good way
 		
-		debug("Camera" + camera + " coordinates" + coordinates);
+		debug("Camera" + cameraPos + " coordinates" + coordinates);
 
 		var sphereMaterial = new THREE.MeshLambertMaterial({ color: annotColor, shading: THREE.FlatShading });
 		var sphere = new THREE.Mesh(
@@ -103,7 +103,7 @@ modelViewer = function() {
 		sphere.position = coordinates;
 		
 		if (name != null)
-			addAnnotationObject(camera, coordinates, text, sphere);
+			addAnnotationObject(cameraPos, coordinates, text, sphere);
 	}
 
 
@@ -116,13 +116,13 @@ modelViewer = function() {
 		}
 	}
 
-	function addAnnotationObject(camera, coordinates, text, obj){
-		annotations.push({ "camera": camera, "coordinates": coordinates, "text": text});
+	function addAnnotationObject(cameraPos, coordinates, text, obj){
+		annotations.push({ "camera": cameraPos, "coordinates": coordinates, "text": text});
 		annot_obj.push(obj); 
 		annotNum ++;
 		if(!initLoad){
-			console.log("Posting" + camera + " " + coordinates + " " + text);
-			$.post('/model_files/' + objId + '/annotations', {"camera": v3ToString(camera), "coordinates": v3ToString(coordinates), "text": text});
+			console.log("Posting" + cameraPos + " " + coordinates + " " + text);
+			$.post('/model_files/' + objId + '/annotations', {"camera": v3ToString(cameraPos), "coordinates": v3ToString(coordinates), "text": text});
 		}
 
 		$("#annotation_list").append("<li>" + text + "</li>");
@@ -290,9 +290,9 @@ modelViewer = function() {
 
 		$.getJSON('/model_files/' + objId + '/annotations', function (data){
 			loadAnnotations(data);
+			initLoad = false;
 		})
 		
-		initLoad = false;
 
 		$("#annotation_list").on("click", "li", function(){
 			viewAnnotation($("#annotation_list li").index(this));
