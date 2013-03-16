@@ -13,7 +13,7 @@ module DropboxHelper
   end
 
   def dropbox_session
-    DropboxSession.deserialize(session[:dropbox_session])
+    DropboxSession.deserialize(cookies[:dropbox_session])
   end
 
   def dropbox_client

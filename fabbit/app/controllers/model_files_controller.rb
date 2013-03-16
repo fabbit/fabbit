@@ -17,7 +17,6 @@ class ModelFilesController < ApplicationController
       user: dropbox_client.account_info["uid"],
       path: params[:filename],
       cached_revision: dropbox_client.metadata(params[:filename])["revision"]
-
     ).first_or_initialize
     model_file.dropbox = dropbox_client
     model_file.save
