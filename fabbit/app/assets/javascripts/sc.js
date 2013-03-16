@@ -164,42 +164,38 @@ modelViewer = function() {
 		renderer.render(scene, camera);
 	}
 
-	function viewMouseDown(event) {
-		event.preventDefault();
+	function viewMouseUp(event){
+		if(moveFlag === 0){
+			event.preventDefault();
 
-	    var vector = new THREE.Vector3(
-	        ( event.offsetX / WIDTH ) * 2 - 1,
-	      - ( event.offsetY / HEIGHT ) * 2 + 1,
-	       	.5
-	    );
+		    var vector = new THREE.Vector3(
+		        ( event.offsetX / WIDTH ) * 2 - 1,
+		      - ( event.offsetY / HEIGHT ) * 2 + 1,
+		       	.5
+		    );
 
-	    if(false){
-		    console.log(event);
-		    console.log("X:" + event.clientX + " Y:" + event.clientY);
-		    console.log("Vector is");
-		    console.log(vector);
+
+		   	projector.unprojectVector( vector, camera );
+
+		    var ray = new THREE.Raycaster(camera.position, vector.sub(camera.position).normalize());
+		   	ray.precision = 0.001;
+		    var intersects_annots = ray.intersectObjects(annot_obj);
+		    var intersects_objects = ray.intersectObjects(objects);
+		    if (intersects_annots.length > 0 ){
+		    	
+		    	var intersectAnnot = intersects_annots[0].object;
+
+		    	if( intersectAnnot != null){
+		    		viewAnnotation(intersectAnnot);
+		    	}
+		    	else error("Clicked on null object");
+		    } 
+		    else if (intersects_objects.length > 0){
+		    	annotate({"camera": camera.position.clone(), "coordinates": intersects_objects[0].point});
+		    	//TODO: replace with getUserAnnotation
+		    }
 	    }
-
-	   	projector.unprojectVector( vector, camera );
-
-	    var ray = new THREE.Raycaster(camera.position, vector.sub(camera.position).normalize());
-	   	ray.precision = 0.001;
-	    var intersects_annots = ray.intersectObjects(annot_obj);
-	    var intersects_objects = ray.intersectObjects(objects);
-	    if (intersects_annots.length > 0 ){
-	    	
-	    	var intersectAnnot = intersects_annots[0].object;
-
-	    	if( intersectAnnot != null){
-	    		viewAnnotation(intersectAnnot);
-	    	}
-	    	else error("Clicked on null object");
-	    } 
-	    else if (intersects_objects.length > 0){
-	    	annotate({"camera": camera.position.clone(), "coordinates": intersects_objects[0].point});
-	    	//TODO: replace with getUserAnnotation
-	    }
-    }
+	}
 
 
     //********** Public methods **************
@@ -221,7 +217,9 @@ modelViewer = function() {
 		projector = new THREE.Projector();
 		renderer = new THREE.WebGLRenderer();
 		renderer.setSize(WIDTH, HEIGHT);
-		renderer.domElement.addEventListener('mousedown', viewMouseDown, false);
+		renderer.domElement.addEventListener('mousedown', function(){ moveFlag = 0;}, false);
+		renderer.domElement.addEventListener('mouseup', viewMouseUp, false);
+		renderer.domElement.addEventListener('mousemove', function(){moveFlag = 1;}, false);
 
 		// camera = view angle, aspect, near, far
 		camera = new THREE.PerspectiveCamera(VIEW_ANGLE, ASPECT, NEAR, FAR);
