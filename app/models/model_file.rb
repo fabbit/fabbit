@@ -1,10 +1,13 @@
 class ModelFile < ActiveRecord::Base
   attr_accessible :cached_revision, :path, :user
 
+  # TODO cached_revision should not conflict semantically with Revisions
+  # (since this is a dropbox revision)
   validates :path, :cached_revision, :user, presence: true
 
   has_many :revisions, dependent: :destroy
 
+  # TODO delete
   before_create :initial_cache
   after_create { self.revisions.create!(revision_number: self.cached_revision) }
 
@@ -13,6 +16,8 @@ class ModelFile < ActiveRecord::Base
   # If the stored revision is up to date, returns the file data from the cache;
   # otherwise, requests the file from Dropbox, updates the cache, revises the
   # cached revision number, and returns the file.
+  #
+  # TODO Take a dropbox_client as an argument
   #
   # The test_rev argument is used for testing to simulate a revision number
   # from dropbox. Similarly, the test_content simulates the contents of a file
@@ -47,6 +52,7 @@ class ModelFile < ActiveRecord::Base
   #   self.revisions.find_by_revision_number(revision_number)
   # end
 
+  # TODO Remove
   def dropbox=(dropbox_client)
     @dropbox_client = dropbox_client
   end
@@ -63,6 +69,7 @@ class ModelFile < ActiveRecord::Base
       File.open(cache_file_name(revision), "w") { |f| f.write(content) }
     end
 
+    # TODO Remove
     def initial_cache
       File.open(cache_file_name, 'w') { |f| f.write(@dropbox_client.get_file self.path) }
     end
