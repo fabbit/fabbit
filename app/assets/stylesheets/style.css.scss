@@ -1,0 +1,189 @@
+$blue: #3079ed;
+$black: #1c1c1c;
+$gray: gray;
+
+ body {
+ 	color: $black;
+	font-family: Helvetica, Arial, serif;
+	font-size: 14px;
+	height: 100%;
+}
+
+.container {
+	background: white;
+	height: 100%;
+	position: absolute;
+	margin-left: -475px;
+	left: 50%;
+	width: 900px;
+	padding: 25px ;
+	-moz-box-sizing: border-box; -webkit-box-sizing: border-box; box-sizing: border-box;
+
+}
+
+.row {
+	float:left;
+	clear:both;
+	width: 100%;
+}
+
+.title, h1{
+	color: $black;
+	font-size: 28px;
+}
+
+.subtitle, h2 {
+	color: $gray;
+	font-size: 18px;
+}
+
+.splash {
+	padding: 20px;
+	margin: 0 auto;
+	margin-top: 200px;
+	text-align: center;
+}
+
+
+.splash .title{
+	margin-bottom: 10px;
+	font-size: 50px;
+}
+
+.splash .subtitle {
+	margin-bottom: 20px;
+	font-size: 22px;
+}
+
+.inset {
+	display: inline-block;
+	padding: 10px;
+	border-radius: 5px;
+
+}
+
+.inset.gray {
+	background: rgba(200,200,200,.4);
+	border: 1px solid rgb(200,200,200);	
+	color: $gray;
+}
+.inset.blue {
+	border: 1px solid rgb(103, 176, 253);
+	color: $blue;
+	background: rgba(103, 176, 253,.3);
+}
+
+.header {
+	width: 100%;
+	float:left;
+	vertical-align: bottom;
+	padding-bottom: 5px;
+}
+
+.header .logo {
+	float: left;
+}
+
+.header .user {
+	float: right;
+	cursor: pointer;
+	padding-top: 8px; /* TODO: THIS IS DISGUSTING FIGURE OUT A BETTER WAY */;
+}
+
+.header .user ul {
+	display: none;
+}
+.header .user ul li {
+	text-align: right;
+	margin: 3px 0px;
+	color: gray;
+}
+
+.header .user ul li:hover {
+	color: $black;
+}
+
+.header .user .subtitle:hover {
+	color: $black;
+}
+
+.navigate {
+	margin-top: 20px;
+}
+
+.navigate ul {
+	float: left;
+	width: 100%;
+	padding: 10px 0px;
+}
+
+.navigate ul li {
+	padding-right: 10px;
+	color: $blue;
+	cursor: pointer;
+	float:left;
+}
+
+.navigate ul li:after {
+	content: '>';
+	color: blue;
+	color: $gray;
+	font-size: 14px;
+	padding-bottom: 3px;
+	position: relative;
+	top: -2px;
+	left: 2px;
+}
+
+.navigate ul li:nth-last-child(2){
+	cursor: default;
+	color: $black;
+}
+
+.navigate ul li:last-child{
+	float:right;
+}
+
+.navigate ul li:last-child:after, .navigate ul li:nth-last-child(2):after {
+	content: '';
+}
+
+
+.files .inset{
+	position: relative;
+	width: 194px;
+	height: 150px;
+	padding-top: 70px;
+	margin-right: 20px;
+	margin-top: 10px;
+	margin-bottom: 10px;
+	text-align: center;
+	overflow: visible;
+	-moz-box-sizing: border-box; -webkit-box-sizing: border-box; box-sizing: border-box;
+
+}
+
+.files .inset:nth-child(4),.files .inset:nth-child(8),.files .inset:nth-child(12),{
+    margin-right: 0px;
+}
+
+
+
+.files .inset div{
+	opacity: .6;
+}	
+
+.files .inset div:first-child{
+	opacity:1;
+	margin-bottom: 5px;
+}
+
+
+
+@media only screen and (max-width: 950px), only screen and (max-device-width: 950px) {
+ 	.container {
+ 		width: 100%;
+ 		margin-left: 0;
+ 		left:0;
+ 	}
+ }

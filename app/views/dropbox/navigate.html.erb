@@ -1,12 +1,36 @@
-<div class="row">
-  <h1><%= @folder %></h1>
-  <h3><%= link_to "Back", navigate_path(parent_link(@parent)) %></h3>
+
+<div class="row header">
+	<div class="logo title"> Fabbit </div>
+	<div class="user"> 
+		<div class="subtitle" id="me"> bhaviksingh@gmail.com </div>
+		<ul>
+			<li> Notifications </li>
+			<li> Logout </li>
+		</ul>
+		<script>
+		$(".header .user .subtitle").click(function(){ $(".header .user ul").slideToggle()});
+		</script>
+	</div>
 </div>
-<div class="row">
+
+<div class="row navigate">
+
+  <ul class="subtitle">
+  	<li> Your projects </li>
+  	<li> Something </li>
+  	<li> <%= @folder %></li>
+	 <li>  <%= link_to "back", navigate_path(parent_link(@parent)) %></li>
+  </ul>
+
+</div>
+
+<ul class="row files">
+
   <% @contents.each do |content| %>
-    <p>
-      <%= link_to content[:content], content[:link] %>
-      <b><%= " >" if content[:is_dir] %></b>
-    </p>
+    <li <%= raw content[:is_dir] ? "class='inset blue' " : "class='inset gray'" %> >
+      <div> <%= link_to content[:content], content[:link] %> </div>
+      <div > 3 new events </div>
+      <div> Last viewed 2 months </div>
+    </li>
   <% end %>
-</div>
+</ul>
