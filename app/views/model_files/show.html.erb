@@ -1,6 +1,6 @@
-<div class="row">
-  <h1><%= @modelname %></h1>
-  <h3><%= link_to "Back", navigate_path(@parent) %></h3>
+<%= render "dropbox/header" , lastthing:@modelname %>
+
+<div class="row model">
   <p id="stlstring"><%= @file %></p>
   <script>
     $(document).ready(function(){
@@ -11,12 +11,11 @@
     })
   </script>
   <div id="container">
+      <div class="status"> <span id="loader_status"> </span> </div>
   </div>
-  <div> Loader status: <span id="loader_status"> </span> </div>
 
   <div id="annotations">
-    <h2> Annotations </h2> 
-    <h3> A to rotate, S to zoom, click to add annotation </h3>
+    <div class="subtitle">Annotations </div>
     <ul id="annotation_list">
     </ul>
   </div>

@@ -183,6 +183,25 @@ $gray: gray;
 	opacity: 1;
 }
 
+.model #stlstring {
+	display: none;
+}
+
+.model #container .status {
+	position: absolute;
+	margin-top: 5px;
+	margin-left: 5px;
+	color: #FFAF96;
+	opacity: .6;
+}
+
+.model #container {
+	margin-left: 25px;
+	margin-top: 10px;
+}
+.model canvas {
+	background: rgb(255, 255, 234);
+}
 
 @media only screen and (max-width: 950px), only screen and (max-device-width: 950px) {
  	.container {

@@ -205,8 +205,8 @@ modelViewer = function() {
     	objId = id;
 
 		// set the scene size 
-		WIDTH = 600;
-		HEIGHT = 400;
+		WIDTH = 800;
+		HEIGHT = 450;
 		// set some camera attributes
 		VIEW_ANGLE = 45;
 		ASPECT = WIDTH / HEIGHT;

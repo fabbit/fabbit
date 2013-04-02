@@ -1,28 +1,4 @@
-
-<div class="row header">
-	<div class="logo title"> Fabbit </div>
-	<div class="user"> 
-		<div class="subtitle" id="me"> bhaviksingh@gmail.com </div>
-		<ul>
-			<li> Notifications </li>
-			<li> Logout </li>
-		</ul>
-		<script>
-		$(".header .user .subtitle").click(function(){ $(".header .user ul").slideToggle()});
-		</script>
-	</div>
-</div>
-
-<div class="row navigate">
-
-  <ul class="subtitle">
-  	<li> Your projects </li>
-  	<li> Something </li>
-  	<li> <%= @folder %></li>
-	 <li>  <%= link_to "back", navigate_path(parent_link(@parent)) %></li>
-  </ul>
-
-</div>
+<%= render "dropbox/header", lastthing:@folder %>
 
 <ul class="row files">
 
@@ -33,4 +9,11 @@
       <div> Last viewed 2 months </div>
     </li>
   <% end %>
+  <script>
+  $(".files .inset").click(function(){
+	   var h = this.children[0].children[0];
+	   console.log(h);
+	   window.location = h;
+	});
+  </script>
 </ul>
