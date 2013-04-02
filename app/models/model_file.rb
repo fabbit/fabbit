@@ -7,9 +7,6 @@ class ModelFile < ActiveRecord::Base
 
   has_many :revisions, dependent: :destroy
 
-  # TODO delete
-  before_create :initial_cache
-  after_create { self.revisions.create!(revision_number: self.cached_revision) }
 
   # Retrieves the latest version of the model file by comparing the stored
   # revision number with the one on Dropbox.
@@ -17,18 +14,16 @@ class ModelFile < ActiveRecord::Base
   # otherwise, requests the file from Dropbox, updates the cache, revises the
   # cached revision number, and returns the file.
   #
-  # TODO Take a dropbox_client as an argument
-  #
   # The test_rev argument is used for testing to simulate a revision number
   # from dropbox. Similarly, the test_content simulates the contents of a file
   # loaded from dropbox.
 
-  def latest(test_rev=nil, test_content=nil)
-    dropbox_rev = test_rev || @dropbox_client.metadata(self.path)["revision"]
-    if self.cached_revision == dropbox_rev
+  def update_and_get(dropbox_client, test_rev=nil, test_content=nil)
+    dropbox_rev = test_rev || dropbox_client.metadata(self.path)["revision"]
+    if self.cached_revision == dropbox_rev and File.exists?(self.cache_file_name)
       return load_cached
     else
-      latest_file = test_content || @dropbox_client.get_file(self.path)
+      latest_file = test_content || dropbox_client.get_file(self.path)
       cache(latest_file, dropbox_rev)
       self.cached_revision = dropbox_rev
       self.save
@@ -52,26 +47,16 @@ class ModelFile < ActiveRecord::Base
   #   self.revisions.find_by_revision_number(revision_number)
   # end
 
-  # TODO Remove
-  def dropbox=(dropbox_client)
-    @dropbox_client = dropbox_client
-  end
-
   private
 
     # Load the contents of the cached file
     def load_cached
-      File.open(cache_file_name, "r") { |f| f.read }
+      File.open(cache_file_name, "rb") { |f| f.read }
     end
 
     # Write the given file contents to the cache
     def cache(content, revision)
       File.open(cache_file_name(revision), "w") { |f| f.write(content) }
-    end
-
-    # TODO Remove
-    def initial_cache
-      File.open(cache_file_name, 'w') { |f| f.write(@dropbox_client.get_file self.path) }
     end
 
 end

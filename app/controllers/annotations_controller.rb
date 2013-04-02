@@ -12,10 +12,11 @@ class AnnotationsController < ApplicationController
   end
 
   def create
+    model_file = ModelFile.find(params[:model_file_id])
     revision = model_file.revisions.first
     revision = Revisions.find(params[:revision_id]) if params[:revision_id]
     revision.annotations.create!(
-      coordinates: params[:pos],
+      coordinates: params[:coordinates],
       camera: params[:camera],
       text: params[:text]
     )

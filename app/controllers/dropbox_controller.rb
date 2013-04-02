@@ -19,24 +19,10 @@ class DropboxController < ApplicationController
   end
 
   def navigate
-    path = params[:path]
-    if params[:path].nil?
-      path = '/'
-    end
-    if params[:more_path]
-      path += '/' + params[:more_path]
-    end
+    path = parse_path(params[:path], params[:more_path])
     meta = dropbox_client.metadata(path)
-    @meta = meta
-    @parent = parent_dir_of path
-    @folder = meta["path"]
-    @contents = meta["contents"].map do |content|
-      link = navigate_url(to_link(content["path"]))
-      if not content["is_dir"]
-        link = initialize_url(to_link(content["path"]))
-      end
-      { content: to_link(content["path"]), link: link, is_dir: content["is_dir"] }
-    end
+    @breadcrumbs = to_breadcrumbs(meta["path"])
+    @contents = process_contents(meta["contents"])
   end
 
 end

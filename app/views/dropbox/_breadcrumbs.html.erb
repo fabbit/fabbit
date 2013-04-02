@@ -16,10 +16,12 @@
 <div class="row navigate">
 
   <ul class="subtitle">
-  	<li> Your projects </li>
-  	<li> Something </li>
-  	<li> <%= lastthing %></li>
-	 <li>  <%= link_to "back", navigate_path(parent_link(@parent)) %></li>
+        <li> <%= link_to "Your projects", navigate_path %> </li>
+
+        <% @breadcrumbs.each do |crumb| %>
+          <li><%= link_to crumb[:text], crumb[:link] %></li>
+        <% end %>
+        <li></li>
   </ul>
 
 </div>
