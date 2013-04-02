@@ -21,7 +21,7 @@ module DropboxHelper
   end
 
   def to_link(content)
-    content["path"][1..-1]
+    content[1..-1]
   end
 
   def parent_link(parent)

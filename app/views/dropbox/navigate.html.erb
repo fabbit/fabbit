@@ -16,10 +16,9 @@
 <div class="row navigate">
 
   <ul class="subtitle">
-  	<li> Your projects </li>
-  	<li> Something </li>
-  	<li> <%= @folder %></li>
-	 <li>  <%= link_to "back", navigate_path(parent_link(@parent)) %></li>
+        <li> <%= link_to "Your Projects", navigate_path %> </li>
+  	<li> <%= link_to @folder, navigate_path(to_link(@folder)) %></li>
+	<li>  <%= link_to "back", navigate_path(parent_link(@parent)) %></li>
   </ul>
 
 </div>
