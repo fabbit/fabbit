@@ -31,11 +31,11 @@ class DropboxController < ApplicationController
     @parent = parent_dir_of path
     @folder = meta["path"]
     @contents = meta["contents"].map do |content|
-      link = navigate_url(to_link(content))
+      link = navigate_url(to_link(content["path"]))
       if not content["is_dir"]
-        link = initialize_url(to_link(content))
+        link = initialize_url(to_link(content["path"]))
       end
-      { content: to_link(content), link: link, is_dir: content["is_dir"] }
+      { content: to_link(content["path"]), link: link, is_dir: content["is_dir"] }
     end
   end
 
