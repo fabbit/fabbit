@@ -30,7 +30,7 @@ class ModelFilesController < ApplicationController
   def contents
     @file = ModelFile.find(params[:id]).update_and_get(dropbox_client)
     respond_to do |format|
-      format.json { render json: @file }
+      format.json { render json: { contents: @file } }
     end
   end
 
