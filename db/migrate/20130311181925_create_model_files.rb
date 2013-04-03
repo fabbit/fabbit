@@ -7,7 +7,6 @@ class CreateModelFiles < ActiveRecord::Migration
 
       t.timestamps
     end
-    add_index :model_files, :user
-    add_index :model_files, [:path, :cached_revision]
+    add_index :model_files, [:user, :path], unique: true
   end
 end
