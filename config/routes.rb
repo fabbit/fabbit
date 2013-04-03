@@ -10,6 +10,8 @@ Fabbit::Application.routes.draw do
     resources :revisions, only: [:show] do
       resources :annotations, only: [:index, :create]
     end
+
+    get "contents", on: :member
   end
   resource :discussions, only: [:index, :create]
 end

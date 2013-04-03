@@ -27,6 +27,13 @@ class ModelFilesController < ApplicationController
     redirect_to model_file
   end
 
+  def contents
+    @file = ModelFile.find(params[:id]).update_and_get(dropbox_client)
+    respond_to do |format|
+      format.json { render json: @file }
+    end
+  end
+
   # TODO file history
 
 end
