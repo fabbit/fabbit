@@ -16,13 +16,13 @@ class ModelFilesController < ApplicationController
     model_file = ModelFile.where(
       user: dropbox_client.account_info["uid"].to_s,
       path: params[:filename],
-      cached_revision: dropbox_client.metadata(params[:filename])["revision"]
     ).first_or_initialize
 
     if model_file.new_record? and model_file.save
       model_file.update_and_get(dropbox_client)
       model_file.revisions.create!(revision_number: model_file.cached_revision)
     end
+
 
     redirect_to model_file
   end

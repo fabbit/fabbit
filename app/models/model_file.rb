@@ -3,7 +3,7 @@ class ModelFile < ActiveRecord::Base
 
   # TODO cached_revision should not conflict semantically with Revisions
   # (since this is a dropbox revision)
-  validates :path, :cached_revision, :user, presence: true
+  validates :path, :user, presence: true
 
   has_many :revisions, dependent: :destroy
 
@@ -56,7 +56,7 @@ class ModelFile < ActiveRecord::Base
 
     # Write the given file contents to the cache
     def cache(content, revision)
-      File.open(cache_file_name(revision), "w") { |f| f.write(content) }
+      File.open(cache_file_name(revision), "wb") { |f| f.write(content) }
     end
 
 end

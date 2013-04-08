@@ -40,8 +40,7 @@ ActiveRecord::Schema.define(:version => 20130315230810) do
     t.datetime "updated_at",      :null => false
   end
 
-  add_index "model_files", ["path", "cached_revision"], :name => "index_model_files_on_path_and_cached_revision"
-  add_index "model_files", ["user"], :name => "index_model_files_on_user"
+  add_index "model_files", ["user", "path"], :name => "index_model_files_on_user_and_path", :unique => true
 
   create_table "revisions", :force => true do |t|
     t.integer  "model_file_id"
@@ -61,14 +60,5 @@ ActiveRecord::Schema.define(:version => 20130315230810) do
 
   add_index "sessions", ["session_id"], :name => "index_sessions_on_session_id"
   add_index "sessions", ["updated_at"], :name => "index_sessions_on_updated_at"
-
-  create_table "users", :force => true do |t|
-    t.string   "first_name"
-    t.string   "last_name"
-    t.string   "email"
-    t.datetime "created_at",      :null => false
-    t.datetime "updated_at",      :null => false
-    t.string   "password_digest"
-  end
 
 end
