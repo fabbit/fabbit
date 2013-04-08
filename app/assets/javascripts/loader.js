@@ -32,14 +32,16 @@ THREE.STLLoader.prototype = {
 
   constructor: THREE.STLLoader,
 
+
   load: function ( url, isString) {
 
     var scope = this;
     var isString = (typeof isString === 'undefined') ? false: isString; //if isString is not passed, assume false!
 
     if (isString){
-      //Just assume ascii and go straight
-      var g = scope.parseASCII(url);
+
+      url = url.trim();
+      var g = scope.parse(url);
       scope.dispatchEvent({type: 'load', content: g});
 
     } else {
@@ -48,8 +50,8 @@ THREE.STLLoader.prototype = {
       var request = new XMLHttpRequest();
       request.addEventListener( 'load', function ( event ) {
 
-              var geometry;
-              geometry = scope.parse( event.target.response, isString );
+        var geometry;
+        geometry = scope.parse( event.target.response);
 
         scope.dispatchEvent( { type: 'load', content: geometry } );
 
@@ -69,6 +71,7 @@ THREE.STLLoader.prototype = {
 
       
       request.open( 'GET', url, true );
+      request.overrideMimeType('text/plain; charset=x-user-defined');
       request.responseType = "arraybuffer";
       request.send( null );
 
@@ -77,6 +80,9 @@ THREE.STLLoader.prototype = {
 
   bin2str: function (buf) {
 
+    if (typeof(buf) === 'string') {
+      return buf;
+    }
     var array_buffer = new Uint8Array(buf);
     var str = '';
     for(var i = 0; i < buf.byteLength; i++) {
@@ -87,30 +93,36 @@ THREE.STLLoader.prototype = {
   },
 
   isASCII: function(buf){
-
-    var dv = new DataView(buf);
-    var str = '';
-    for(var i = 0; i < 5; i++) {
-      str += String.fromCharCode(dv.getUint8(i, true)); // assume little-endian
+    console.log(typeof(buf));
+    if (typeof(buf) === 'string'){
+      var str = buf.substring(0,5);
+    } else {
+      var dv = new DataView(buf);
+      var str = '';
+      for(var i = 0; i < 10; i++) {
+        str += String.fromCharCode(dv.getUint8(i, true)); // assume little-endian
+      }
     }
-    return (str.toLowerCase() === 'solid'); // All ASCII stl files begin with 'solid'
+    var ret = str.indexOf("solid") >= 0;
+    console.log("returning " + ret);
+    return ret;
+  },
 
-    },
+  parse: function (buf) {
 
-  parse: function (buf, isString) {
+    if(this.isASCII(buf))
+    {
+      var str = this.bin2str(buf);
+      console.log(str);
+      console.log(str.indexOf("solid"));
+      return this.parseASCII(str);
+    }
+    else
+    {
+      return this.parseBinaryFile(buf);
+    }
 
-      if(this.isASCII(buf))
-      {
-
-        var str = this.bin2str(buf);
-        return this.parseASCII(str);
-      }
-      else
-      {
-        return this.parseBinary(buf);
-      }
-
-    },
+  },
 
   parseASCII: function ( data ) {
 
@@ -120,7 +132,6 @@ THREE.STLLoader.prototype = {
     var result;
 
     while ( ( result = patternFace.exec( data ) ) != null ) {
-
       var text = result[ 0 ];
 
       // Normal
@@ -148,9 +159,62 @@ THREE.STLLoader.prototype = {
 
     geometry.computeCentroids();
     geometry.computeBoundingSphere();
-
+    console.log(geometry);
     return geometry;
 
+  },
+
+  parseBinaryFile: function(input) {
+ 
+    input = new BinaryReader(input);
+
+    // Skip the header.
+    input.seek(80);
+    console.log(input);
+    console.log(input.getSize());
+
+    var geometry = new THREE.Geometry();
+    // Load the number of vertices.
+    var count = input.readUInt32();
+    console.log('COUNT IS ' + count);
+
+    // During the parse loop we maintain the following data structures:
+    var vertices = [];   // Append-only list of all unique vertices.
+    var vert_hash = {};  // Mapping from vertex to index in 'vertices', above.
+    var faces    = [];   // List of triangle descriptions, each a three-element
+                         // list of indices in 'vertices', above.
+
+
+    for (var i = 0; i < count; i++) {
+      if (i % 100 == 0) {
+        console.log('Parsing ' + (i+1) + ' of ' + count + ' polygons...');
+      }
+      
+      // Skip the normal (3 single-precision floats)
+      input.seek(input.getPosition() + 12);
+
+      var face_indices = [];
+      for (var x = 0; x < 3; x++) {
+        var vertex = [input.readFloat(), input.readFloat(), input.readFloat()];
+       if (i < 10) {
+        console.log(vertex);
+      }
+        var vertexIndex = vert_hash[vertex];
+        if (vertexIndex == null) {
+          vertexIndex = vertices.length;
+          geometry.vertices.push(vertex);
+          vert_hash[vertex] = vertexIndex;
+        }
+
+        face_indices.push(vertexIndex);
+      }
+      geometry.faces.push(face_indices);
+    
+      // Skip the "attribute" field (unused in common models)
+      input.readUInt16();
+    }
+
+    return geometry;
   },
 
   parseBinary: function (buf) {
@@ -169,6 +233,16 @@ THREE.STLLoader.prototype = {
     // end
     //
 
+    function str2ab(str) {
+      var buf = new ArrayBuffer(str.length*2); // 2 bytes for each char
+      var bufView = new Uint16Array(buf);
+      for (var i=0, strLen=str.length; i<strLen; i++) {
+        bufView[i] = str.charCodeAt(i);
+      }
+      return buf;
+    }
+
+
     var geometry = new THREE.Geometry();
 
     var headerLength = 80;
@@ -178,18 +252,28 @@ THREE.STLLoader.prototype = {
     var le = true; // is little-endian  // This might be processor dependent...
 
     // var header = new Uint8Array(buf, 0, headerLength); // not presently used
+    if (typeof(buf) === 'string') {
+      buf = str2ab(buf);
+    }
+
     var dvTriangleCount = new DataView(buf, headerLength, 4);
+
     var numTriangles = dvTriangleCount.getUint32(0, le);
+    console.log(numTriangles);
 
     for (var i = 0; i < numTriangles; i++) {
 
+      //console.log(dataOffset + i*faceLength, faceLength);
+      
+      //console.log(dataOffset + i*faceLength + " " + faceLength);
       var dv = new DataView(buf, dataOffset + i*faceLength, faceLength);
 
       var normal = new THREE.Vector3( dv.getFloat32(0, le), dv.getFloat32(4, le), dv.getFloat32(8, le) );
 
       for(var v = 3; v < 12; v+=3) {
-
-        geometry.vertices.push( new THREE.Vector3( dv.getFloat32(v*4, le), dv.getFloat32((v+1)*4, le), dv.getFloat32( (v+2)*4, le ) ) );
+        var v = new THREE.Vector3( dv.getFloat32(v*4, le), dv.getFloat32((v+1)*4, le), dv.getFloat32( (v+2)*4, le ) );
+        //console.log(v);
+        geometry.vertices.push(v);
 
       }
       var len = geometry.vertices.length;
