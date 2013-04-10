@@ -80,7 +80,7 @@ modelViewer = function() {
 	function loadAnnotations(list){
 		console.log(list);
 		for(var i =0; i< list.length; i++){
-			annotate({"camera":stringToV3(list[i].camera), "coordinates":stringToV3(list[i].coordinates), "text":list[i].text});
+			annotate({"camera":stringToV3(list[i].camera), "coordinates":stringToV3(list[i].coordinates), "text":list[i].text, "id": list[i].id});
 		}
 	}
 
@@ -90,6 +90,8 @@ modelViewer = function() {
 
 		var cameraPos = typeof annotation.camera !== 'undefined' ? annotation.camera: camera.position.clone();
 		var coordinates = typeof annotation.coordinates !== 'undefined' ? annotation.coordinates: v3(0,0,0);
+		var id = typeof annotation.id !== 'undefined' ? annotation.id : newAnnotId;
+		var discussions = typeof annotation.discussions !== 'undefined' ? annotation.discussions : [];
 		var text = typeof annotation.text !== 'undefined' ? annotation.text: getAnnotationText(); //TODO: have user annotations in a different place, maybe use the same function. this is not a good way
 		
 		if (text === "" || text === null){
@@ -107,7 +109,7 @@ modelViewer = function() {
 		
 		sphere.position = coordinates;
 		
-		addAnnotationObject(cameraPos, coordinates, text, sphere);
+		addAnnotationObject(cameraPos, coordinates, text, sphere, discussions, id);
 	}
 
 	//User input for annotations
@@ -120,10 +122,25 @@ modelViewer = function() {
 		}
 	}
 
+	function createDiscussionEl(uid, text){
+		return "<li> <div class='user'>" + uid + "</div><div class='text'>"+ text + "</div></li>";
+	}
+
+
 	//Actually adds the annotation to bookkeeping and scene
-	function addAnnotationObject(cameraPos, coordinates, text, obj){
-		annotations.push({ "camera": cameraPos, "coordinates": coordinates, "text": text});
-		$("#annotation_list").append("<li>" + text + "</li>");
+	function addAnnotationObject(cameraPos, coordinates, text, obj, discussions, id){
+		//TODO: change annotations to be indexed by "id" and store it in the html?
+		annotations.push( { "camera": cameraPos, "coordinates": coordinates, "text": text, "id": id});
+		var disc = "";
+
+		if (initLoad) {
+			for(var i=0; i< discussions.length; i++){
+				disc += createDiscussionEl(discussions[i].uid, discussions[i].text);
+			}
+		}
+		$("#annotation_list").append("<li>" + text + " <ul class='discussions'> </ul> <input class='discussion_input'> </li>");
+
+
 		annotNum ++;
 		annot_obj_backup.push(obj);
  
@@ -361,8 +378,33 @@ modelViewer = function() {
 			viewAnnotation(i);
 		});
 
+		$("#annotation_list").on("keypress", "input", function() { 
+			var keycode = (event.keyCode ? event.keyCode : event.which);
+			if(keycode == '13'){
+				var i = $("#annotation_list li").index($(this).parent());
+				console.log("Doing shit" + i + " this " + $(this).parent());
+				console.log(annotations[i]);
+				addDiscussion(i, annotations[i].id, $(this).val());
+			}
+		});
+
+		// $("#annotation_list input").on("keyup", function(){
+		// 	console.log("change called with");
+		// 	console.log(this);
+		// 	var i = $("#annotation_list li").index(this);
+		// 	addDiscussion(i, annotations[i].id, $(this).val());
+		// })
+
 		animate();
 	}	
+
+	function addDiscussion(index, annotID, text){
+		console.log(annotID);
+		$.post('/model_files/' + objId + '/annotations/' + annotID + '/discussions', {"uid":0, "text": text});
+		var discussionEl = "#annotation_list li:nth-child(" + (index + 1 )+ ")";
+		$(discussionEl + " .discussions").append(createDiscussionEl(0,text));
+		$(discussionEl + " input").val("");
+	}
 
 	this.loadObject = function(stlString, isString){
 
