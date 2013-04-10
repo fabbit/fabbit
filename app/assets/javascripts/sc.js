@@ -78,6 +78,7 @@ modelViewer = function() {
 
 	//****** Annotation methods *******
 	function loadAnnotations(list){
+		console.log(list);
 		for(var i =0; i< list.length; i++){
 			annotate({"camera":stringToV3(list[i].camera), "coordinates":stringToV3(list[i].coordinates), "text":list[i].text});
 		}
@@ -213,10 +214,8 @@ modelViewer = function() {
 			event.preventDefault();
 
 		   	var intersections = intersector(event);
-		   	console.log(intersections);
 		   	var intersects_objects = intersections[1];
 		   	var intersects_annots = intersections[0];
-		   	console.log(intersects_annots);
 
 		    if (intersects_annots.length > 0 ){
 		    	
@@ -239,7 +238,6 @@ modelViewer = function() {
 
     this.showAnnot= function(bool){
     	if (showAnnot == bool){
-    		console.log(showAnnot + " + " + bool);
     		return;
     	} 
 
@@ -384,7 +382,7 @@ modelViewer = function() {
 			mesh.position.set( 0, - 0.25, 0.6 );
 			mesh.rotation.set( 0, - Math.PI / 2, 0 );
 			var boundedBy = mesh.geometry.boundingSphere.radius;
-			var scaleFactor = 25/boundedBy;
+			var scaleFactor = 25/boundedBy;			
 			mesh.scale.set(scaleFactor, scaleFactor, scaleFactor);
 			objects.push(mesh);
 			scene.add(mesh);

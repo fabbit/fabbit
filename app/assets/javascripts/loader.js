@@ -71,7 +71,6 @@ THREE.STLLoader.prototype = {
       
       request.open( 'GET', url, true );
       request.overrideMimeType('text/plain; charset=x-user-defined');
-      request.responseType = "arraybuffer";
       request.send( null );
 
     }
@@ -92,7 +91,7 @@ THREE.STLLoader.prototype = {
   },
 
   isASCII: function(buf){
-    console.log(typeof(buf));
+    
     if (typeof(buf) === 'string'){
       var str = buf.substring(0,5);
     } else {
@@ -104,7 +103,7 @@ THREE.STLLoader.prototype = {
     }
     var ret = str.indexOf("solid") >= 0;
     console.log("returning " + ret);
-    return ret;
+    return false;
   },
 
   parse: function (buf) {
@@ -112,8 +111,6 @@ THREE.STLLoader.prototype = {
     if(this.isASCII(buf))
     {
       var str = this.bin2str(buf);
-      console.log(str);
-      console.log(str.indexOf("solid"));
       return this.parseASCII(str);
     }
     else
@@ -158,7 +155,6 @@ THREE.STLLoader.prototype = {
 
     geometry.computeCentroids();
     geometry.computeBoundingSphere();
-    console.log(geometry);
     return geometry;
 
   },
@@ -169,13 +165,10 @@ THREE.STLLoader.prototype = {
 
     // Skip the header.
     input.seek(80);
-    console.log(input);
-    console.log(input.getSize());
 
     var geometry = new THREE.Geometry();
     // Load the number of vertices.
     var count = input.readUInt32();
-    console.log('COUNT IS ' + count);
 
     // During the parse loop we maintain the following data structures:
     var vertices = [];   // Append-only list of all unique vertices.
@@ -186,7 +179,7 @@ THREE.STLLoader.prototype = {
 
     for (var i = 0; i < count; i++) {
       if (i % 100 == 0) {
-        console.log('Parsing ' + (i+1) + ' of ' + count + ' polygons...');
+        //console.log('Parsing ' + (i+1) + ' of ' + count + ' polygons...');
       }
       
       // Skip the normal (3 single-precision floats)
@@ -195,23 +188,33 @@ THREE.STLLoader.prototype = {
       var face_indices = [];
       for (var x = 0; x < 3; x++) {
         var vertex = [input.readFloat(), input.readFloat(), input.readFloat()];
-       if (i < 10) {
-        console.log(vertex);
-      }
+       
         var vertexIndex = vert_hash[vertex];
         if (vertexIndex == null) {
           vertexIndex = vertices.length;
-          geometry.vertices.push(vertex);
+          vertices.push(vertex);
           vert_hash[vertex] = vertexIndex;
         }
 
         face_indices.push(vertexIndex);
       }
-      geometry.faces.push(face_indices);
-    
+      faces.push(face_indices);
+
       // Skip the "attribute" field (unused in common models)
       input.readUInt16();
     }
+
+    for (var i=0; i<faces.length; i++){
+      geometry.faces.push(new THREE.Face3(faces[i][0], faces[i][1], faces[i][2]));
+    }
+    for (var i=0; i<vertices.length; i++){
+      geometry.vertices.push(new THREE.Vector3(vertices[i][0], vertices[i][1], vertices[i][2]));
+    }
+
+
+    geometry.computeBoundingSphere();
+    geometry.computeCentroids();
+    geometry.computeFaceNormals();
 
     return geometry;
   },
@@ -258,7 +261,6 @@ THREE.STLLoader.prototype = {
     var dvTriangleCount = new DataView(buf, headerLength, 4);
 
     var numTriangles = dvTriangleCount.getUint32(0, le);
-    console.log(numTriangles);
 
     for (var i = 0; i < numTriangles; i++) {
 
