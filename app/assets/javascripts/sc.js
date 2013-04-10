@@ -6,13 +6,15 @@ modelViewer = function() {
 	var annotNum; 
 	var objId;
 
+	var showAnnot = true;
+
 
 	//Basic setup variables
 	var WIDTH, HEIGHT;
 	var VIEW_ANGLE, ASPECT, NEAR, FAR;
 	var renderer, camera, scene;
 	var objectColor = "#C0D8F0";
-	var annotColor = "#FF8C00"; 
+	var annotColor = "#3079ed"; 
 
 	//tween variable, currently only one
 	var tween;
@@ -25,6 +27,7 @@ modelViewer = function() {
 	var objects = [];
 	var annotations = [];
 	var annot_obj = []; 
+	var annot_obj_backup = [];
 	var currentlyactive = 0;
 	var initLoad = true;
 
@@ -106,7 +109,7 @@ modelViewer = function() {
 		addAnnotationObject(cameraPos, coordinates, text, sphere);
 	}
 
-
+	//User input for annotations
 	function getAnnotationText(){
 		var name = prompt("Please enter an annotation","");
 		if (name!=null && name!="") {
@@ -116,21 +119,29 @@ modelViewer = function() {
 		}
 	}
 
+	//Actually adds the annotation to bookkeeping and scene
 	function addAnnotationObject(cameraPos, coordinates, text, obj){
 		annotations.push({ "camera": cameraPos, "coordinates": coordinates, "text": text});
-		annot_obj.push(obj); 
+		$("#annotation_list").append("<li>" + text + "</li>");
 		annotNum ++;
+		annot_obj_backup.push(obj);
+ 
+ 		//TODO: maybe this doesn't need to be done, but its way tidier
+ 		//TODO: ASK professor hartmann if maybe we should show the one you've just added
+		if(showAnnot){
+			scene.add(obj);
+			annot_obj.push(obj);
+		}
+
 		if(!initLoad){
 			debug("Posting" + cameraPos + " " + coordinates + " " + text);
 			$.post('/model_files/' + objId + '/annotations', {"camera": v3ToString(cameraPos), "coordinates": v3ToString(coordinates), "text": text});
 		}
 
-		$("#annotation_list").append("<li>" + text + "</li>");
-		scene.add(obj);
+		
 	}
 
-	function viewAnnotation(obj) {
-		var objPos = annot_obj.indexOf(obj);
+	function viewAnnotation(objPos) {
 		if(objPos >= 0){
 			debug("Viewing annotation" + objPos + " it is : ");
 			debug(annotations);
@@ -141,7 +152,7 @@ modelViewer = function() {
 	function highlightAnnotation(text, pos){
 
 		$("#" + annotId + " ul li").each(function(index){ 
-			var el = $(this);
+			el = $(this);
 			if(index === pos) {
 				el.addClass("active");
 			} else {
@@ -164,29 +175,54 @@ modelViewer = function() {
 		renderer.render(scene, camera);
 	}
 
+	function intersector(event){
+
+	 	var vector = new THREE.Vector3(
+	        ( event.offsetX / WIDTH ) * 2 - 1,
+	      - ( event.offsetY / HEIGHT ) * 2 + 1,
+	       	.5
+	    );
+
+	   	projector.unprojectVector( vector, camera );
+
+	    var ray = new THREE.Raycaster(camera.position, vector.sub(camera.position).normalize());
+	   	ray.precision = 0.001;
+	    return [ray.intersectObjects(annot_obj) , ray.intersectObjects(objects)]
+	}
+
+	function viewMouseOver(event){
+		moveFlag = 1;
+
+		event.preventDefault();
+
+		var intersections = intersector(event);
+	   	var intersects_objects = intersections[1];
+	   	var intersects_annots = intersections[0];
+
+		if(intersects_annots.length > 0 ){
+			$('.model canvas').css('cursor','pointer');
+		} else {
+			$('.model canvas').css('cursor','move');
+		}
+	}
+
 	function viewMouseUp(event){
 		if(moveFlag === 0){
+
 			event.preventDefault();
 
-		    var vector = new THREE.Vector3(
-		        ( event.offsetX / WIDTH ) * 2 - 1,
-		      - ( event.offsetY / HEIGHT ) * 2 + 1,
-		       	.5
-		    );
+		   	var intersections = intersector(event);
+		   	console.log(intersections);
+		   	var intersects_objects = intersections[1];
+		   	var intersects_annots = intersections[0];
+		   	console.log(intersects_annots);
 
-
-		   	projector.unprojectVector( vector, camera );
-
-		    var ray = new THREE.Raycaster(camera.position, vector.sub(camera.position).normalize());
-		   	ray.precision = 0.001;
-		    var intersects_annots = ray.intersectObjects(annot_obj);
-		    var intersects_objects = ray.intersectObjects(objects);
 		    if (intersects_annots.length > 0 ){
 		    	
 		    	var intersectAnnot = intersects_annots[0].object;
 
 		    	if( intersectAnnot != null){
-		    		viewAnnotation(intersectAnnot);
+		    		viewAnnotation(annot_obj.indexOf(intersectAnnot));
 		    	}
 		    	else error("Clicked on null object");
 		    } 
@@ -200,8 +236,36 @@ modelViewer = function() {
 
     //********** Public methods **************
 
-    this.init = function(containerId, id){
+    this.showAnnot= function(bool){
+    	if (showAnnot == bool){
+    		console.log(showAnnot + " + " + bool);
+    		return;
+    	} 
 
+    	showAnnot = bool; 
+		if (showAnnot) {
+
+			annot_obj = annot_obj_backup.slice(0);
+			for (var i =0; i<annot_obj.length; i++){
+				scene.add(annot_obj[i]);
+			}
+		} else {
+
+			for (var i=0; i<annot_obj.length; i++){
+				scene.remove(annot_obj[i]);
+			}
+			annot_obj = [];
+		}
+    	render();
+    }
+
+    this.init = function(containerId, id){
+    
+    	objects = [];
+		annotations = [];
+		annot_obj = []; 
+		currentlyactive = 0;
+		initLoad = true;
     	objId = id;
 
 		// set the scene size 
@@ -219,7 +283,8 @@ modelViewer = function() {
 		renderer.setSize(WIDTH, HEIGHT);
 		renderer.domElement.addEventListener('mousedown', function(){ moveFlag = 0;}, false);
 		renderer.domElement.addEventListener('mouseup', viewMouseUp, false);
-		renderer.domElement.addEventListener('mousemove', function(){moveFlag = 1;}, false);
+		//renderer.domElement.addEventListener('mouseover', viewMouseOver, false);
+		renderer.domElement.addEventListener('mousemove', viewMouseOver, false);
 
 		// camera = view angle, aspect, near, far
 		camera = new THREE.PerspectiveCamera(VIEW_ANGLE, ASPECT, NEAR, FAR);
@@ -293,7 +358,8 @@ modelViewer = function() {
 		
 
 		$("#annotation_list").on("click", "li", function(){
-			viewAnnotation(annot_obj[$("#annotation_list li").index(this)]);
+			var i = $("#annotation_list li").index(this);
+			viewAnnotation(i);
 		});
 
 		animate();
@@ -309,7 +375,7 @@ modelViewer = function() {
 		loader.addEventListener( 'load', function ( event ) {
 				
 			var geometry = event.content;
-			$("#loader_status").html("Loaded element");
+			$("#loader_status").html("Loaded element </br> s to zoom, a to pan");
 
 			var material = new THREE.MeshLambertMaterial({color:objectColor, shading: THREE.FlatShading});
 			var mesh = new THREE.Mesh( geometry, material );

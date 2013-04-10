@@ -8,10 +8,18 @@
       var viewer = new modelViewer();
       viewer.init("container", <%= @model.id %>);
       viewer.loadObject(text, true);
-    })
+      //http://localhost/~bhaviksingh/viewer/examples/objects/CACHE_CUBE.stl
+
+      $("#annotation_controller").toggle(
+          function(){ $("#annotation_controller").html("Turn annotations on"); viewer.showAnnot(false); },
+          function(){ $("#annotation_controller").html("Turn annotations off"); viewer.showAnnot(true);}
+          );
+    });
   </script>
   <div id="container">
       <div class="status"> <span id="loader_status"> </span> </div>
+      <div id="annotation_controller" class="status" > Turn annotations off </div>
+
   </div>
 
   <div id="annotations">

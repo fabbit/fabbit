@@ -66,7 +66,6 @@ THREE.STLLoader.prototype = {
       request.addEventListener( 'error', function () {
 
         scope.dispatchEvent( { type: 'error', message: 'Couldn\'t load URL [' + url + ']' } );
-
       }, false );
 
       

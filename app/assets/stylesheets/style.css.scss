@@ -195,14 +195,36 @@ $gray: gray;
 	opacity: .6;
 }
 
+.model #container #annotation_controller.status  {
+	text-align: right;
+	right: 60px;
+	cursor: pointer;
+}
+.model #container #annotation_controller.status:hover {
+	opacity: 1;
+}
+
 .model #container {
 	margin-left: 25px;
 	margin-top: 10px;
 }
 .model canvas {
 	background: rgb(255, 255, 234);
+	cursor: move;
 }
 
+#annotations {
+	margin-top: 15px;
+}
+
+#annotation_list li {
+	padding: 10px 0px;
+	cursor: pointer;
+}
+
+#annotation_list li.active {
+	color: $blue;
+}
 @media only screen and (max-width: 950px), only screen and (max-device-width: 950px) {
  	.container {
  		width: 100%;
@@ -210,3 +232,4 @@ $gray: gray;
  		left:0;
  	}
  }
+
