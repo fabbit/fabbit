@@ -5,4 +5,5 @@ class Annotation < ActiveRecord::Base
   validates :revision_id, presence: true
 
   belongs_to :revision
+  has_many :discussions
 end

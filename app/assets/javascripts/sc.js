@@ -136,6 +136,7 @@ modelViewer = function() {
 		if(!initLoad){
 			debug("Posting" + cameraPos + " " + coordinates + " " + text);
 			$.post('/model_files/' + objId + '/annotations', {"camera": v3ToString(cameraPos), "coordinates": v3ToString(coordinates), "text": text});
+			$.post('/model_files/' + objId + '/annotations/' + newAnnotId + '/discussions', {"uid": uid, "text": text});
 		}
 
 		
