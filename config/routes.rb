@@ -9,7 +9,7 @@ Fabbit::Application.routes.draw do
     resources :annotations, only: [:index, :create] do
       resource :discussions, only: [:index, :create]
     end
-    resources :revisions, only: [:show] do
+    resources :revisions, only: [:index, :show] do
       resources :annotations, only: [:index, :create]
     end
 
