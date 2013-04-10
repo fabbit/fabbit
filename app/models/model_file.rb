@@ -39,13 +39,13 @@ class ModelFile < ActiveRecord::Base
     Rails.root.join(cache_folder,"#{self.user}_#{revision || self.cached_revision}_#{file_name}")
   end
 
-  # def latest_revision
-  #   self.revisions.sort_by { |revision| revision.revision_number }.reverse[0]
-  # end
+  def latest_revision
+    self.revisions.order("created_at DESC").limit(1)
+  end
 
-  # def revision(revision_number)
-  #   self.revisions.find_by_revision_number(revision_number)
-  # end
+  def revision(revision_number)
+    self.revisions.find_by_revision_number(revision_number)
+  end
 
   private
 

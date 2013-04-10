@@ -7,7 +7,7 @@ class AnnotationsController < ApplicationController
     @annotations = revision.annotations
     respond_to do |format|
       format.html { redirect_to ModelFile.find(params[:model_file_id]) }
-      format.json { render json: @annotations }
+      format.json { render json: @annotations.to_json(include: :discussions) }
     end
   end
 

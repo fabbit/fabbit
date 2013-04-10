@@ -1,0 +1,10 @@
+<h1><%= @model_file.path %></h1>
+<h2>Revisions</h2>
+<%= render @revisions %>
+<h2>Dropbox File History</h2>
+<% @dropbox_revisions.each do |rev| %>
+  <li>
+    <%= rev["revision"] %>
+    <%= rev["modified"] %>
+  </li>
+<% end %>
