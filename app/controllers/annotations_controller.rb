@@ -21,7 +21,7 @@ class AnnotationsController < ApplicationController
       text: params[:text]
     )
     respond_to do |format|
-      format.js
+      format.js {render text: @annotation.id}
     end
   end
 

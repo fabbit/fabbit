@@ -18,7 +18,7 @@ class DiscussionsController < ApplicationController
 
     if discussion.save
       respond_to do |format|
-        format.js
+        format.js {render text: discussion.uid}
       end
     else
       # error message

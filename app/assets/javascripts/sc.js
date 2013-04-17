@@ -195,7 +195,7 @@ modelViewer = function(sceneContainer, annotationContainer, uniqueID) {
 
 	this.addModel = function(fileName){
 		model = new Model(fileName);
-		objects.push(model.load());
+		model.load();
 		//objectModel.setColor("#eeee")
 	}
 
@@ -224,8 +224,8 @@ modelViewer = function(sceneContainer, annotationContainer, uniqueID) {
 			}
 		}
 		function createMap(id, object) {
-			annotation_map[0].push(object);
-			annotation_map[1].push(id);
+			annotation_map[0].unshift(object);
+			annotation_map[1].unshift(id);
 		}
 		function getIdWithObj(object){
 			return annotation_map[1][annotation_map[0].indexOf(object)];
@@ -279,7 +279,7 @@ modelViewer = function(sceneContainer, annotationContainer, uniqueID) {
 			var discussions = [];
 			for (var i=0; i< annotJSON.discussions.length; i++){
 				var disc = annotJSON.discussions[i];
-				discussions.push({"uid": disc.uid , "text": disc.text});
+				discussions.unshift({"uid": disc.uid , "text": disc.text});
 			}
 
 			//TODO: What do we do if something goes wrong?
@@ -319,7 +319,7 @@ modelViewer = function(sceneContainer, annotationContainer, uniqueID) {
 
 				annotationContainer_element.on("keypress", "input", function(e){
 					if(e.keyCode == '13') {
-						addDiscussion(this.value, getIdWithHtml($(this).parent().attr('id')));
+						newDiscussion(this.value, getIdWithHtml($(this).parent().attr('id')));
 					}
 				});
 
@@ -336,10 +336,11 @@ modelViewer = function(sceneContainer, annotationContainer, uniqueID) {
 		/* PUBLIC METHODS */
 
 		//posts discussion to model and adds it to datastructures (doesn't need to be public, bound to click event)
-		this.newDiscussion = function(discussionText, id) {
+		function newDiscussion(discussionText, id) {
 			$.post('/model_files/' + sceneID + '/annotations/' + id + '/discussions', {"uid":0, "text": discussionText}, function(data){
 				console.log(data);
-				annotations[id].discussions.push({"uid": data, "text": discussionText});
+				annotations[id].discussions.unshift({"uid": data, "text": discussionText});
+				console.log(annotations);
 				updateUI();
 			})
 		}
