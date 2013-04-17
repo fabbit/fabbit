@@ -16,6 +16,9 @@ modelViewer = function(sceneContainer, annotationContainer, uniqueID) {
 	var model;
 	var annot;
 
+	//Camera tween
+	var tween;
+
 	function debug(str){
 		if(true){
 			console.log(str);
@@ -24,13 +27,27 @@ modelViewer = function(sceneContainer, annotationContainer, uniqueID) {
 	function animate() {
 		requestAnimationFrame(animate);
 		controller.controls.update();
-		//TODO: UPDATE TWEEN!
-		renderer.render(scene.scene, camera)
+		render();
+	}
+
+	function render(){
+		TWEEN.update();
+		renderer.render(scene.scene, camera);
 	}
 
 	function moveCamera(newPosition) {
+		//camera.position = newPosition;
+
+		var oldpos = {x: camera.position.x, y: camera.position.y, z: camera.position.z};
+
+		tween = new TWEEN.Tween(oldpos).to(newPosition, 1000);
+		tween.onUpdate(function(){
+			camera.position.x = oldpos.x; camera.position.y = oldpos.y; camera.position.z = oldpos.z;
+		});
+		tween.start();
+
 		camera.lookAt(new THREE.Vector3(0,0,0));
-		camera.position = newPosition;
+		camera.updateMatrix();
 	}
 
 	function init(){
