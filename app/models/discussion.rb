@@ -1,5 +1,7 @@
 class Discussion < ActiveRecord::Base
-  attr_accessible :annotation_id, :text, :uid
+  attr_accessible :annotation_id, :text
 
-  validates :uid, :text, :annotation_id, presence: true
+  validates :user_id, :text, :annotation_id, presence: true
+
+  belongs_to :user
 end

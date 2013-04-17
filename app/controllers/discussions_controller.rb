@@ -10,15 +10,19 @@ class DiscussionsController < ApplicationController
   end
 
   def create
+    user = User.where(
+      dropbox_uid: dropbox_client.account_info["user_id"].to_s
+    )
+
     annotation = Annotation.find(params[:annotation_id])
     discussion = annotation.discussions.new(
-      uid: params[:uid],
+      user_id: user.id,
       text: params[:text],
     )
 
     if discussion.save
       respond_to do |format|
-        format.js { render text: discussion.uid }
+        format.js { render text: discussion.user_id }
       end
     else
       # error message
