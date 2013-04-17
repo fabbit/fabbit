@@ -102,8 +102,7 @@ THREE.STLLoader.prototype = {
       }
     }
     var ret = str.indexOf("solid") >= 0;
-    console.log("returning " + ret);
-    return false;
+    return ret;
   },
 
   parse: function (buf) {

@@ -210,7 +210,7 @@ $gray: gray;
 }
 .model canvas {
 	background: rgb(255, 255, 234);
-	cursor: move;
+	cursor: pointer;
 }
 
 #annotations {
@@ -225,6 +225,23 @@ $gray: gray;
 #annotation_list li.active {
 	color: $blue;
 }
+
+#annotation_list li.active .discussions {
+	color: $black;
+}
+#annotation_list li .discussions div {
+	display: inline;
+}
+
+#annotation_list li .discussions .user {
+	color: $gray;
+}
+#annotation_list li .discussions .user:after {
+	content: "said";
+	padding-left: 5px;
+	padding-right: 5px;
+}
+
 @media only screen and (max-width: 950px), only screen and (max-device-width: 950px) {
  	.container {
  		width: 100%;
