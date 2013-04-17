@@ -27,14 +27,9 @@ modelViewer = function(sceneContainer, annotationContainer, uniqueID) {
 	function animate() {
 		requestAnimationFrame(animate);
 		controller.controls.update();
-		render();
-	}
-
-	function render(){
 		TWEEN.update();
 		renderer.render(scene.scene, camera);
 	}
-
 	function moveCamera(newPosition) {
 		//camera.position = newPosition;
 
@@ -213,10 +208,10 @@ modelViewer = function(sceneContainer, annotationContainer, uniqueID) {
 	this.addModel = function(fileName){
 		model = new Model(fileName);
 		model.load();
-		//objectModel.setColor("#eeee")
+		//model.setColor("#eeee")
 	}
 
-	//CLASS ANNOTATIONS!!!!!
+	//CLASS ANNOTATIONS!!!! instantiated with id of ul you want to use
 	Annotations = function(annotationContainer) {
 		
 		var annotationContainer_element = $(annotationContainer);
@@ -399,8 +394,6 @@ modelViewer = function(sceneContainer, annotationContainer, uniqueID) {
 		}
 
 		initializeAnnotations(); //Auto call to init annotations
-
-
 	}
 
 	this.toggleAnnotations = function() {
