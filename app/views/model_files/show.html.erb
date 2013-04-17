@@ -8,9 +8,9 @@
       viewer.addModel("<%= escape_javascript(contents_model_file_url) %>");
 
       $("#annotation_controller").toggle(
-          function(){ $("#annotation_controller").html("Turn annotations on"); viewer.showAnnot(false); },
-          function(){ $("#annotation_controller").html("Turn annotations off"); viewer.showAnnot(true);}
-          );
+          function(){ $("#annotation_controller").html("Turn annotations on"); viewer.toggleAnnotations(); },
+          function(){ $("#annotation_controller").html("Turn annotations off"); viewer.toggleAnnotations(); }
+        );
     });
   </script>
   <div id="container">
