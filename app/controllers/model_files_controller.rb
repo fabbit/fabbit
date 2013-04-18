@@ -13,9 +13,9 @@ class ModelFilesController < ApplicationController
   # Loads the requested model file, initializing the file cache if necessary.
   # Redirects immediately to a RESTful model file show page
   def init_model_file
-    user = User.new(
-      dropbox_uid: dropbox_client.account_info["user_id"].to_s
-    )
+    user = User.where(
+      dropbox_uid: dropbox_client.account_info["uid"].to_s
+    ).first_or_initialize
 
     if user.save
       model_file = ModelFile.where(
@@ -27,9 +27,10 @@ class ModelFilesController < ApplicationController
         model_file.update_and_get(dropbox_client)
         model_file.revisions.create!(revision_number: model_file.cached_revision)
       end
+
+      redirect_to model_file
     end
 
-    redirect_to model_file
   end
 
   def contents

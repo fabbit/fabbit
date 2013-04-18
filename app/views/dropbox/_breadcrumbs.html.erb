@@ -16,7 +16,7 @@
 <div class="row navigate">
 
   <ul class="subtitle">
-        <li> <%= link_to "Your projects", navigate_path %> </li>
+        <li> <%= link_to "Your projects", user_navigate_path %> </li>
 
         <% @breadcrumbs.each do |crumb| %>
           <li><%= link_to crumb[:text], crumb[:link] %></li>

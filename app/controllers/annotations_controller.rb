@@ -12,21 +12,22 @@ class AnnotationsController < ApplicationController
   end
 
   def create
-    user = User.where(
-      dropbox_uid: dropbox_client.account_info["user_id"].to_s
-    )
+    user = User.find_by_dropbox_uid(dropbox_client.account_info["uid"].to_s)
 
     model_file = ModelFile.find(params[:model_file_id])
     revision = model_file.revisions.first
     revision = Revisions.find(params[:revision_id]) if params[:revision_id]
-    @annotation = revision.annotations.create!(
+    @annotation = revision.annotations.build(
       coordinates: params[:coordinates],
       camera: params[:camera],
       text: params[:text],
-      user_id: user.id
     )
-    respond_to do |format|
-      format.js { render text: @annotation.id }
+
+    @annotation.user = user
+    if @annotation.save
+      respond_to do |format|
+        format.js { render text: @annotation.id }
+      end
     end
   end
 

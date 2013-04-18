@@ -44,7 +44,7 @@ module DropboxHelper
     link = ""
     dir_list.map do |crumb|
       link = File.join(link, crumb)
-      { text: crumb, link: navigate_url(to_link(link)) }
+      { text: crumb, link: user_navigate_url(to_link(link)) }
     end
   end
 
@@ -59,11 +59,11 @@ module DropboxHelper
     return full_path
   end
 
-  def process_contents(contents)
+  def process_contents(contents, user)
     contents.map do |content|
-      link = navigate_url(to_link(content["path"]))
+      link = user_navigate_url(user, to_link(content["path"]))
       if not content["is_dir"]
-        link = initialize_url(to_link(content["path"]))
+        link = user_init_model_file_url(user, to_link(content["path"]))
       end
       { content: to_filename(content["path"]), link: link, is_dir: content["is_dir"] }
     end
