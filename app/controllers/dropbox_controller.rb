@@ -26,7 +26,7 @@ class DropboxController < ApplicationController
     user = User.find(params[:user_id])
     path = parse_path(params[:path], params[:more_path])
     meta = dropbox_client.metadata(path)
-    @breadcrumbs = to_breadcrumbs(meta["path"])
+    @breadcrumbs = to_breadcrumbs(meta["path"], user)
     @contents = process_contents(meta["contents"], user)
   end
 

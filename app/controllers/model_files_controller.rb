@@ -7,7 +7,7 @@ class ModelFilesController < ApplicationController
     @model = model_file
     @file = model_file.update_and_get(dropbox_client)
     @model = model_file
-    @breadcrumbs = to_breadcrumbs(model_file.path)
+    @breadcrumbs = to_breadcrumbs(model_file.path, model_file.user)
   end
 
   # Loads the requested model file, initializing the file cache if necessary.
@@ -28,7 +28,7 @@ class ModelFilesController < ApplicationController
         model_file.revisions.create!(revision_number: model_file.cached_revision)
       end
 
-      redirect_to model_file
+      redirect_to user_model_file_path(user, model_file)
     end
 
   end

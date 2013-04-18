@@ -36,7 +36,7 @@ module DropboxHelper
     path.split('/')[0..-2].join('/')
   end
 
-  def to_breadcrumbs(path)
+  def to_breadcrumbs(path, user)
     dir_list = path.split(File::SEPARATOR)
     if !dir_list.empty? and dir_list[0].blank?
       dir_list = dir_list[1..-1]
@@ -44,7 +44,7 @@ module DropboxHelper
     link = ""
     dir_list.map do |crumb|
       link = File.join(link, crumb)
-      { text: crumb, link: user_navigate_url(to_link(link)) }
+      { text: crumb, link: user_navigate_url(user, to_link(link)) }
     end
   end
 
