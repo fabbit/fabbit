@@ -17,6 +17,9 @@ modelViewer = function(sceneContainer, annotationContainer, uniqueID, userID) {
 	var model;
 	var annot;
 
+	//Camera tween
+	var tween;
+
 	function debug(str){
 		if(true){
 			console.log(str);
@@ -25,13 +28,22 @@ modelViewer = function(sceneContainer, annotationContainer, uniqueID, userID) {
 	function animate() {
 		requestAnimationFrame(animate);
 		controller.controls.update();
-		//TODO: UPDATE TWEEN!
-		renderer.render(scene.scene, camera)
+		TWEEN.update();
+		renderer.render(scene.scene, camera);
 	}
-
 	function moveCamera(newPosition) {
+		//camera.position = newPosition;
+
+		var oldpos = {x: camera.position.x, y: camera.position.y, z: camera.position.z};
+
+		tween = new TWEEN.Tween(oldpos).to(newPosition, 1000);
+		tween.onUpdate(function(){
+			camera.position.x = oldpos.x; camera.position.y = oldpos.y; camera.position.z = oldpos.z;
+		});
+		tween.start();
+
 		camera.lookAt(new THREE.Vector3(0,0,0));
-		camera.position = newPosition;
+		camera.updateMatrix();
 	}
 
 	function init(){
@@ -197,10 +209,10 @@ modelViewer = function(sceneContainer, annotationContainer, uniqueID, userID) {
 	this.addModel = function(fileName){
 		model = new Model(fileName);
 		model.load();
-		//objectModel.setColor("#eeee")
+		//model.setColor("#eeee")
 	}
 
-	//CLASS ANNOTATIONS!!!!!
+	//CLASS ANNOTATIONS!!!! instantiated with id of ul you want to use
 	Annotations = function(annotationContainer) {
 		
 		var annotationContainer_element = $(annotationContainer);
@@ -383,8 +395,6 @@ modelViewer = function(sceneContainer, annotationContainer, uniqueID, userID) {
 		}
 
 		initializeAnnotations(); //Auto call to init annotations
-
-
 	}
 
 	this.toggleAnnotations = function() {
