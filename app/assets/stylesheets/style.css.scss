@@ -88,26 +88,26 @@ $gray: gray;
 	float: left;
 }
 
-.header .user {
+.header .member {
 	float: right;
 	cursor: pointer;
 	padding-top: 8px; /* TODO: THIS IS DISGUSTING FIGURE OUT A BETTER WAY */;
 }
 
-.header .user ul {
+.header .member ul {
 	display: none;
 }
-.header .user ul li {
+.header .member ul li {
 	text-align: right;
 	margin: 3px 0px;
 	color: gray;
 }
 
-.header .user ul li:hover {
+.header .member ul li:hover {
 	color: $black;
 }
 
-.header .user .subtitle:hover {
+.header .member .subtitle:hover {
 	color: $black;
 }
 
@@ -293,10 +293,10 @@ $gray: gray;
 	display: inline;
 }
 
-#annotation_list li .discussions .user {
+#annotation_list li .discussions .member {
 	color: $gray;
 }
-#annotation_list li .discussions .user:after {
+#annotation_list li .discussions .member:after {
 	content: "said";
 	padding-left: 5px;
 	padding-right: 5px;

@@ -8,7 +8,7 @@ describe ModelFile do
   describe "responses" do
     it { should respond_to :path }
     it { should respond_to :cached_revision }
-    it { should respond_to :user }
+    it { should respond_to :member }
     it { should respond_to :latest }
     it { should respond_to :revisions }
   end
@@ -24,7 +24,7 @@ describe ModelFile do
       it { should_not be_valid }
     end
 
-    describe "with blank user" do
+    describe "with blank member" do
       before { file.user = "" }
       it { should_not be_valid }
     end

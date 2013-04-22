@@ -1,4 +1,4 @@
-class User < ActiveRecord::Base
+class Member < ActiveRecord::Base
   attr_accessible :dropbox_uid, :name
 
   validates :dropbox_uid, :name, presence: true

@@ -5,8 +5,8 @@ class RevisionsController < ApplicationController
     @model= @revision.model_file
     @file = @revision.retrieve_from_dropbox(dropbox_client)
     @model = @model_file
-    @user = params[:user_id]? User.find(params[:user_id]) : current_user
-    @breadcrumbs = to_breadcrumbs(@model_file.path, @user)
+    @member = params[:member_id]? Member.find(params[:member_id]) : current_member
+    @breadcrumbs = to_breadcrumbs(@model_file.path, @member)
   end
 
   def index

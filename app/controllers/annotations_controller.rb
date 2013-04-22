@@ -8,13 +8,13 @@ class AnnotationsController < ApplicationController
     respond_to do |format|
       format.html { redirect_to ModelFile.find(params[:model_file_id]) }
       format.json do
-        render json: @annotations.to_json(include: { discussions: { methods: :user_name } })
+        render json: @annotations.to_json(include: { discussions: { methods: :member_name } })
       end
     end
   end
 
   def create
-    user = User.find_by_dropbox_uid(dropbox_client.account_info["uid"].to_s)
+    member = Member.find_by_dropbox_uid(dropbox_client.account_info["uid"].to_s)
 
     model_file = ModelFile.find(params[:model_file_id])
     revision = model_file.revisions.first
@@ -25,7 +25,7 @@ class AnnotationsController < ApplicationController
       text: params[:text],
     )
 
-    @annotation.user = user
+    @annotation.member = member
     if @annotation.save
       respond_to do |format|
         format.js { render text: @annotation.id }

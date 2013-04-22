@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130422172623) do
+ActiveRecord::Schema.define(:version => 20130422182850) do
 
   create_table "annotations", :force => true do |t|
     t.integer  "revision_id"
@@ -27,11 +27,20 @@ ActiveRecord::Schema.define(:version => 20130422172623) do
 
   create_table "discussions", :force => true do |t|
     t.integer  "annotation_id"
-    t.string   "user_id"
+    t.string   "member_id"
     t.string   "text"
     t.datetime "created_at",    :null => false
     t.datetime "updated_at",    :null => false
   end
+
+  create_table "members", :force => true do |t|
+    t.integer  "dropbox_uid"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
+    t.string   "name"
+  end
+
+  add_index "members", ["dropbox_uid"], :name => "index_users_on_dropbox_uid"
 
   create_table "model_files", :force => true do |t|
     t.string   "user"
@@ -39,10 +48,35 @@ ActiveRecord::Schema.define(:version => 20130422172623) do
     t.string   "cached_revision"
     t.datetime "created_at",      :null => false
     t.datetime "updated_at",      :null => false
-    t.integer  "user_id"
+    t.integer  "member_id"
   end
 
   add_index "model_files", ["user", "path"], :name => "index_model_files_on_user_and_path", :unique => true
+
+  create_table "project_members", :force => true do |t|
+    t.integer  "project_id"
+    t.integer  "member_id"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
+  add_index "project_members", ["member_id"], :name => "index_project_members_on_member_id"
+  add_index "project_members", ["project_id"], :name => "index_project_members_on_project_id"
+
+  create_table "project_types", :force => true do |t|
+    t.string   "name"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
+  create_table "projects", :force => true do |t|
+    t.string   "name"
+    t.integer  "project_type_id"
+    t.datetime "created_at",      :null => false
+    t.datetime "updated_at",      :null => false
+  end
+
+  add_index "projects", ["project_type_id"], :name => "index_projects_on_project_type_id"
 
   create_table "revisions", :force => true do |t|
     t.integer  "model_file_id"
@@ -60,14 +94,5 @@ ActiveRecord::Schema.define(:version => 20130422172623) do
 
   add_index "sessions", ["session_id"], :name => "index_sessions_on_session_id"
   add_index "sessions", ["updated_at"], :name => "index_sessions_on_updated_at"
-
-  create_table "users", :force => true do |t|
-    t.integer  "dropbox_uid"
-    t.datetime "created_at",  :null => false
-    t.datetime "updated_at",  :null => false
-    t.string   "name"
-  end
-
-  add_index "users", ["dropbox_uid"], :name => "index_users_on_dropbox_uid"
 
 end

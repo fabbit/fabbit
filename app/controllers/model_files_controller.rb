@@ -4,22 +4,22 @@ class ModelFilesController < ApplicationController
 
   def show
     @model = ModelFile.find(params[:id])
-    @user = params[:user_id]? User.find(params[:user_id]) : current_user
+    @member = params[:member_id]? Member.find(params[:member_id]) : current_member
     @file = @model.update_and_get(dropbox_client)
-    @breadcrumbs = to_breadcrumbs(@model.path, @user)
+    @breadcrumbs = to_breadcrumbs(@model.path, @member)
     @revisions = @model.revisions
   end
 
   # Loads the requested model file, initializing the file cache if necessary.
   # Redirects immediately to a RESTful model file show page
   def init_model_file
-    user = User.where(
+    member = Member.where(
       dropbox_uid: dropbox_client.account_info["uid"].to_s
     ).first_or_initialize
 
-    if user.save
+    if member.save
       model_file = ModelFile.where(
-        user_id: user.id,
+        member_id: member.id,
         path: params[:filename],
       ).first_or_initialize
 

@@ -13,13 +13,13 @@ class DropboxController < ApplicationController
       dbsession.get_access_token
       cookies[:dropbox_session] = dbsession.serialize
 
-      user = User.where(
+      member = Member.where(
         dropbox_uid: dropbox_client.account_info["uid"].to_s
       ).first_or_initialize
 
-      user.name = dropbox_client.account_info["display_name"].to_s
+      member.name = dropbox_client.account_info["display_name"].to_s
 
-      if user.save
+      if member.save
         flash[:success] = "You've signed into Dropbox!"
         redirect_to navigate_path
       end
@@ -27,11 +27,11 @@ class DropboxController < ApplicationController
   end
 
   def navigate
-    user = params[:user_id]? User.find(params[:user_id]) : current_user
+    member = params[:member_id]? Member.find(params[:member_id]) : current_member
     path = parse_path(params[:path], params[:more_path])
     meta = dropbox_client.metadata(path)
-    @breadcrumbs = to_breadcrumbs(meta["path"], user)
-    @contents = process_contents(meta["contents"], user)
+    @breadcrumbs = to_breadcrumbs(meta["path"], member)
+    @contents = process_contents(meta["contents"], member)
   end
 
 end

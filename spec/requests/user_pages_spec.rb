@@ -1,4 +1,4 @@
 require 'spec_helper'
 
-describe "UserPages" do
+describe "MemberPages" do
 end

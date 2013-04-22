@@ -21,9 +21,9 @@ module DropboxHelper
   end
 
   # TODO could implement this as a cookie, saving the extra call to Dropbox
-  def current_user
-    @current_user = User.find_by_dropbox_uid(dropbox_client.account_info["uid"].to_s)
-    return @current_user
+  def current_member
+    @current_member = Member.find_by_dropbox_uid(dropbox_client.account_info["uid"].to_s)
+    return @current_member
   end
 
   def to_link(content)
@@ -42,7 +42,7 @@ module DropboxHelper
     path.split('/')[0..-2].join('/')
   end
 
-  def to_breadcrumbs(path, user)
+  def to_breadcrumbs(path, member)
     dir_list = path.split(File::SEPARATOR)
     if !dir_list.empty? and dir_list[0].blank?
       dir_list = dir_list[1..-1]
@@ -65,7 +65,7 @@ module DropboxHelper
     return full_path
   end
 
-  def process_contents(contents, user)
+  def process_contents(contents, member)
     contents.map do |content|
       link = navigate_url(to_link(content["path"]))
       if not content["is_dir"]

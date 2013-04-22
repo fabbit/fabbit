@@ -1,4 +1,4 @@
-modelViewer = function(sceneContainer, annotationContainer, uniqueID, userID) {
+modelViewer = function(sceneContainer, annotationContainer, uniqueID, memberID) {
 
 	//Essentials
 	var camera;
@@ -8,7 +8,7 @@ modelViewer = function(sceneContainer, annotationContainer, uniqueID, userID) {
 	//Scene variables
 	var scene;
 	var sceneID = uniqueID;
-        var userID = userID;
+        var memberID = memberID;
 	var sceneElement = $(sceneContainer);
 	var annotationContainer = annotationContainer;
 
@@ -258,8 +258,8 @@ modelViewer = function(sceneContainer, annotationContainer, uniqueID, userID) {
 				var discussion_html = "";
 				for(var j=0; j< annotObj.discussions.length; j++){
 					var discussionObj = annotObj.discussions;
-					//Each discussion is <li> <div class='user'> user id </div> <div class='text'> discussion text </div>
-					discussion_html += "<li> <div class='user'>" + discussionObj[j].user_id + "</div>" +
+					//Each discussion is <li> <div class='member'> member id </div> <div class='text'> discussion text </div>
+					discussion_html += "<li> <div class='member'>" + discussionObj[j].member_id + "</div>" +
 											"<div class='text'>" + discussionObj[j].text + "</div> </li>";
 
 				}
@@ -292,7 +292,7 @@ modelViewer = function(sceneContainer, annotationContainer, uniqueID, userID) {
 			var discussions = [];
 			for (var i=0; i< annotJSON.discussions.length; i++){
 				var disc = annotJSON.discussions[i];
-				discussions.unshift({"user_id": disc.user_id , "text": disc.text});
+				discussions.unshift({"member_id": disc.member_id , "text": disc.text});
 			}
 
 			//TODO: What do we do if something goes wrong?
@@ -352,9 +352,9 @@ modelViewer = function(sceneContainer, annotationContainer, uniqueID, userID) {
 
 		//posts discussion to model and adds it to datastructures (doesn't need to be public, bound to click event)
 		function newDiscussion(discussionText, id) {
-			$.post('/annotations/' + id + '/discussions', {"user_id":0, "text": discussionText}, function(data){
+			$.post('/annotations/' + id + '/discussions', {"member_id":0, "text": discussionText}, function(data){
 				console.log(data);
-				annotations[id].discussions.unshift({"user_id": data, "text": discussionText});
+				annotations[id].discussions.unshift({"member_id": data, "text": discussionText});
 				console.log(annotations);
 				updateUI();
 			})
