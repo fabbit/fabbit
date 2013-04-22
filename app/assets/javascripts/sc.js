@@ -259,7 +259,7 @@ modelViewer = function(sceneContainer, annotationContainer, uniqueID, userID) {
 				for(var j=0; j< annotObj.discussions.length; j++){
 					var discussionObj = annotObj.discussions;
 					//Each discussion is <li> <div class='user'> user id </div> <div class='text'> discussion text </div>
-					discussion_html += "<li> <div class='user'>" + discussionObj[j].uid + "</div>" +
+					discussion_html += "<li> <div class='user'>" + discussionObj[j].user_id + "</div>" +
 											"<div class='text'>" + discussionObj[j].text + "</div> </li>";
 
 				}
@@ -292,7 +292,7 @@ modelViewer = function(sceneContainer, annotationContainer, uniqueID, userID) {
 			var discussions = [];
 			for (var i=0; i< annotJSON.discussions.length; i++){
 				var disc = annotJSON.discussions[i];
-				discussions.unshift({"uid": disc.uid , "text": disc.text});
+				discussions.unshift({"user_id": disc.user_id , "text": disc.text});
 			}
 
 			//TODO: What do we do if something goes wrong?
@@ -325,7 +325,7 @@ modelViewer = function(sceneContainer, annotationContainer, uniqueID, userID) {
 
 		//Called automatically on init. Gets annotations from server and adds them to ds
 		function initializeAnnotations() {
-			$.getJSON('/users/' + userID + '/model_files/' + sceneID + '/annotations', function(data) {
+			$.getJSON('/model_files/' + sceneID + '/annotations', function(data) {
 				annotationList = data;
 				for (var i =0; i <annotationList.length; i++) {
 					var temp = parseAnnotation(annotationList[i]);
@@ -352,9 +352,9 @@ modelViewer = function(sceneContainer, annotationContainer, uniqueID, userID) {
 
 		//posts discussion to model and adds it to datastructures (doesn't need to be public, bound to click event)
 		function newDiscussion(discussionText, id) {
-			$.post('/users/' + userID + '/model_files/' + sceneID + '/annotations/' + id + '/discussions', {"uid":0, "text": discussionText}, function(data){
+			$.post('/annotations/' + id + '/discussions', {"user_id":0, "text": discussionText}, function(data){
 				console.log(data);
-				annotations[id].discussions.unshift({"uid": data, "text": discussionText});
+				annotations[id].discussions.unshift({"user_id": data, "text": discussionText});
 				console.log(annotations);
 				updateUI();
 			})
@@ -364,7 +364,7 @@ modelViewer = function(sceneContainer, annotationContainer, uniqueID, userID) {
 			var name = prompt("Gimme an annotation please");
 			if (name!= null && name != ""){
 				
-				$.post('/users/' + userID + '/model_files/' + sceneID + '/annotations', {"camera": v3ToString(camera.position.clone()), "coordinates": v3ToString(point) , "text": name}, function(data){
+				$.post('/model_files/' + sceneID + '/annotations', {"camera": v3ToString(camera.position.clone()), "coordinates": v3ToString(point) , "text": name}, function(data){
 					addAnnotation({"text": name, "camera": camera.position.clone(), "coordinates": point, "discussions": []}, data);
 					updateUI();
 				});
