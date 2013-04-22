@@ -1,4 +1,4 @@
-modelViewer = function(sceneContainer, annotationContainer, uniqueID) {
+modelViewer = function(sceneContainer, annotationContainer, uniqueID, userID) {
 
 	//Essentials
 	var camera;
@@ -8,6 +8,7 @@ modelViewer = function(sceneContainer, annotationContainer, uniqueID) {
 	//Scene variables
 	var scene;
 	var sceneID = uniqueID;
+        var userID = userID;
 	var sceneElement = $(sceneContainer);
 	var annotationContainer = annotationContainer;
 
@@ -324,7 +325,7 @@ modelViewer = function(sceneContainer, annotationContainer, uniqueID) {
 
 		//Called automatically on init. Gets annotations from server and adds them to ds
 		function initializeAnnotations() {
-			$.getJSON('/model_files/' + sceneID + '/annotations', function(data) {
+			$.getJSON('/users/' + userID + '/model_files/' + sceneID + '/annotations', function(data) {
 				annotationList = data;
 				for (var i =0; i <annotationList.length; i++) {
 					var temp = parseAnnotation(annotationList[i]);
@@ -351,7 +352,7 @@ modelViewer = function(sceneContainer, annotationContainer, uniqueID) {
 
 		//posts discussion to model and adds it to datastructures (doesn't need to be public, bound to click event)
 		function newDiscussion(discussionText, id) {
-			$.post('/model_files/' + sceneID + '/annotations/' + id + '/discussions', {"uid":0, "text": discussionText}, function(data){
+			$.post('/users/' + userID + '/model_files/' + sceneID + '/annotations/' + id + '/discussions', {"uid":0, "text": discussionText}, function(data){
 				console.log(data);
 				annotations[id].discussions.unshift({"uid": data, "text": discussionText});
 				console.log(annotations);
@@ -363,7 +364,7 @@ modelViewer = function(sceneContainer, annotationContainer, uniqueID) {
 			var name = prompt("Gimme an annotation please");
 			if (name!= null && name != ""){
 				
-				$.post('/model_files/' + sceneID + '/annotations', {"camera": v3ToString(camera.position.clone()), "coordinates": v3ToString(point) , "text": name}, function(data){
+				$.post('/users/' + userID + '/model_files/' + sceneID + '/annotations', {"camera": v3ToString(camera.position.clone()), "coordinates": v3ToString(point) , "text": name}, function(data){
 					addAnnotation({"text": name, "camera": camera.position.clone(), "coordinates": point, "discussions": []}, data);
 					updateUI();
 				});

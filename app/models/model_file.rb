@@ -1,11 +1,12 @@
 class ModelFile < ActiveRecord::Base
-  attr_accessible :cached_revision, :path, :user
+  attr_accessible :cached_revision, :path
 
   # TODO cached_revision should not conflict semantically with Revisions
   # (since this is a dropbox revision)
-  validates :path, :user, presence: true
+  validates :path, :user_id, presence: true
 
   has_many :revisions, dependent: :destroy
+  belongs_to :user
 
 
   # Retrieves the latest version of the model file by comparing the stored
@@ -36,7 +37,7 @@ class ModelFile < ActiveRecord::Base
   def cache_file_name(revision=nil)
     file_name = self.path.split("/")[-1]
     cache_folder = "cache"
-    Rails.root.join(cache_folder,"#{self.user}_#{revision || self.cached_revision}_#{file_name}")
+    Rails.root.join(cache_folder,"#{self.user.dropbox_uid}_#{revision || self.cached_revision}_#{file_name}")
   end
 
   def latest_revision

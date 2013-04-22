@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130315230810) do
+ActiveRecord::Schema.define(:version => 20130417231147) do
 
   create_table "annotations", :force => true do |t|
     t.integer  "revision_id"
@@ -20,13 +20,14 @@ ActiveRecord::Schema.define(:version => 20130315230810) do
     t.string   "text"
     t.datetime "created_at",  :null => false
     t.datetime "updated_at",  :null => false
+    t.integer  "user_id"
   end
 
   add_index "annotations", ["revision_id"], :name => "index_annotations_on_revision_id"
 
   create_table "discussions", :force => true do |t|
     t.integer  "annotation_id"
-    t.string   "uid"
+    t.string   "user_id"
     t.string   "text"
     t.datetime "created_at",    :null => false
     t.datetime "updated_at",    :null => false
@@ -38,6 +39,7 @@ ActiveRecord::Schema.define(:version => 20130315230810) do
     t.integer  "cached_revision"
     t.datetime "created_at",      :null => false
     t.datetime "updated_at",      :null => false
+    t.integer  "user_id"
   end
 
   add_index "model_files", ["user", "path"], :name => "index_model_files_on_user_and_path", :unique => true
@@ -60,5 +62,13 @@ ActiveRecord::Schema.define(:version => 20130315230810) do
 
   add_index "sessions", ["session_id"], :name => "index_sessions_on_session_id"
   add_index "sessions", ["updated_at"], :name => "index_sessions_on_updated_at"
+
+  create_table "users", :force => true do |t|
+    t.integer  "dropbox_uid"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
+  end
+
+  add_index "users", ["dropbox_uid"], :name => "index_users_on_dropbox_uid"
 
 end
