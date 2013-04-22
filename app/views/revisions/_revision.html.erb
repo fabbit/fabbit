@@ -1,2 +1,1 @@
-<p>#<%= revision.revision_number %></p>
-<p>annotations: <%= revision.annotations.count %></p>
+<li> <%= revision.revision_number %> <span> <%= time_ago_in_words(revision.created_at) %> </span> </li>

@@ -28,6 +28,8 @@ class RevisionsController < ApplicationController
   end
 
   def destroy
+    Revision.find(params[:id]).destroy
+    respond_to { |format| format.js }
   end
 
 end
