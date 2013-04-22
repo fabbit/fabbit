@@ -5,7 +5,7 @@ class DiscussionsController < ApplicationController
     @discussions = annotation.discussions
     respond_to do |format|
       format.html { redirect_to ModelFile.find(params[:model_file_id]) }
-      format.json { render json: @discussions }
+      format.json { render json: @discussions.to_json({ methods: :user_name }) }
     end
   end
 

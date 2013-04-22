@@ -3,7 +3,7 @@
   <script>
     $(document).ready(function(){
       var viewer = new modelViewer("#container", "#annotation_list",<%= @model.id %>, <%= @user.id %>);
-      viewer.addModel("<%= escape_javascript(contents_user_model_file_url) %>");
+      viewer.addModel("<%= escape_javascript(contents_model_file_url) %>");
 
       $("#annotation_controller").toggle(
           function(){ $("#annotation_controller").html("Turn annotations on"); viewer.toggleAnnotations(); },

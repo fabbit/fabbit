@@ -2,10 +2,10 @@ class RevisionsController < ApplicationController
 
   def show
     @revision = Revision.find(params[:id])
-    @model_file = @revision.model_file
+    @model= @revision.model_file
     @file = @revision.retrieve_from_dropbox(dropbox_client)
     @model = @model_file
-    @user = User.find(params[:user_id])
+    @user = params[:user_id]? User.find(params[:user_id]) : current_user
     @breadcrumbs = to_breadcrumbs(@model_file.path, @user)
   end
 

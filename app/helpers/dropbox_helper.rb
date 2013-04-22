@@ -23,7 +23,6 @@ module DropboxHelper
   # TODO could implement this as a cookie, saving the extra call to Dropbox
   def current_user
     @current_user = User.find_by_dropbox_uid(dropbox_client.account_info["uid"].to_s)
-    @current_user.dropbox_client = dropbox_client
     return @current_user
   end
 
@@ -51,7 +50,7 @@ module DropboxHelper
     link = ""
     dir_list.map do |crumb|
       link = File.join(link, crumb)
-      { text: crumb, link: user_navigate_url(user, to_link(link)) }
+      { text: crumb, link: navigate_url(to_link(link)) }
     end
   end
 
@@ -68,9 +67,9 @@ module DropboxHelper
 
   def process_contents(contents, user)
     contents.map do |content|
-      link = user_navigate_url(user, to_link(content["path"]))
+      link = navigate_url(to_link(content["path"]))
       if not content["is_dir"]
-        link = user_init_model_file_url(user, to_link(content["path"]))
+        link = init_model_file_url(to_link(content["path"]))
       end
       { content: to_filename(content["path"]), link: link, is_dir: content["is_dir"] }
     end

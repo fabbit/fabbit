@@ -3,13 +3,11 @@ class ModelFilesController < ApplicationController
   before_filter :live_dropbox_session
 
   def show
-    model_file = ModelFile.find(params[:id])
-    @user = User.find(params[:user_id])
-    @model = model_file
-    @file = model_file.update_and_get(dropbox_client)
-    @model = model_file
-    @breadcrumbs = to_breadcrumbs(model_file.path, model_file.user)
-    @revisions = model_file.revisions
+    @model = ModelFile.find(params[:id])
+    @user = params[:user_id]? User.find(params[:user_id]) : current_user
+    @file = @model.update_and_get(dropbox_client)
+    @breadcrumbs = to_breadcrumbs(@model.path, @user)
+    @revisions = @model.revisions
   end
 
   # Loads the requested model file, initializing the file cache if necessary.
@@ -30,7 +28,7 @@ class ModelFilesController < ApplicationController
         model_file.revisions.create!(revision_number: model_file.cached_revision)
       end
 
-      redirect_to user_model_file_path(user, model_file)
+      redirect_to model_file_path(model_file)
     end
 
   end

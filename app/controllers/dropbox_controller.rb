@@ -15,15 +15,19 @@ class DropboxController < ApplicationController
 
       user = User.where(
         dropbox_uid: dropbox_client.account_info["uid"].to_s
-      ).first_or_create!
+      ).first_or_initialize
 
-      flash[:success] = "You've signed into Dropbox!"
-      redirect_to user_navigate_path(user)
+      user.name = dropbox_client.account_info["display_name"].to_s
+
+      if user.save
+        flash[:success] = "You've signed into Dropbox!"
+        redirect_to navigate_path
+      end
     end
   end
 
   def navigate
-    user = User.find(params[:user_id])
+    user = params[:user_id]? User.find(params[:user_id]) : current_user
     path = parse_path(params[:path], params[:more_path])
     meta = dropbox_client.metadata(path)
     @breadcrumbs = to_breadcrumbs(meta["path"], user)
