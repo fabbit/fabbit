@@ -4,6 +4,7 @@ class ModelFilesController < ApplicationController
 
   def show
     model_file = ModelFile.find(params[:id])
+    @user = User.find(params[:user_id])
     @model = model_file
     @file = model_file.update_and_get(dropbox_client)
     @model = model_file

@@ -4,7 +4,7 @@
   <p id="stlstring"><%= @file %></p>
   <script>
     $(document).ready(function(){
-      var viewer = new modelViewer("#container", "#annotation_list",<%= @model.id %>);
+      var viewer = new modelViewer("#container", "#annotation_list",<%= @model.id %>, <%= @user.id %>);
       viewer.addModel("<%= escape_javascript(contents_user_model_file_url) %>");
 
       $("#annotation_controller").toggle(
