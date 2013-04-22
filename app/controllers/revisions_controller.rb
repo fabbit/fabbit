@@ -13,6 +13,10 @@ class RevisionsController < ApplicationController
     @model_file = ModelFile.find(params[:model_file_id])
     @revisions = @model_file.revisions
     @dropbox_revisions = dropbox_client.revisions(@model_file.path)
+
+    respond_to do |format|
+      format.json { render :json @revisions }
+    end
   end
 
   def create

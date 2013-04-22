@@ -1,3 +1,6 @@
 class ProjectMember < ActiveRecord::Base
-  attr_accessible :member_id, :project_id
+  validates :member_id, :project_id, precense: true
+
+  belongs_to :member
+  belongs_to :project
 end

@@ -4,4 +4,7 @@ class Member < ActiveRecord::Base
   validates :dropbox_uid, :name, presence: true
 
   has_many :discussions, dependent: :destroy
+
+  has_many :project_members, dependent: :destroy
+  has_many :projects, through: :project_members
 end
