@@ -111,20 +111,28 @@ $gray: gray;
 	color: $black;
 }
 
+.navigate {
+	width:100%;
+}
 .navigate ul {
 	float: left;
-	width: 100%;
 	padding: 10px 0px;
 }
 
+//Generic to both crumbs and navigate
 .navigate ul li {
 	padding-right: 10px;
-	color: $blue;
 	cursor: pointer;
+}
+
+
+//Crumb specific
+.navigate ul.crumbs li {
+	color: $blue;
 	float:left;
 }
 
-.navigate ul li:after {
+.navigate ul.crumbs li:after {
 	content: '>';
 	color: blue;
 	color: $gray;
@@ -135,18 +143,65 @@ $gray: gray;
 	left: 2px;
 }
 
-.navigate ul li:nth-last-child(2){
+.navigate ul.crumbs li:nth-last-child(2){
 	cursor: default;
 	color: $black;
 }
 
-.navigate ul li:last-child{
+.navigate ul.crumbs li:last-child{
 	float:right;
 }
 
-.navigate ul li:last-child:after, .navigate ul li:nth-last-child(2):after {
+.navigate ul.crumbs li:last-child:after, .navigate ul.crumbs li:nth-last-child(2):after {
 	content: '';
 }
+
+//Revision specific
+.navigate .revisions {
+	position: absolute;
+	right: 15px; //TODO: this is a little messy, maybe dont use absolute positioning;
+}
+
+.navigate ul.revisions li {
+	text-align: right;
+	display: none;
+	padding: 10px;
+	min-width: 100px;
+	background: white;
+	margin-bottom: 5px;
+}
+
+.navigate ul.revisions li span {
+	color: $gray;
+	display: block;
+	font-size: 14px; //TODO: getting messy again, maybe have spans be the subtitles;
+}
+.navigate ul.revisions li:first-child, .navigate ul.revisions.expanded li {
+	display: block;
+}
+.navigate ul.revisions li:first-child {
+	padding-top:0px;
+}
+.navigate ul.revisions li:first-child span {
+	display: none;
+}
+
+.navigate ul.revisions.expanded li:first-child span {
+	display: block;
+}
+
+.navigate ul.revisions li:first-child:before {
+	content: ">";
+	font-size: 15px;
+	position: absolute;
+	left: -0px;
+	color: $gray;
+}
+
+.navigate ul.revisions.expanded li:first-child:before {
+	content: "v";
+}
+
 
 
 .files .inset{
@@ -191,17 +246,12 @@ $gray: gray;
 
 .model #container .status {
 	position: absolute;
-	margin-top: 5px;
-	margin-left: 5px;
+	margin-top: 10px;
+	margin-left: 10px;
 	color: #FFAF96;
 	opacity: .6;
 }
 
-.model #container #annotation_controller.status  {
-	text-align: right;
-	right: 60px;
-	cursor: pointer;
-}
 .model #container #annotation_controller.status:hover {
 	opacity: 1;
 }

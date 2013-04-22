@@ -8,20 +8,32 @@
 			<li> Logout </li>
 		</ul>
 		<script>
+		$(document).ready(function(){
 			$(".header .user .subtitle").click(function(){ $(".header .user ul").slideToggle()});
+			$(".navigate .revisions li:first-child").toggle(
+				function(){ $(".navigate .revisions").addClass("expanded")}, 
+				function(){ $(".navigate .revisions").removeClass("expanded")}
+				);
+		});
 		</script>
 	</div>
 </div>
 
 <div class="row navigate">
 
-  <ul class="subtitle">
+  <ul class="subtitle crumbs">
         <li> <%= link_to "Your projects", user_navigate_path %> </li>
 
         <% @breadcrumbs.each do |crumb| %>
           <li><%= link_to crumb[:text], crumb[:link] %></li>
         <% end %>
         <li></li>
+  </ul>
+
+  <ul class="subtitle revisions">
+  	<li> Revision 5 <span> 1 day ago </span> </li>
+  	<li> Revision 4 <span> 2 days ago </span> </li>
+  	<li> Revision 3 <span> 3 weeks ago </span> </li>
   </ul>
 
 </div>
