@@ -1,30 +1,3 @@
 <%= render "dropbox/breadcrumbs" %>
 
-<div class="row model">
-  <p id="stlstring"><%= @file %></p>
-  <script>
-    $(document).ready(function(){
-      var text = $("#stlstring").html();
-      var viewer = new modelViewer();
-      viewer.init("container", <%= @model.id %>);
-      viewer.loadObject("<%= escape_javascript(contents_model_file_url) %>", false);
-      //http://localhost/~bhaviksingh/viewer/examples/objects/CACHE_CUBE.stl
-
-      $("#annotation_controller").toggle(
-          function(){ $("#annotation_controller").html("Turn annotations on"); viewer.showAnnot(false); },
-          function(){ $("#annotation_controller").html("Turn annotations off"); viewer.showAnnot(true);}
-          );
-    });
-  </script>
-  <div id="container">
-      <div class="status"> <span id="loader_status"> </span> </div>
-      <div id="annotation_controller" class="status" > Turn annotations off </div>
-
-  </div>
-
-  <div id="annotations">
-    <div class="subtitle">Annotations </div>
-    <ul id="annotation_list">
-    </ul>
-  </div>
-</div>
+<%= render "model_files/model_viewer" %>

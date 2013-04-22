@@ -16,7 +16,7 @@ class DiscussionsController < ApplicationController
     discussion = annotation.discussions.new(
       text: params[:text],
     )
-    discussion.user = user
+    discussion.user = current_user
 
     if discussion.save
       respond_to do |format|

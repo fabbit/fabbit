@@ -20,6 +20,13 @@ module DropboxHelper
     DropboxClient.new(dropbox_session, fabbit_dev_access_type)
   end
 
+  # TODO could implement this as a cookie, saving the extra call to Dropbox
+  def current_user
+    @current_user = User.find_by_dropbox_uid(dropbox_client.account_info["uid"].to_s)
+    @current_user.dropbox_client = dropbox_client
+    return @current_user
+  end
+
   def to_link(content)
     content[1..-1]
   end

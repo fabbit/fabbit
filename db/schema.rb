@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130417231147) do
+ActiveRecord::Schema.define(:version => 20130422152031) do
 
   create_table "annotations", :force => true do |t|
     t.integer  "revision_id"
@@ -36,7 +36,7 @@ ActiveRecord::Schema.define(:version => 20130417231147) do
   create_table "model_files", :force => true do |t|
     t.string   "user"
     t.string   "path"
-    t.integer  "cached_revision"
+    t.string   "cached_revision"
     t.datetime "created_at",      :null => false
     t.datetime "updated_at",      :null => false
     t.integer  "user_id"
@@ -46,12 +46,10 @@ ActiveRecord::Schema.define(:version => 20130417231147) do
 
   create_table "revisions", :force => true do |t|
     t.integer  "model_file_id"
-    t.integer  "revision_number"
     t.datetime "created_at",      :null => false
     t.datetime "updated_at",      :null => false
+    t.string   "revision_number"
   end
-
-  add_index "revisions", ["model_file_id", "revision_number"], :name => "index_revisions_on_model_file_id_and_revision_number"
 
   create_table "sessions", :force => true do |t|
     t.string   "session_id", :null => false

@@ -20,7 +20,7 @@ class ModelFile < ActiveRecord::Base
   # loaded from dropbox.
 
   def update_and_get(dropbox_client, test_rev=nil, test_content=nil)
-    dropbox_rev = test_rev || dropbox_client.metadata(self.path)["revision"]
+    dropbox_rev = test_rev || dropbox_client.metadata(self.path)["rev"]
     if self.cached_revision == dropbox_rev and File.exists?(self.cache_file_name)
       return load_cached
     else
