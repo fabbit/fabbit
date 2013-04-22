@@ -265,6 +265,28 @@ $gray: gray;
 	border: 1px solid rgb(255, 233, 194);
 }
 
+.versions ul li {
+	float:left;
+}
+
+.versions ul li div{
+	float:left;
+	padding: 10px 0px;
+}
+
+.versions ul li div.check {
+	text-align: center;
+	width: 100px;
+	color: $gray;
+}
+
+.versions ul li div.name {
+	width: 500px;
+}
+
+.versions ul li div.date {
+	width: 150px;
+}
 #annotations {
 	margin-top: 15px;
 }

@@ -1,3 +1,24 @@
 <%= render "dropbox/breadcrumbs" %>
 
 <%= render "model_files/model_viewer" %>
+
+
+
+<div class="row versions">
+  <ul>
+    <li class="subtitle"> 
+      <div class="name"> Version number</div>
+      <div class="date"> Last changed</div>
+      <div class="check"> Is revision </div>
+    </li>
+    <% @dropbox_revisions.each do |revision| %>
+    <li>      
+      <div class="name"> <%= revision["rev"] %></div>
+      <div class="date"> <%= revision["modified"] %> </div>
+      <div class="check"> <input type="checkbox"> </div>
+    </li>
+    <% end %>
+  </ul>
+</div>
+
+
