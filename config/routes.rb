@@ -18,10 +18,14 @@ Fabbit::Application.routes.draw do
   resources :model_files, only: [:show] do
     resources :annotations, only: [:index, :create]
     resources :revisions, only: [:index, :create]
-    get "contents", on: :member
+
+    member do
+      get :contents
+      get :dropbox_revisions
+    end
   end
 
-  resources :revisions, only: [:show] do
+  resources :revisions, only: [:show, :destroy] do
     resources :annotations, only: [:index, :create]
   end
 

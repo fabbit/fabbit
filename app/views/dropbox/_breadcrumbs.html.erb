@@ -29,11 +29,10 @@
         <% end %>
         <li></li>
   </ul>
-
-  <ul class="subtitle revisions">
-  	<li> Revision 5 <span> 1 day ago </span> </li>
-  	<li> Revision 4 <span> 2 days ago </span> </li>
-  	<li> Revision 3 <span> 3 weeks ago </span> </li>
-  </ul>
+  <% if @model %>
+    <ul class="subtitle revisions">
+      <%= render @model.revisions %>
+    </ul>
+  <% end %>
 
 </div>

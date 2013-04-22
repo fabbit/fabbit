@@ -38,6 +38,13 @@ class ModelFilesController < ApplicationController
     respond_to do |format|
       format.text { render text: @file }
     end
+
+  end
+
+  def dropbox_revisions
+    @model_file = ModelFile.find(params[:id])
+    @revisions = @model_file.revisions
+    @dropbox_revisions = dropbox_client.revisions(@model_file.path)
   end
 
   # TODO file history
