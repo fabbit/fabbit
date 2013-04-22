@@ -33,7 +33,6 @@ $gray: gray;
 }
 
 .subtitle, h2 {
-	color: $gray;
 	font-size: 18px;
 }
 
@@ -82,6 +81,9 @@ $gray: gray;
 	margin-bottom: 15px;
 }
 
+.header .subtitle {
+	color: $gray;
+}
 .header .logo {
 	float: left;
 }
@@ -205,12 +207,12 @@ $gray: gray;
 }
 
 .model #container {
-	margin-left: 25px;
 	margin-top: 10px;
 }
 .model canvas {
 	background: rgb(255, 255, 234);
 	cursor: pointer;
+	border: 1px solid rgb(255, 233, 194);
 }
 
 #annotations {
@@ -218,12 +220,20 @@ $gray: gray;
 }
 
 #annotation_list li {
-	padding: 10px 0px;
+	margin: 5px 0px;
+	padding: 10px 10px;
 	cursor: pointer;
+	width: 100%;
+	border-left: 3px solid white;
 }
 
 #annotation_list li.active {
-	color: $blue;
+	border-left: 3px solid $blue;
+}
+
+#annotation_list input{
+	width: 100%;
+	margin-top: 5px;
 }
 
 #annotation_list li.active .discussions {

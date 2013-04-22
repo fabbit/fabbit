@@ -49,7 +49,7 @@ modelViewer = function(sceneContainer, annotationContainer, uniqueID) {
 		
 		objects = [];
 		//Set up scene
-		scene = { "width": 800, "height": 450, "scene": new THREE.Scene()};	
+		scene = { "width": 900, "height": 507, "scene": new THREE.Scene()};	
 		camera = new THREE.PerspectiveCamera(45, 1.77, scene.width /scene.height, 10000); //view_angle, aspect = width/height, near, far
 		moveCamera(new THREE.Vector3(0,0,100));
 		scene.scene.add(camera);
@@ -176,7 +176,7 @@ modelViewer = function(sceneContainer, annotationContainer, uniqueID) {
 				var scaleFactor = 25/boundedBy;			
 
 				//Move the mesh around
-				mesh.position.set( boundedBy ,0,0); //TODO: Calculate position and rotation better
+				mesh.position.set(0 ,0,0); //TODO: Calculate position and rotation better
 				mesh.rotation.set( 0, - Math.PI / 2, 0 );
 				mesh.scale.set(scaleFactor, scaleFactor, scaleFactor);
 				
@@ -306,7 +306,9 @@ modelViewer = function(sceneContainer, annotationContainer, uniqueID) {
 		//adds clean annotObj (annotation json) with id to data structures
 		function addAnnotation(annotObj, id){
 			annotations[id] = annotObj;
-			var sphereMaterial = new THREE.MeshLambertMaterial({ color: annotColor, shading: THREE.FlatShading });
+			
+			var sphereMaterial = new THREE.MeshBasicMaterial({ color: annotColor, transparent: true});
+			sphereMaterial.opacity = 0.6;
 			var sphere = new THREE.Mesh(
 			  new THREE.SphereGeometry(
 			    3, //radius
