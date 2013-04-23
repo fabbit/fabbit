@@ -18,15 +18,16 @@ $(':checkbox').change(function(){
   <ul>
     <li class="subtitle"> 
       <div class="name"> Version number</div>
+      <div class="name"> Revision number</div>
       <div class="date"> Last changed</div>
       <div class="check"> Is revision </div>
     </li>
     <% @dropbox_revisions.each do |revision| %>
     <li>      
-      <div class="name"> <%= revision["rev"] %></div>
-      <div class="name"> revision id here </div>
-      <div class="date"> <%= revision["modified"] %> </div>
-      <div class="check"> <input type="checkbox" <% @revisions.include?(Revision.find_by_revision_number(revision["rev"])) ? "checked" : "" %> </div>
+      <div class="name"> <%= revision[:rev] %></div>
+      <div class="name"> <%= revision[:revision_obj] ? revision[:revision_obj].id : "x" %>  </div>
+      <div class="date"> <%= revision[:modified] %> </div>
+      <div class="check"> <input type="checkbox" <%= revision[:revision_obj] ? "checked" : "" %> </div>
     </li>
     <% end %>
   </ul>

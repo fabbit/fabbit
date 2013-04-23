@@ -12,7 +12,7 @@ class ModelFilesController < ApplicationController
     @dropbox_revisions = @dropbox_revisions.map do |revision|
       { rev: revision["rev"],
         modified: revision["modified"],
-        revision_id: Revision.find_by_revision_number(revision["rev"])
+        revision_obj: Revision.find_by_revision_number(revision["rev"])
       }
     end
   end
