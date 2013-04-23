@@ -8,6 +8,7 @@ class ModelFilesController < ApplicationController
     @file = @model.update_and_get(dropbox_client)
     @breadcrumbs = to_breadcrumbs(@model.path, @member)
     @revisions = @model.revisions
+    @dropbox_revisions = dropbox_client.revisions(@model.path)
   end
 
   # Loads the requested model file, initializing the file cache if necessary.
