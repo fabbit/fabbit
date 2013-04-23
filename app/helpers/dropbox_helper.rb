@@ -26,6 +26,10 @@ module DropboxHelper
     return @current_member
   end
 
+  def current_member?
+    return !@current_member.nil?
+  end
+
   def to_link(content)
     content[1..-1]
   end
