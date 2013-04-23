@@ -2,16 +2,39 @@
 
 <%= render "model_files/model_viewer" %>
 <script>
-$(':checkbox').change(function(){ 
+$(document).ready(function(){
+
+  $(':checkbox').change(function(){ 
   
-  var revisionNumber = $(this).parent().find(".name").html();
+  var children = $(this).parent().parent().children();
+
+  var versionNumber =  $(children[0]).html().trim();
+  var revisionNumber = $(children[1]).html().trim();
+
+  console.log(versionNumber);
   console.log(revisionNumber);
 
   if($(this).is(':checked')) {
-    $.post('/model_files/' + <%= @model.id %> + '/revisions' + revisionNumber);
+    
+    $.post('/model_files/' + <%= @model.id %> + '/revisions', {"revision_number": versionNumber}, function(data){
+      console.log($(this).parent().find(".fabbit"));
+      $(children[1]).html(data);
+    });
+
   } else {
-    $.delete('/model_files/' + <%= @model.id %> + '/revisions' + revisionNumber);
+    
+    $.ajax({
+      url: '/revisions/' + revisionNumber  ,
+      type: 'DELETE',
+      data: revisionNumber,
+      success: function(result) {
+          $(children[1]).html('x');
+      }
+    });
   }
+
+  });
+
 });
 </script>
 <div class="row versions">
@@ -24,8 +47,8 @@ $(':checkbox').change(function(){
     </li>
     <% @dropbox_revisions.each do |revision| %>
     <li>      
-      <div class="name"> <%= revision[:rev] %></div>
-      <div class="name"> <%= revision[:revision_obj] ? revision[:revision_obj].id : "x" %>  </div>
+      <div class="name dropbox"> <%= revision[:rev] %></div>
+      <div class="name fabbit"> <%= revision[:revision_obj] ? revision[:revision_obj].id : "x" %>  </div>
       <div class="date"> <%= revision[:modified] %> </div>
       <div class="check"> <input type="checkbox" <%= revision[:revision_obj] ? "checked" : "" %> </div>
     </li>

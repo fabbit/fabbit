@@ -15,13 +15,13 @@ class RevisionsController < ApplicationController
     @dropbox_revisions = dropbox_client.revisions(@model_file.path)
 
     respond_to do |format|
-      format.json { render :json @revisions }
+      format.json { render json: @revisions }
     end
   end
 
   def create
     model_file = ModelFile.find(params[:model_file_id])
-    revision = model_file.build(revision_number: params[:revision_number])
+    revision = model_file.revisions.build(revision_number: params[:revision_number])
     if revision.save
       respond_to do |format|
         format.js { render text: revision.id }
