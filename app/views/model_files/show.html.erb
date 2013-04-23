@@ -1,3 +1,35 @@
 <%= render "dropbox/breadcrumbs" %>
 
 <%= render "model_files/model_viewer" %>
+<script>
+$(':checkbox').change(function(){ 
+  
+  var revisionNumber = $(this).parent().find(".name").html();
+  console.log(revisionNumber);
+
+  if($(this).is(':checked')) {
+    $.post('/model_files/' + <%= @model.id %> + '/revisions' + revisionNumber);
+  } else {
+    $.delete('/model_files/' + <%= @model.id %> + '/revisions' + revisionNumber);
+  }
+});
+</script>
+<div class="row versions">
+  <ul>
+    <li class="subtitle"> 
+      <div class="name"> Version number</div>
+      <div class="date"> Last changed</div>
+      <div class="check"> Is revision </div>
+    </li>
+    <% @dropbox_revisions.each do |revision| %>
+    <li>      
+      <div class="name"> <%= revision["rev"] %></div>
+      <div class="name"> revision id here </div>
+      <div class="date"> <%= revision["modified"] %> </div>
+      <div class="check"> <input type="checkbox" <% @revisions.include?(Revision.find_by_revision_number(revision["rev"])) ? "checked" : "" %> </div>
+    </li>
+    <% end %>
+  </ul>
+</div>
+
+
