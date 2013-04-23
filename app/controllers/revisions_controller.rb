@@ -21,9 +21,11 @@ class RevisionsController < ApplicationController
 
   def create
     model_file = ModelFile.find(params[:model_file_id])
-    revision = model_file.build(revision_number: params[:rev]) # TODO change to a helper
+    revision = model_file.build(revision_number: params[:revision_number])
     if revision.save
-      respond_to { |format| format.js }
+      respond_to do |format|
+        format.js { render text: revision.id }
+      end
     end
   end
 
