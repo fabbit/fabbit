@@ -21,7 +21,7 @@ class RevisionsController < ApplicationController
 
   def create
     model_file = ModelFile.find(params[:model_file_id])
-    revision = model_file.build(revision_number: dropbox_client.revisions[0]["rev"]) # TODO change to a helper
+    revision = model_file.build(revision_number: params[:rev]) # TODO change to a helper
     if revision.save
       respond_to { |format| format.js }
     end

@@ -4,10 +4,17 @@ class ModelFilesController < ApplicationController
 
   def show
     @model = ModelFile.find(params[:id])
-    @member = params[:member_id]? Member.find(params[:member_id]) : current_member
+    @member = params[:member_id] ? Member.find(params[:member_id]) : current_member
     @file = @model.update_and_get(dropbox_client)
     @breadcrumbs = to_breadcrumbs(@model.path, @member)
     @revisions = @model.revisions
+    @dropbox_revisions = dropbox_client.revisions(@model.path)
+    @dropbox_revisions = @dropbox_revisions.map do |revision|
+      { rev: revision["rev"],
+        modified: revision["modified"],
+        revision_id: Revision.find_by_revision_number(revision["rev"])
+      }
+    end
   end
 
   # Loads the requested model file, initializing the file cache if necessary.

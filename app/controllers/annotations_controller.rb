@@ -2,8 +2,7 @@ class AnnotationsController < ApplicationController
 
   def index
     model_file = ModelFile.find(params[:model_file_id])
-    revision = model_file.revisions.first
-    revision = Revisions.find(params[:revision_id]) if params[:revision_id]
+    revision = params[:revision_id] ? Revision.find(params[:revision_id]) : model_file.revisions.first
     @annotations = revision.annotations
     respond_to do |format|
       format.html { redirect_to ModelFile.find(params[:model_file_id]) }
