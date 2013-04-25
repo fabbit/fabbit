@@ -1,7 +1,5 @@
 class ModelFilesController < ApplicationController
 
-  before_filter :live_dropbox_session
-
   def show
     @model = ModelFile.find(params[:id])
     @member = params[:member_id] ? Member.find(params[:member_id]) : current_member
@@ -10,9 +8,11 @@ class ModelFilesController < ApplicationController
     @versions = @model.versions
     @dropbox_revisions = dropbox_client.revisions(@model.path)
     @dropbox_revisions = @dropbox_revisions.map do |revision|
+      version = Version.find_by_revision_number(revision["rev"])
       { rev: revision["rev"],
-        modified: revision["modified"],
-        version: Version.find_by_revision_number(revision["rev"])
+        modified: version ? version.revision_date : revision["modified"],
+        version: version,
+        details: version.details if version
       }
     end
   end
