@@ -1,6 +1,7 @@
 $blue: #3079ed;
 $black: #1c1c1c;
 $gray: gray;
+$red: red;
 
  body {
  	color: $black;
@@ -267,26 +268,65 @@ $gray: gray;
 
 .versions ul li {
 	float:left;
+	clear:left;
+	margin: 10px 0px;
 }
 
 .versions ul li div{
 	float:left;
-	padding: 10px 0px;
 }
 
-.versions ul li div.check {
-	text-align: center;
-	width: 100px;
-	color: $gray;
-}
 
-.versions ul li div.name {
-	width: 200px;
+.versions ul li div.dropbox {
+	display: none;
 }
 
 .versions ul li div.date {
 	width: 150px;
 }
+
+.versions ul li div.action {
+	text-align: center;
+	width: 160px;
+	margin-right: 25px;
+
+	height: 20%;
+	border-radius: 4px;
+	height: 10px;
+	padding: 10px 0px;
+	margin-top: -10px;
+	text-align: center;
+	font-size: 12px;
+	cursor: pointer;
+	
+}
+
+.versions ul li div.message {
+	width: 300px;
+}
+
+.versions ul li div.message input {
+	width: 100%;
+}
+.versions ul li .action.unmarked {
+	color: $gray;
+	background-color: lighten($gray, 40%);
+	border: 1px solid lighten($gray, 20%);
+
+}
+
+.versions ul li .action.marked {
+	color: $blue;
+	background-color: lighten($blue, 40%);
+	border: 1px solid lighten($blue, 20%);
+}
+
+.versions ul li .action.marked.unmark {
+	color: $red;
+	background-color: lighten($red, 40%);
+	border: 1px solid lighten($red, 20%);
+}
+
 #annotations {
 	margin-top: 15px;
 }
