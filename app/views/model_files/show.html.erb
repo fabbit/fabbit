@@ -16,7 +16,7 @@ $(document).ready(function(){
 
   if($(this).is(':checked')) {
     
-    $.post('/model_files/' + <%= @model.id %> + '/revisions', {"revision_number": versionNumber}, function(data){
+    $.post('/model_files/' + <%= @model.id %> + '/versions', {"revision_number": versionNumber}, function(data){
       console.log($(this).parent().find(".fabbit"));
       $(children[1]).html(data);
     });
@@ -24,7 +24,7 @@ $(document).ready(function(){
   } else {
     
     $.ajax({
-      url: '/revisions/' + revisionNumber  ,
+      url: '/versions/' + revisionNumber  ,
       type: 'DELETE',
       data: revisionNumber,
       success: function(result) {
@@ -48,9 +48,9 @@ $(document).ready(function(){
     <% @dropbox_revisions.each do |revision| %>
     <li>      
       <div class="name dropbox"> <%= revision[:rev] %></div>
-      <div class="name fabbit"> <%= revision[:revision_obj] ? revision[:revision_obj].id : "x" %>  </div>
+      <div class="name fabbit"> <%= revision[:version] ? revision[:version].id : "x" %>  </div>
       <div class="date"> <%= revision[:modified] %> </div>
-      <div class="check"> <input type="checkbox" <%= revision[:revision_obj] ? "checked" : "" %> </div>
+      <div class="check"> <input type="checkbox" <%= revision[:version] ? "checked" : "" %> </div>
     </li>
     <% end %>
   </ul>

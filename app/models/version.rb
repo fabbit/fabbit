@@ -1,4 +1,4 @@
-class Revision < ActiveRecord::Base
+class Version < ActiveRecord::Base
   attr_accessible :model_file_id, :revision_number
 
   validates :model_file_id, :revision_number, presence: true
