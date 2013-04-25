@@ -1,11 +1,11 @@
 class ModelFile < ActiveRecord::Base
   attr_accessible :cached_revision, :path
 
-  # TODO cached_revision should not conflict semantically with Revisions
+  # TODO cached_revision should not conflict semantically with Versions
   # (since this is a dropbox revision)
   validates :path, :member_id, presence: true
 
-  has_many :revisions, dependent: :destroy
+  has_many :versions, dependent: :destroy
   belongs_to :member
 
 
@@ -40,12 +40,12 @@ class ModelFile < ActiveRecord::Base
     Rails.root.join(cache_folder,"#{self.member.dropbox_uid}_#{revision || self.cached_revision}_#{file_name}")
   end
 
-  def latest_revision
-    self.revisions.order("created_at DESC").limit(1)
+  def latest_version
+    self.versions.order("created_at DESC").limit(1)
   end
 
-  def revision(revision_number)
-    self.revisions.find_by_revision_number(revision_number)
+  def version(revision_number)
+    self.versions.find_by_revision_number(revision_number)
   end
 
   private

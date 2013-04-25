@@ -11,10 +11,10 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130422182850) do
+ActiveRecord::Schema.define(:version => 20130425222626) do
 
   create_table "annotations", :force => true do |t|
-    t.integer  "revision_id"
+    t.integer  "version_id"
     t.string   "coordinates"
     t.string   "camera"
     t.string   "text"
@@ -23,7 +23,7 @@ ActiveRecord::Schema.define(:version => 20130422182850) do
     t.integer  "user_id"
   end
 
-  add_index "annotations", ["revision_id"], :name => "index_annotations_on_revision_id"
+  add_index "annotations", ["version_id"], :name => "index_annotations_on_revision_id"
 
   create_table "discussions", :force => true do |t|
     t.integer  "annotation_id"
@@ -78,13 +78,6 @@ ActiveRecord::Schema.define(:version => 20130422182850) do
 
   add_index "projects", ["project_type_id"], :name => "index_projects_on_project_type_id"
 
-  create_table "revisions", :force => true do |t|
-    t.integer  "model_file_id"
-    t.datetime "created_at",      :null => false
-    t.datetime "updated_at",      :null => false
-    t.string   "revision_number"
-  end
-
   create_table "sessions", :force => true do |t|
     t.string   "session_id", :null => false
     t.text     "data"
@@ -94,5 +87,12 @@ ActiveRecord::Schema.define(:version => 20130422182850) do
 
   add_index "sessions", ["session_id"], :name => "index_sessions_on_session_id"
   add_index "sessions", ["updated_at"], :name => "index_sessions_on_updated_at"
+
+  create_table "versions", :force => true do |t|
+    t.integer  "model_file_id"
+    t.datetime "created_at",      :null => false
+    t.datetime "updated_at",      :null => false
+    t.string   "revision_number"
+  end
 
 end

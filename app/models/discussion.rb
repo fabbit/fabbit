@@ -6,7 +6,6 @@ class Discussion < ActiveRecord::Base
   belongs_to :member
 
   def member_name
-    p "test"
     self.member.name
   end
 end

@@ -17,7 +17,7 @@ Fabbit::Application.routes.draw do
 
   resources :model_files, only: [:show] do
     resources :annotations, only: [:index, :create]
-    resources :revisions, only: [:index, :create]
+    resources :versions, only: [:index, :create]
 
     member do
       get :contents
@@ -25,7 +25,7 @@ Fabbit::Application.routes.draw do
     end
   end
 
-  resources :revisions, only: [:show, :destroy] do
+  resources :versions, only: [:show, :destroy] do
     resources :annotations, only: [:index, :create]
   end
 

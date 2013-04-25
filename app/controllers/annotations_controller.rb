@@ -2,8 +2,8 @@ class AnnotationsController < ApplicationController
 
   def index
     model_file = ModelFile.find(params[:model_file_id])
-    revision = params[:revision_id] ? Revision.find(params[:revision_id]) : model_file.revisions.first
-    @annotations = revision.annotations
+    version = params[:version_id] ? Version.find(params[:version_id]) : model_file.versions.first
+    @annotations = version.annotations
     respond_to do |format|
       format.html { redirect_to ModelFile.find(params[:model_file_id]) }
       format.json do
@@ -16,9 +16,9 @@ class AnnotationsController < ApplicationController
     member = Member.find_by_dropbox_uid(dropbox_client.account_info["uid"].to_s)
 
     model_file = ModelFile.find(params[:model_file_id])
-    revision = model_file.revisions.first
-    revision = Revisions.find(params[:revision_id]) if params[:revision_id]
-    @annotation = revision.annotations.build(
+    version = model_file.versions.first
+    version = Version.find(params[:version_id]) if params[:version_id]
+    @annotation = version.annotations.build(
       coordinates: params[:coordinates],
       camera: params[:camera],
       text: params[:text],

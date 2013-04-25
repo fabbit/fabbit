@@ -7,12 +7,12 @@ class ModelFilesController < ApplicationController
     @member = params[:member_id] ? Member.find(params[:member_id]) : current_member
     @file = @model.update_and_get(dropbox_client)
     @breadcrumbs = to_breadcrumbs(@model.path, @member)
-    @revisions = @model.revisions
+    @versions = @model.versions
     @dropbox_revisions = dropbox_client.revisions(@model.path)
     @dropbox_revisions = @dropbox_revisions.map do |revision|
       { rev: revision["rev"],
         modified: revision["modified"],
-        revision_obj: Revision.find_by_revision_number(revision["rev"])
+        version: Version.find_by_revision_number(revision["rev"])
       }
     end
   end
@@ -50,7 +50,7 @@ class ModelFilesController < ApplicationController
 
   def dropbox_revisions
     @model_file = ModelFile.find(params[:id])
-    @revisions = @model_file.revisions
+    @versions = @model_file.versions
     @dropbox_revisions = dropbox_client.revisions(@model_file.path)
   end
 
