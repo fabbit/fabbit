@@ -1,14 +1,12 @@
 class Version < ActiveRecord::Base
-  attr_accessible :model_file_id, :revision_number
+  attr_accessible :model_file_id, :revision_number, :revision_date, :details
 
-  validates :model_file_id, :revision_number, presence: true
+  validates :model_file_id, :revision_number, :details, presence: true
 
   belongs_to :model_file
   has_many :annotations, dependent: :destroy
 
   def retrieve_from_dropbox(dropbox_client)
-    p [self.path, self.revision_number].join(", ")
-    p dropbox_client.metadata(self.path)
     dropbox_client.get_file(self.path, self.revision_number)
   end
 
