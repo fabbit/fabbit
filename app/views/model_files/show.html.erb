@@ -4,6 +4,7 @@
 <script>
 $(document).ready(function(){
 
+  var dropbox_to_version = {};
 
   //HOVER OVER for marked -> unmark
   $('.versions').on('hover', 'div.action.marked', function(event){
@@ -45,15 +46,16 @@ $(document).ready(function(){
     //Update the message to be accurate
     var message_element = $(element).parent();
     var message = $(element).val(); //TODO: Error if value is empty!!!
- 
-    //Get the dropbox id
+
+    //Get the dropbox id and date
     var dropbox_id = message_element.parent().find('.dropbox').html().trim();
+    var dropbox_date = message_element.parent().find('.date').html().trim();
+    var action_element = message_element.parent().find('.action');
 
     //Post both of them
-    $.post('/model_files/' + <%= @model.id %> + '/versions', {"revision_number": dropbox_id, "details": message}, function(){
+    $.post('/model_files/' + <%= @model.id %> + '/versions', {"revision_number": dropbox_id, "details": message, "date": dropbox_date}, function(data){
       
       //Update the action ui
-      var action_element = message_element.parent().find('.action');
       console.log(action_element);
       action_element.removeClass('unmarked');
       action_element.addClass('marked');
@@ -62,27 +64,31 @@ $(document).ready(function(){
       //Update the message ui
       message_element.html(message); 
 
+      dropbox_to_version[dropbox_id] = data;
+
     });
   }
 
   //Unmark click deletes it
   $('.versions').on('click', 'div.action.marked.unmark', function(){
-    var dropbox_id = $(this).parent().find('.dropbox').html().trim();
     
+    var dropbox_id = $(this).parent().find('.dropbox').html().trim();
+    var version_id = dropbox_to_version[dropbox_id];
+    var action_element = $(this).parent().find('.action');
+    var message_element = $(this).parent().find('.message');
+
     $.ajax({
-      url: '/versions/' + dropbox_id,
+      url: '/versions/' + version_id,
       type: 'DELETE',
       success: function(result) {
           
           //Update the action ui
-          var action_element = message_element.parent().find('.action');
-          console.log(action_element);
           action_element.removeClass('marked');
           action_element.addClass('unmarked');
           action_element.html('Mark as version');
 
           //Update the message ui
-          $(this).parent().find('.message').html("")
+         message_element.html("");
       }
     });
   });
