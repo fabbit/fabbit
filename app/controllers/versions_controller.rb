@@ -21,7 +21,7 @@ class VersionsController < ApplicationController
 
   def create
     model_file = ModelFile.find(params[:model_file_id])
-    revision_date = dropbox_client.revisions(DateTime.parse(params[:revision_date]))
+    revision_date = params[:revision_date]
     version = model_file.versions.build(
       revision_number: params[:revision_number],
       revision_date: revision_date,

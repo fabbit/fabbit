@@ -33,7 +33,7 @@ class ModelFilesController < ApplicationController
 
       if model_file.new_record? and model_file.save
         model_file.update_and_get(dropbox_client)
-        model_file.revisions.create!(revision_number: model_file.cached_revision)
+        model_file.versions.create!(revision_number: model_file.cached_revision)
       end
 
       redirect_to model_file_path(model_file)
