@@ -12,9 +12,10 @@ class ModelFilesController < ApplicationController
       { rev: revision["rev"],
         modified: version ? version.revision_date : revision["modified"],
         version: version,
-        details: version.details if version
+        details: version ? version.details : ""
       }
     end
+    p @dropbox_revisions
   end
 
   # Loads the requested model file, initializing the file cache if necessary.

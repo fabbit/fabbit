@@ -2,9 +2,17 @@
 
 <%= render "model_files/model_viewer" %>
 <script>
+
+var dropbox_to_version = {};
+
+function addMap(dropbox_id, version){
+  console.log("DO THINGS");
+  dropbox_to_version[dropbox_id] = version;
+}
+
 $(document).ready(function(){
 
-  var dropbox_to_version = {};
+
 
   //HOVER OVER for marked -> unmark
   $('.versions').on('hover', 'div.action.marked', function(event){
@@ -53,7 +61,7 @@ $(document).ready(function(){
     var action_element = message_element.parent().find('.action');
 
     //Post both of them
-    $.post('/model_files/' + <%= @model.id %> + '/versions', {"revision_number": dropbox_id, "details": message, "date": dropbox_date}, function(data){
+    $.post('/model_files/' + <%= @model.id %> + '/versions', {"revision_number": dropbox_id, "details": message, "revision_date": dropbox_date}, function(data){
       
       //Update the action ui
       console.log(action_element);
@@ -88,7 +96,7 @@ $(document).ready(function(){
           action_element.html('Mark as version');
 
           //Update the message ui
-         message_element.html("");
+         message_element.html("");  
       }
     });
   });
@@ -103,18 +111,20 @@ $(document).ready(function(){
       <div class="action"> </div>
       <div class="message"> Commit message </div>
     </li>
+
+    <% @dropbox_revisions.each do |revision| %>
     <li>
-      <div class="dropbox"> 2as931s9a </div>
-      <div class="date"> Tue, 23 April 2013 </div> 
-      <div class="action unmarked"> Mark as version </div>
-      <div class="message"> </div>
+      <div class="dropbox"> <%= revision[:rev] %> </div>
+      <div class="date"> <%= revision[:modified] %> </div>
+      <div class=" <%= revision[:version] ? "action marked" : "action unmarked" %>" > </div>
+      <div class="message"> <%= revision[:details] %> </div>
+      <script>
+        <% if revision[:version] %>
+          addMap("<%= revision[:rev] %>", "<%= revision[:version].id %>");
+        <% end %>
+      </script>
     </li>
-    <li>
-      <div class="dropbox"> 2as931s9a </div>
-      <div class="date"> Tue, 23 April 2013 </div> 
-      <div class="action marked"> Marked as version </div>
-      <div class="message"> </div>
-    </li>
+    <% end %>
 
   </ul>
 </div>
