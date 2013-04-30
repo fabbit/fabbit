@@ -148,6 +148,10 @@ $red: red;
 	display: none;
 }
 
+.navigate ul.crumbs > li:last-child:before{
+	display:none;
+}
+
 
 .navigate ul.crumbs > li:last-child{
 	cursor: default;
@@ -158,8 +162,7 @@ $red: red;
 //Revision specific
 .navigate ul.revisions {
 	position: absolute;
-	margin-left: 10px;
-	margin-top: -17px; //TODO: JANK.CSS this is to make the revisions appear in the right place :\;
+	margin-left: 5px;
 }
 .navigate ul.revisions li {
 	text-align: left;
@@ -203,17 +206,18 @@ $red: red;
 	display: block;
 }
 
-// .navigate ul.revisions li:first-child:before {
-// 	content: ">";
-// 	font-size: 15px;
-// 	position: absolute;
-// 	left: -0px;
-// 	color: $gray;
-// }
+.navigate ul.revisions li:first-child:before {
+	content: ">";
+	font-size: 15px;
+	position: absolute;
+	padding-right: 5px;
+	left: -5px;
+	color: $gray;
+}
 
-// .navigate ul.revisions.expanded li:first-child:before {
-// 	content: "v";
-// }
+.navigate ul.revisions.expanded li:first-child:before {
+	content: "v";
+}
 
 
 
