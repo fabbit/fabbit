@@ -27,12 +27,15 @@
         <% @breadcrumbs.each do |crumb| %>
           <li><%= link_to crumb[:text], crumb[:link] %></li>
         <% end %>
-        <li></li>
+        <li>
+        	<% if @model %>
+		    <ul class="subtitle revisions">
+		      <%= render @model.versions %>
+		      <li> <%= link_to "See all versions", model_file_versions_url(@model) %> </li>
+		    </ul>
+		  <% end %>
+        </li>
   </ul>
-  <% if @model %>
-    <ul class="subtitle revisions">
-      <%= render @model.versions %>
-    </ul>
-  <% end %>
+  
 
 </div>
