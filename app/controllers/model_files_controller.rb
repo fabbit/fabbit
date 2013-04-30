@@ -5,17 +5,6 @@ class ModelFilesController < ApplicationController
     @member = params[:member_id] ? Member.find(params[:member_id]) : current_member
     @file = @model.update_and_get(dropbox_client)
     @breadcrumbs = to_breadcrumbs(@model.path, @member)
-    @versions = @model.versions
-    @dropbox_revisions = dropbox_client.revisions(@model.path)
-    @dropbox_revisions = @dropbox_revisions.map do |revision|
-      version = Version.find_by_revision_number(revision["rev"])
-      { rev: revision["rev"],
-        modified: version ? version.revision_date : revision["modified"],
-        version: version,
-        details: version ? version.details : ""
-      }
-    end
-    p @dropbox_revisions
   end
 
   # Loads the requested model file, initializing the file cache if necessary.
@@ -33,7 +22,10 @@ class ModelFilesController < ApplicationController
 
       if model_file.new_record? and model_file.save
         model_file.update_and_get(dropbox_client)
-        model_file.versions.create!(revision_number: model_file.cached_revision)
+        model_file.versions.create!(
+          revision_number: model_file.cached_revision,
+          details: "First version",
+          revision_date: DateTime.now)
       end
 
       redirect_to model_file_path(model_file)

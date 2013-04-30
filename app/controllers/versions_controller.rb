@@ -10,13 +10,26 @@ class VersionsController < ApplicationController
   end
 
   def index
-    @model_file = ModelFile.find(params[:model_file_id])
-    @versions = @model_file.versions
-    @dropbox_revisions = dropbox_client.revisions(@model_file.path)
+    @model = ModelFile.find(params[:model_file_id])
+    @versions = @model.versions
+    @dropbox_revisions = dropbox_client.revisions(@model.path)
+    @member = params[:member_id]? Member.find(params[:member_id]) : current_member
+    @breadcrumbs = to_breadcrumbs(@model.path, @member)
+    @versions = @model.versions
+    @dropbox_revisions = dropbox_client.revisions(@model.path)
+    @dropbox_revisions = @dropbox_revisions.map do |revision|
+      version = Version.find_by_revision_number(revision["rev"])
+      { rev: revision["rev"],
+        modified: version ? version.revision_date : revision["modified"],
+        version: version,
+        details: version ? version.details : ""
+      }
+    end
 
     respond_to do |format|
       format.html
       format.json { render json: @versions }
+      format.html
     end
   end
 
