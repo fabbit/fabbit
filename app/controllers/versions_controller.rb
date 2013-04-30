@@ -15,6 +15,7 @@ class VersionsController < ApplicationController
     @dropbox_revisions = dropbox_client.revisions(@model_file.path)
 
     respond_to do |format|
+      format.html
       format.json { render json: @versions }
     end
   end

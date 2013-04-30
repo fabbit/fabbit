@@ -2,6 +2,8 @@ require 'dropbox_sdk'
 
 class DropboxController < ApplicationController
 
+  skip_before_filter :live_dropbox_session, only: :new
+
   def new
     if not params[:oauth_token]
       dbsession = DropboxSession.new(fabbit_dev_app_key, fabbit_dev_app_secret)
