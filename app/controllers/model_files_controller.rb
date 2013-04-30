@@ -38,7 +38,6 @@ class ModelFilesController < ApplicationController
     respond_to do |format|
       format.text { render text: @file }
     end
-
   end
 
   def dropbox_revisions

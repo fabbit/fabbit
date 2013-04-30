@@ -27,6 +27,10 @@ Fabbit::Application.routes.draw do
 
   resources :versions, only: [:show, :destroy] do
     resources :annotations, only: [:index, :create]
+
+    member do
+      get :contents
+    end
   end
 
   resources :annotations, only: [:show] do

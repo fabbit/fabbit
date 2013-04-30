@@ -4,9 +4,8 @@ class VersionsController < ApplicationController
     @version = Version.find(params[:id])
     @model = @version.model_file
     @file = @version.retrieve_from_dropbox(dropbox_client)
-    @model = @model_file
     @member = params[:member_id]? Member.find(params[:member_id]) : current_member
-    @breadcrumbs = to_breadcrumbs(@model_file.path, @member)
+    @breadcrumbs = to_breadcrumbs(@model.path, @member)
   end
 
   def index
@@ -29,7 +28,6 @@ class VersionsController < ApplicationController
     respond_to do |format|
       format.html
       format.json { render json: @versions }
-      format.html
     end
   end
 
@@ -51,6 +49,14 @@ class VersionsController < ApplicationController
   def destroy
     Version.find(params[:id]).destroy
     respond_to { |format| format.js }
+  end
+
+  def contents
+    @file = Version.find(params[:id]).retrieve_from_dropbox(dropbox_client)
+    p @file
+    respond_to do |format|
+      format.text { render text: @file }
+    end
   end
 
 end
