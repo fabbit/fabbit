@@ -52,10 +52,16 @@ module DropboxHelper
       dir_list = dir_list[1..-1]
     end
     link = ""
-    dir_list.map do |crumb|
+    breadcrumbs = dir_list[0..-2].map do |crumb|
       link = File.join(link, crumb)
       { text: crumb, link: navigate_url(to_link(link)) }
     end
+    if dir_list[-1]
+      file_name = dir_list[-1]
+      file_dir = File.join(link, file_name)
+      breadcrumbs << { text: file_name, link: init_model_file_path(to_link(file_dir)) }
+    end
+    return breadcrumbs
   end
 
   def parse_path(path, more_path)

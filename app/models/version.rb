@@ -1,3 +1,34 @@
+# == Schema Information
+#
+# Table name: versions
+#
+#  id              :integer          not null, primary key
+#  model_file_id   :integer
+#  revision_number :string(255)
+#  created_at      :datetime         not null
+#  updated_at      :datetime         not null
+#  details         :string(255)
+#  revision_date   :datetime
+#
+
+# == Description
+# 
+# A specific version of a ModelFile, with a description of its significant changes
+#
+# == Attributes
+#
+# [+revision_number+] The Dropbox-given revision number
+# [+revision_date+] The date of the revision as it happened on Dropbox
+# [+details+] A short description of the version changes
+#
+# == Associations
+#
+# Has many:
+# - Annotation
+#
+# Belongs to:
+# - ModelFile
+
 class Version < ActiveRecord::Base
   attr_accessible :model_file_id, :revision_number, :revision_date, :details
 

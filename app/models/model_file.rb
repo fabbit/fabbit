@@ -1,7 +1,41 @@
+# == Schema Information
+#
+# Table name: model_files
+#
+#  id              :integer          not null, primary key
+#  user            :string(255)
+#  path            :string(255)
+#  cached_revision :string(255)
+#  created_at      :datetime         not null
+#  updated_at      :datetime         not null
+#  member_id       :integer
+#
+
+# == Description
+#
+# A ModelFile corresponds to a file that a Fabbit member has used. It is generated upon accessing
+# the file through Fabbit (init_model_file).
+#
+# == Attributes
+#
+# [+path+] The path of the file on Dropbox. This and the user uniquely identifies any file on Fabbit.
+#
+# == Associations
+#
+# Has many:
+# - Version
+#
+# Belongs to:
+# - Member
+
+
 class ModelFile < ActiveRecord::Base
   attr_accessible :cached_revision, :path
 
   # TODO cached_revision should not conflict semantically with Versions
+  # TODO add Project association
+  # NOTE do we really need to keep track of the cached revision if we just cache the latest
+  # revision regardless?
   # (since this is a dropbox revision)
   validates :path, :member_id, presence: true
 
@@ -18,6 +52,8 @@ class ModelFile < ActiveRecord::Base
   # The test_rev argument is used for testing to simulate a revision number
   # from dropbox. Similarly, the test_content simulates the contents of a file
   # loaded from dropbox.
+  #
+  # *NOTE:* May become obsolete due to use of versions instead
 
   def update_and_get(dropbox_client, test_rev=nil, test_content=nil)
     dropbox_rev = test_rev || dropbox_client.metadata(self.path)["rev"]
@@ -40,10 +76,12 @@ class ModelFile < ActiveRecord::Base
     Rails.root.join(cache_folder,"#{self.member.dropbox_uid}_#{revision || self.cached_revision}_#{file_name}")
   end
 
+  # Shortcut for the latest version of a file
   def latest_version
     self.versions.order("created_at DESC").limit(1)
   end
 
+  # Find a version using a Dropbox revision number
   def version(revision_number)
     self.versions.find_by_revision_number(revision_number)
   end

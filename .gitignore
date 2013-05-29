@@ -32,3 +32,4 @@ doc/
 .DS_Store
 bundler_stubs/
 /cache/*
+logfile

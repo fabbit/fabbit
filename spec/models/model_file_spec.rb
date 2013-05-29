@@ -1,3 +1,16 @@
+# == Schema Information
+#
+# Table name: model_files
+#
+#  id              :integer          not null, primary key
+#  user            :string(255)
+#  path            :string(255)
+#  cached_revision :string(255)
+#  created_at      :datetime         not null
+#  updated_at      :datetime         not null
+#  member_id       :integer
+#
+
 require 'spec_helper'
 
 describe ModelFile do
