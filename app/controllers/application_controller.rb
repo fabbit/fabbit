@@ -4,6 +4,7 @@ class ApplicationController < ActionController::Base
 
   before_filter :live_dropbox_session
 
+  # Filter for checking that the Dropbox session is still live for every request
   def live_dropbox_session
     redirect_to new_dropbox_path if !cookies[:dropbox_session]
   end

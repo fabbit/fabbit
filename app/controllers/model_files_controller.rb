@@ -1,5 +1,10 @@
+# == Description
+#
+# Controller for the ModelFile model
+
 class ModelFilesController < ApplicationController
 
+  # Reads and displays a ModelFile
   def show
     @model = ModelFile.find(params[:id])
     @member = params[:member_id] ? Member.find(params[:member_id]) : current_member
@@ -9,6 +14,7 @@ class ModelFilesController < ApplicationController
 
   # Loads the requested model file, initializing the file cache if necessary.
   # Redirects immediately to a RESTful model file show page
+  # - NOTE: Perhaps a loading screen should render here?
   def init_model_file
     member = Member.where(
       dropbox_uid: dropbox_client.account_info["uid"].to_s
@@ -30,9 +36,12 @@ class ModelFilesController < ApplicationController
 
       redirect_to model_file_path(model_file)
     end
+    # TODO: all of the elses
 
   end
 
+  # Returns the contents of the file
+  # - NOTE: Move to a JS response for show?
   def contents
     @file = ModelFile.find(params[:id]).update_and_get(dropbox_client)
     respond_to do |format|
@@ -40,6 +49,7 @@ class ModelFilesController < ApplicationController
     end
   end
 
+  # Retrieves all dropbox revisions for this model file
   def dropbox_revisions
     @model_file = ModelFile.find(params[:id])
     @versions = @model_file.versions

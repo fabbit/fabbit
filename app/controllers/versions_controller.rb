@@ -1,5 +1,10 @@
+# == Description
+#
+# Controller for the Version model
+
 class VersionsController < ApplicationController
 
+  # Loads and renders using the Version retrieve_from_dropbox method
   def show
     @version = Version.find(params[:id])
     @model = @version.model_file
@@ -8,6 +13,11 @@ class VersionsController < ApplicationController
     @breadcrumbs = to_breadcrumbs(@model.path, @member)
   end
 
+  # Displays all versions and Dropbox revisions of a ModelFile.
+  #
+  # === Responses
+  # - HTML: Renders the version index page
+  # - JSON: returns a JSON object of all the Versions
   def index
     @model = ModelFile.find(params[:model_file_id])
     @versions = @model.versions
@@ -24,6 +34,7 @@ class VersionsController < ApplicationController
         details: version ? version.details : ""
       }
     end
+    # TODO: clean this up
 
     respond_to do |format|
       format.html
@@ -31,6 +42,10 @@ class VersionsController < ApplicationController
     end
   end
 
+  # Creates a new Version of a file based on a Dropbox revision.
+  #
+  # === Responses
+  # - JS: Returns the new version's ID
   def create
     model_file = ModelFile.find(params[:model_file_id])
     revision_date = params[:revision_date]
@@ -46,14 +61,15 @@ class VersionsController < ApplicationController
     end
   end
 
+  # Deletes/unmarks a Version
   def destroy
     Version.find(params[:id]).destroy
     respond_to { |format| format.js }
   end
 
+  # Returns the contents of the Version file
   def contents
     @file = Version.find(params[:id]).retrieve_from_dropbox(dropbox_client)
-    p @file
     respond_to do |format|
       format.text { render text: @file }
     end

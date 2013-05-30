@@ -1,9 +1,16 @@
 require 'dropbox_sdk'
 
+# == Description
+#
+# Controller for handling interactions with Dropbox.
+
 class DropboxController < ApplicationController
 
   skip_before_filter :live_dropbox_session, only: :new
+  # avoiding redirect loop
 
+  # Connects Fabbit to a Dropbox account and start the session.
+  # Creates a new Member or find the corresponding member, and assign it to current_member. (TODO)
   def new
     if not params[:oauth_token]
       dbsession = DropboxSession.new(fabbit_dev_app_key, fabbit_dev_app_secret)
@@ -24,10 +31,13 @@ class DropboxController < ApplicationController
       if member.save
         flash[:success] = "You've signed into Dropbox!"
         redirect_to navigate_path
+      else
+        # TODO: Error
       end
     end
   end
 
+  # Parses directory path from URL to display and navigate through the current member's Dropbox.
   def navigate
     member = params[:member_id]? Member.find(params[:member_id]) : current_member
     path = parse_path(params[:path], params[:more_path])
