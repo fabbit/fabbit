@@ -9,7 +9,7 @@ class VersionsController < ApplicationController
     @version = Version.find(params[:id])
     @model = @version.model_file
     @file = @version.retrieve_from_dropbox(dropbox_client)
-    @member = params[:member_id]? Member.find(params[:member_id]) : current_member
+    @member = current_member
     @breadcrumbs = to_breadcrumbs(@model.path, @member)
   end
 
@@ -22,7 +22,7 @@ class VersionsController < ApplicationController
     @model = ModelFile.find(params[:model_file_id])
     @versions = @model.versions
     @dropbox_revisions = dropbox_client.revisions(@model.path)
-    @member = params[:member_id]? Member.find(params[:member_id]) : current_member
+    @member = current_member
     @breadcrumbs = to_breadcrumbs(@model.path, @member)
     @versions = @model.versions
     @dropbox_revisions = dropbox_client.revisions(@model.path)
@@ -71,7 +71,7 @@ class VersionsController < ApplicationController
   def contents
     @file = Version.find(params[:id]).retrieve_from_dropbox(dropbox_client)
     respond_to do |format|
-      format.text { render text: @file }
+      format.js { render text: @file }
     end
   end
 

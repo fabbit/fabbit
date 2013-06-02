@@ -10,7 +10,7 @@ class DropboxController < ApplicationController
   # avoiding redirect loop
 
   # Connects Fabbit to a Dropbox account and start the session.
-  # Creates a new Member or find the corresponding member, and assign it to current_member. (TODO)
+  # Creates a new Member or find the corresponding member, and assign it to current_member.
   def new
     if not params[:oauth_token]
       dbsession = DropboxSession.new(fabbit_dev_app_key, fabbit_dev_app_secret)
@@ -26,6 +26,7 @@ class DropboxController < ApplicationController
         dropbox_uid: dropbox_client.account_info["uid"].to_s
       ).first_or_initialize
 
+      # Update/assign name
       member.name = dropbox_client.account_info["display_name"].to_s
 
       if member.save
@@ -39,8 +40,8 @@ class DropboxController < ApplicationController
 
   # Parses directory path from URL to display and navigate through the current member's Dropbox.
   def navigate
-    member = params[:member_id]? Member.find(params[:member_id]) : current_member
-    path = parse_path(params[:path], params[:more_path])
+    member = current_member
+    path = params[:dropbox_path] || "/"
     meta = dropbox_client.metadata(path)
     @breadcrumbs = to_breadcrumbs(meta["path"], member)
     @contents = process_contents(meta["contents"], member)

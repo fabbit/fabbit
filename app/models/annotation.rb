@@ -9,7 +9,7 @@
 #  text        :string(255)
 #  created_at  :datetime         not null
 #  updated_at  :datetime         not null
-#  user_id     :integer
+#  member_id   :integer
 #
 
 # == Description
@@ -20,7 +20,7 @@
 #
 # [+camera+] The camera location when the annotation was created
 # [+coordinates+] The specific coordinates of the annotation
-# [+text+] A description of the annotation (may be obsolete with the addition of discussions
+# [+text+] A description of the annotation (may be obsolete with the addition of discussions)
 #
 # == Associations
 #
@@ -32,7 +32,6 @@
 # - Member
 
 class Annotation < ActiveRecord::Base
-  # TODO remove text
   attr_accessible :camera, :coordinates, :text
 
   validates :version_id, :member_id, :camera, :coordinates, presence: true

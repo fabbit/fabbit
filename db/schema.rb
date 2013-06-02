@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130425232357) do
+ActiveRecord::Schema.define(:version => 20130601212348) do
 
   create_table "annotations", :force => true do |t|
     t.integer  "version_id"
@@ -20,7 +20,7 @@ ActiveRecord::Schema.define(:version => 20130425232357) do
     t.string   "text"
     t.datetime "created_at",  :null => false
     t.datetime "updated_at",  :null => false
-    t.integer  "user_id"
+    t.integer  "member_id"
   end
 
   add_index "annotations", ["version_id"], :name => "index_annotations_on_revision_id"
@@ -62,6 +62,16 @@ ActiveRecord::Schema.define(:version => 20130425232357) do
 
   add_index "project_members", ["member_id"], :name => "index_project_members_on_member_id"
   add_index "project_members", ["project_id"], :name => "index_project_members_on_project_id"
+
+  create_table "project_model_files", :force => true do |t|
+    t.integer  "project_id"
+    t.integer  "model_file_id"
+    t.datetime "created_at",    :null => false
+    t.datetime "updated_at",    :null => false
+  end
+
+  add_index "project_model_files", ["model_file_id"], :name => "index_project_model_files_on_model_file_id"
+  add_index "project_model_files", ["project_id"], :name => "index_project_model_files_on_project_id"
 
   create_table "project_types", :force => true do |t|
     t.string   "name"

@@ -8,16 +8,9 @@
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
 #
-#
+
 # == Description
-#
-# An association class for the many-to-many relationship between the models Member and Project
-#
-# == Associations
-#
-# Belongs to:
-# - Member
-# - Project
+# *DEPRECATED* Association class for Project and Member
 
 class ProjectMember < ActiveRecord::Base
   validates :member_id, :project_id, presence: true

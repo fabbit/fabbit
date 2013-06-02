@@ -78,12 +78,19 @@ class ModelFile < ActiveRecord::Base
 
   # Shortcut for the latest version of a file
   def latest_version
-    self.versions.order("created_at DESC").limit(1)
+    self.versions.order("created_at DESC").limit(1).first
   end
 
   # Find a version using a Dropbox revision number
   def version(revision_number)
     self.versions.find_by_revision_number(revision_number)
+  end
+
+  # Loads the given version, or the latest version if version_id is nil.
+  # Note that this searches through all Version records, so filtering must be done at the
+  # controller level to prevent unauthorized access.
+  def latest_or_version(version_id)
+    version = Version.where(id: version_id).first || self.latest_version
   end
 
   private

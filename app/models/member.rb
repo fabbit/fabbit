@@ -8,19 +8,20 @@
 #  updated_at  :datetime         not null
 #  name        :string(255)
 #
-#
+
 # == Description
-# A member of Fabbit, corresponding to a Dropbox user
+#
+# A member of Fabbit, corresponding to a Dropbox user.
 #
 # == Attributes
-# [+dropbox_uid+] The Dropbox user ID
-# [+name+] The name of the member as it appears on Dropbox. Used for displaying other members' names, which the Dropbox client cannot access
 #
-# == Assocations
+# [+dropbox_uid+] The user ID given by Dropbox
+# [+name+] The user's name as given by Dropbox
+#
+# == Associations
 #
 # Has many:
 # - Discussion
-# - Project
 
 class Member < ActiveRecord::Base
   attr_accessible :dropbox_uid, :name

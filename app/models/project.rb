@@ -8,17 +8,19 @@
 #  created_at      :datetime         not null
 #  updated_at      :datetime         not null
 #
-#
+
 # == Description
-# A Project is a collection of ModelFiles that are relavant to the project.
+#
+# A representation of a project that can contain multiple ModelFiles
 #
 # == Attributes
+#
 # [+name+] The name of the project
 #
 # == Associations
 #
 # Has many:
-# - Member
+# - ModelFile
 #
 # Belongs to:
 # - ProjectType
@@ -30,6 +32,9 @@ class Project < ActiveRecord::Base
 
   has_many :project_members, dependent: :destroy
   has_many :members, through: :project_members
+
+  has_many :project_model_files, dependent: :destroy
+  has_many :model_files, through: :project_members
 
   belongs_to :project_type
 end

@@ -7,18 +7,19 @@
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
 #
-#
+
 # == Description
-# A type indicator for a Project. Projects can have many types
+#
+# A type identifier for a Project.
 #
 # == Attributes
 #
-# [+name+] The name of the project type
+# [+name+] The name of the type
 #
 # == Associations
 #
 # Has many:
-# - Projects
+# - Project
 
 class ProjectType < ActiveRecord::Base
   attr_accessible :name

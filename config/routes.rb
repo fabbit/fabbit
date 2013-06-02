@@ -5,14 +5,16 @@ Fabbit::Application.routes.draw do
   resources :dropbox, only: [:new]
 
   resources :projects, only: [:index, :new, :create]
-  resources :project_members, only: [:create, :destroy]
+  resources :project_model_files, only: [:create, :destroy]
+
+  resources :members, only: [:show] do
+    resources :model_files, only: [:index]
+    resources :projects, only: [:index]
+  end
 
   resources :projects, only: [:show] do
     resources :members, only: [:index]
-  end
-
-  resources :members, only: [:show] do
-    resources :projects, only: [:index]
+    resources :model_files, only: [:index]
   end
 
   resources :model_files, only: [:show] do
@@ -38,6 +40,9 @@ Fabbit::Application.routes.draw do
   end
 
   match "/model_file/:filename", to: "model_files#init_model_file", filename: /.+/, as: "init_model_file"
-  match "/navigate/(:path(/:more_path))", to: "dropbox#navigate", as: "navigate"
+  match "/navigate/(:dropbox_path)", to: "dropbox#navigate", dropbox_path: /.+/, as: "navigate"
+  # match "/navigate", to: "dropbox#navigate"
+  # match "/navigate/(:path(/:more_path))", to: "dropbox#navigate", as: "navigate"
+  # NOTE: should I change this to the same format as init_model_file?
 
 end
