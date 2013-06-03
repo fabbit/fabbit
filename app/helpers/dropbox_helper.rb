@@ -68,7 +68,7 @@ module DropboxHelper
 
   # Formats a path to be made into breadcrumbs
   # - TODO: use better File methods to streamline the process
-  def to_breadcrumbs(path, member)
+  def to_breadcrumbs(path)
 
     # Extract and split path
     dir_list = File.dirname(path).split(File::SEPARATOR).map do |x|
@@ -99,7 +99,7 @@ module DropboxHelper
 
   # Process the path given to navigate
   # - TODO: use File methods
-  def parse_path(path, more_path)
+  def parse_path(path)
     full_path = path
     if path.nil?
       full_path = '/'
@@ -111,7 +111,7 @@ module DropboxHelper
   end
 
   # Process the contents returned by Dropbox
-  def process_contents(contents, member)
+  def process_contents(contents)
     contents.map do |content|
       link = navigate_url(to_link(content["path"]))
       if not content["is_dir"]

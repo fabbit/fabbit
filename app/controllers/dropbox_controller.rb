@@ -43,8 +43,8 @@ class DropboxController < ApplicationController
     member = current_member
     path = params[:dropbox_path] || "/"
     meta = dropbox_client.metadata(path)
-    @breadcrumbs = to_breadcrumbs(meta["path"], member)
-    @contents = process_contents(meta["contents"], member)
+    @breadcrumbs = to_breadcrumbs(meta["path"])
+    @contents = process_contents(meta["contents"])
   end
 
 end

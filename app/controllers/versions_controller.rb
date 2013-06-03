@@ -10,7 +10,7 @@ class VersionsController < ApplicationController
     @model = @version.model_file
     @file = @version.retrieve_from_dropbox(dropbox_client)
     @member = current_member
-    @breadcrumbs = to_breadcrumbs(@model.path, @member)
+    @breadcrumbs = to_breadcrumbs(@model.path)
   end
 
   # Displays all versions and Dropbox revisions of a ModelFile.
@@ -23,9 +23,8 @@ class VersionsController < ApplicationController
     @versions = @model.versions
     @dropbox_revisions = dropbox_client.revisions(@model.path)
     @member = current_member
-    @breadcrumbs = to_breadcrumbs(@model.path, @member)
+    @breadcrumbs = to_breadcrumbs(@model.path)
     @versions = @model.versions
-    @dropbox_revisions = dropbox_client.revisions(@model.path)
     @dropbox_revisions = @dropbox_revisions.map do |revision|
       version = Version.find_by_revision_number(revision["rev"])
       { rev: revision["rev"],
@@ -48,10 +47,9 @@ class VersionsController < ApplicationController
   # - JS: Returns the new version's ID
   def create
     model_file = ModelFile.find(params[:model_file_id])
-    revision_date = params[:revision_date]
     version = model_file.versions.build(
       revision_number: params[:revision_number],
-      revision_date: revision_date,
+      revision_date: params[:revision_date],
       details: params[:details],
     )
     if version.save
