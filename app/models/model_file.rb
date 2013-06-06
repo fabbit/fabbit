@@ -56,7 +56,7 @@ class ModelFile < ActiveRecord::Base
   # from dropbox. Similarly, the test_content simulates the contents of a file
   # loaded from dropbox.
   #
-  # *NOTE:* May become obsolete due to use of versions instead
+  # *NOTE*: *DEPRECATED*; see DropboxHelper#update_content_of
 
   def update_and_get(dropbox_client, test_rev=nil, test_content=nil)
     dropbox_rev = test_rev || dropbox_client.metadata(self.path)["rev"]

@@ -24,6 +24,7 @@ Fabbit::Application.routes.draw do
     member do
       get :contents
       get :dropbox_revisions
+      get "preview/:revision_number", action: "preview", as: "preview"
     end
   end
 

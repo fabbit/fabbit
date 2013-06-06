@@ -34,14 +34,25 @@ class ModelFilesController < ApplicationController
 
   end
 
-  # Returns the contents of the file
+  # Returns the content of the file
   # - NOTE: Move to a JS response for show?
   # - TODO: Rename to content
   def contents
     model_file = ModelFile.find(params[:id])
     update_content_of(model_file)
     respond_to do |format|
-      format.text { render text: model_file.content }
+      format.js { render text: model_file.content }
+    end
+  end
+
+  # Renders a revision of a ModelFile that has not been turned into a Version.
+  def preview
+    model_file = ModelFile.find(params[:id])
+    revision_number = params[:revision_number]
+    content = dropbox_client.get_file(model_file.path, revision_number)
+    p "[PREVIEW] Retrieved revision #{revision_number} from Dropbox"
+    respond_to do |format|
+      format.js { render text: content }
     end
   end
 
