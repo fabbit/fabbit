@@ -11,5 +11,26 @@ require 'spec_helper'
 #   end
 # end
 describe DropboxHelper do
-  pending "add some examples to (or delete) #{__FILE__}"
+  describe "to_link method" do
+    let(:root_dir) { "path" }
+    let(:paths) { [
+      "/#{root_dir}/for/testing",
+      "#{root_dir}/for/testing",
+    ] }
+
+    it "should not start with a backslash" do
+      paths.each do |path|
+        to_link(path).should match(/^#{root_dir}/)
+      end
+    end
+  end
+
+  describe "to_breadcrumbs method" do
+    let(:dir) { random_directory }
+
+    it "should break down each directory in order" do
+      breadcrumbs = to_breadcrumbs(dir[:path])
+      breadcrumbs.map {|crumb| crumb[:text] }.should == dir[:dirs]
+    end
+  end
 end

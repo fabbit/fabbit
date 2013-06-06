@@ -8,6 +8,7 @@ gem 'annotate', ">=2.5.0"
 
 gem 'dropbox-sdk'
 gem 'json'
+gem 'therubyracer'
 gem 'oauth'
 
 gem 'pg'

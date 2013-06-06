@@ -7,8 +7,8 @@ class ModelFilesController < ApplicationController
   # Reads and displays a ModelFile
   def show
     @model = ModelFile.find(params[:id])
+    update_content_of(@model)
     @member = current_member
-    @file = @model.update_and_get(dropbox_client)
     @breadcrumbs = to_breadcrumbs(@model.path)
   end
 
@@ -22,7 +22,7 @@ class ModelFilesController < ApplicationController
     ).first_or_initialize
 
     if model_file.new_record? and model_file.save
-      model_file.update_and_get(dropbox_client) # initialize cache
+      update_content_of(model_file)    # initialize cache
       model_file.versions.create!(
         revision_number: model_file.cached_revision,
         details: "First version",
@@ -36,10 +36,12 @@ class ModelFilesController < ApplicationController
 
   # Returns the contents of the file
   # - NOTE: Move to a JS response for show?
+  # - TODO: Rename to content
   def contents
-    @file = ModelFile.find(params[:id]).update_and_get(dropbox_client)
+    model_file = ModelFile.find(params[:id])
+    update_content_of(model_file)
     respond_to do |format|
-      format.text { render text: @file }
+      format.text { render text: model_file.content }
     end
   end
 
