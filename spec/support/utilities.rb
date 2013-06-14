@@ -2,15 +2,15 @@ include DropboxHelper
 
 # TODO: Use factories and test user
 def db_test_email
-  'wyrven09@gmail.com'
+  'dev.fabbit@gmail.com'
 end
 
 def db_test_password
-  '318GreCya'
+  'fabbit development'
 end
 
 def db_test_name
-  'Keien Ohta'
+  'Dev Fabbit'
 end
 
 def dropbox_sign_in

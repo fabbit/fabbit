@@ -16,9 +16,10 @@ require 'spec_helper'
 describe ModelFile do
 
   let(:member) { FactoryGirl.create(:member) }
-  let(:file) { FactoryGirl.create(:model_file, member: member) }
-  let(:version_1) { FactoryGirl.create(:version, model_file: model_file) }
-  subject { file }
+  let(:model_file) { FactoryGirl.create(:model_file, member: member) }
+  let!(:first_version) { FactoryGirl.create(:version, model_file: model_file) }
+
+  subject { model_file }
 
   describe "responses" do
     it { should respond_to :path }
@@ -38,12 +39,12 @@ describe ModelFile do
     end
 
     describe "with blank path" do
-      before { file.path = "" }
+      before { model_file.path = "" }
       it { should_not be_valid }
     end
 
     describe "with blank member" do
-      before { file.member_id = "" }
+      before { model_file.member_id = "" }
       it { should_not be_valid }
     end
 
@@ -52,6 +53,24 @@ describe ModelFile do
   describe "methods" do
 
     describe "latest_version" do
+
+      let!(:new_version) do
+        FactoryGirl.create(
+          :version,
+          revision_date: first_version.revision_date + 1.day,
+          model_file: model_file
+        )
+      end
+
+      it "should retrieve the latest version" do
+        model_file.latest_version.should == new_version
+      end
+
+      it "should not change on non-Dropbox updates" do
+        first_version.save!
+        model_file.latest_version.should == new_version
+      end
+    end
   end
 
 end
