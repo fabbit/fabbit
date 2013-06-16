@@ -9,9 +9,13 @@ function addMap(dropbox_id, version){
   dropbox_to_version[dropbox_id] = version;
 }
 
+
 $(document).ready(function(){
 
+  //     var viewer = new modelViewer("#container", "#annotation_list",<%= @model.id %>, <%= @member.id %>);
+  // this.id = 
 
+  //UI METHODS
 
   //HOVER OVER for marked -> unmark
   $('.versions').on('hover', 'div.action.marked', function(event){
@@ -42,65 +46,100 @@ $(document).ready(function(){
   //Blur calls success
   $('.versions .message').on('blur', 'input', function(event){
     //TODO: BLUR IS BEING CALLED TWICE SO THATS TWO POSTS!!
-    submitMessage(this); 
+    commiteRevision(this); 
   });
 
-  //Post new revision and update ui
-  function submitMessage(element){
 
-    //Update the message to be accurate
-    var message_element = $(element).parent();
-    var message = $(element).val(); //TODO: Error if value is empty!!!
+  //MODEL FOR REVISIONS
+  Revision = function(modelID, json) 
+  {
 
-    //Get the dropbox id and date
-    var dropbox_id = message_element.parent().find('.dropbox').html().trim();
-    var dropbox_date = message_element.parent().find('.date').html().trim();
-    var action_element = message_element.parent().find('.action');
+    var modelID = modelID;
+    var revision_id = ;
+    var date = ;
+    var version = null;
+    var message = "Test";
 
-    //Post both of them
-    $.post('/model_files/' + <%= @model.id %> + '/versions', {"revision_number": dropbox_id, "details": message, "revision_date": dropbox_date}, function(data){
-      
-      //Update the action ui
-      console.log(action_element);
-      action_element.removeClass('unmarked');
-      action_element.addClass('marked');
+    var genFromJson(j){
+      revision_id = parseInt(j.revision_number);
+      message = j.details;
+      date =  j.revision_date;
+      //TODO: version =?
+    }
 
-      //Update the message ui
-      message_element.html(message); 
-      action_element.mouseout();
+    var returnUI() {
+      //TODO could do caching
+      var rev_html = "";
+      rev_html += "<div class='dropbox'>" + revision_id + '</div>';
+      rev_html += "<div class='date'>" + date + '</div>';
+      if (version === null) {
+        rev_html += "<div class='action unmarked'></div>"
+      } else {
+         rev_html += "<div class='action marked'></div>"
+         rev_html += "<div class='message'> <a href=\"/versions/" + version + '\">' + message + "</div>";
+      }
+    }
 
-      dropbox_to_version[dropbox_id] = data;
+    this.revision_id = function() {
+      return revision_id;
+    }
 
-    });
+    this.commit = function() {
+      $.post('/model_files/' + modelID + '/versions', {"revision_number": revision_id, "details": message, "revision_date": date}, function(data){
+        version = data.trim();
+      }
+    }
+
+    this.rollback = function(){
+      $.ajax({
+      url: '/versions/' + version,
+      type: 'DELETE',
+      success: function(result) {
+          version = null;
+        }
+      });
+    }
+
+  }
+
+  //USE MODEL TO GENERATE UI
+  var revisionList = {};
+
+  function updateRevisionUI() {
+    $('.versions').html("");
+    for (var key in revisionList){
+      $('.versions').append("<li>" + revisionsList[key].returnUI() + "</li>");
+    }
+  }
+
+  function initializeRevisions()) {
+    //GET DATA for revisions then for each revision r 
+    //var r = new Revision(id);
+    //revisionList[r.revision_id()] = r;
+    updateRevisionUI();
+  }
+
+
+  function commitRevision(element) {
+      var dropbox_id = message_element.parent().find('.dropbox').html().trim();
+      revisionList[dropbox_id].commit();
+      updateRevisionUI();
   }
 
   //Unmark click deletes it
   $('.versions').on('click', 'div.action.marked.unmark', function(){
-    
     var dropbox_id = $(this).parent().find('.dropbox').html().trim();
-    var version_id = dropbox_to_version[dropbox_id];
-    var action_element = $(this).parent().find('.action');
-    var message_element = $(this).parent().find('.message');
-
-    $.ajax({
-      url: '/versions/' + version_id,
-      type: 'DELETE',
-      success: function(result) {
-          
-          //Update the action ui
-          action_element.removeClass('marked');
-          action_element.addClass('unmarked');
-
-          //Update the message ui
-         message_element.html("");  
-      }
-    });
+    revisionList[dropbox_id].rollback();
+    updateRevisionUI();
   });
+  
 
 });
 </script>
 
+<h1> <%= @model.id %> </h1>
 <div class="row versions">
+
   <ul>
     <li class="subtitle"> 
       <div class="dropbox"> Version number</div>
@@ -109,17 +148,13 @@ $(document).ready(function(){
       <div class="message"> Commit message </div>
     </li>
 
+    <!-- THIS NEEDS TO BE REPLACED. SHOULD DO A GET AND THen perform operations -->
     <% @dropbox_revisions.each do |revision| %>
     <li>
       <div class="dropbox"> <%= revision[:rev] %> </div>
       <div class="date"> <%= revision[:modified].to_datetime.strftime("%B %d, %Y") %> </div>
       <div class=" <%= revision[:version] ? "action marked" : "action unmarked" %>" > </div>
-      <div class="message"> <%= revision[:details] %> </div>
-      <script>
-        <% if revision[:version] %>
-          addMap("<%= revision[:rev] %>", "<%= revision[:version].id %>");
-        <% end %>
-      </script>
+      <div class="message"> <%= link_to revision[:details], revision[:version] %> </div>
     </li>
     <% end %>
 
