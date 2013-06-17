@@ -11,6 +11,11 @@ class VersionsController < ApplicationController
     @file = @version.retrieve_from_dropbox(dropbox_client)
     @member = current_member
     @breadcrumbs = to_breadcrumbs(@model.path)
+
+    respond_to do |format|
+      format.html
+      format.js { render json: @version }
+    end
   end
 
   # Displays all versions and Dropbox revisions of a ModelFile.
