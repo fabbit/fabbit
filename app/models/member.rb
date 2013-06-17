@@ -29,7 +29,9 @@ class Member < ActiveRecord::Base
   validates :dropbox_uid, :name, presence: true
 
   has_many :discussions, dependent: :destroy
+  has_many :model_files, dependent: :destroy
 
-  has_many :project_members, dependent: :destroy
-  has_many :projects, through: :project_members
+  def projects
+    self.model_files.map { |model_file| model_file.projects }.flatten.compact.uniq
+  end
 end

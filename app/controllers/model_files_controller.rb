@@ -46,6 +46,7 @@ class ModelFilesController < ApplicationController
   end
 
   # Renders a revision of a ModelFile that has not been turned into a Version.
+  # *NOTE: DEPRECATED*; see DropboxRevisionsController#show
   def preview
     model_file = ModelFile.find(params[:id])
     revision_number = params[:revision_number]
@@ -57,6 +58,7 @@ class ModelFilesController < ApplicationController
   end
 
   # Retrieves all dropbox revisions for this model file
+  # *NOTE: DEPRECATED*; see DropboxRevisionsController#index
   def dropbox_revisions
     @model_file = ModelFile.find(params[:id])
     @versions = @model_file.versions

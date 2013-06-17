@@ -20,11 +20,12 @@ Fabbit::Application.routes.draw do
   resources :model_files, only: [:show] do
     resources :annotations, only: [:index, :create]
     resources :versions, only: [:index, :create]
+    resources :dropbox_revisions, only: [:index, :show]
 
     member do
       get :contents
-      get :dropbox_revisions
-      get "preview/:revision_number", action: "preview", as: "preview"
+      # get :dropbox_revisions
+      # get "preview/:revision_number", action: "preview", as: "preview"
     end
   end
 
