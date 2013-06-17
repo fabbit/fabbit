@@ -62,6 +62,10 @@ class ModelFilesController < ApplicationController
     @versions = @model_file.versions
     @dropbox_revisions = dropbox_client.revisions(@model_file.path)
     # TODO: helper for the revisions list
+    respond_to do |format|
+      format.js { render json: @dropbox_revisions }
+      format.html
+    end
   end
 
   # TODO file history

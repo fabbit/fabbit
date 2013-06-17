@@ -12,7 +12,7 @@
 #
 
 # == Description
-# 
+#
 # A specific version of a ModelFile, with a description of its significant changes
 #
 # == Attributes
