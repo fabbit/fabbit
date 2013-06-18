@@ -149,7 +149,7 @@ $(document).ready(function(){
     </li>
 
     <!-- THIS NEEDS TO BE REPLACED. SHOULD DO A GET AND THen perform operations -->
-    <% @dropbox_revisions.each do |revision| %>
+    <% @history.each do |revision| %>
     <li>
       <div class="dropbox"> <%= revision[:rev] %> </div>
       <div class="date"> <%= revision[:modified].to_datetime.strftime("%B %d, %Y") %> </div>

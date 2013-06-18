@@ -19,21 +19,16 @@ class VersionsController < ApplicationController
   # - HTML: Renders the version index page
   # - JSON: returns a JSON object of all the Versions
   def index
-    @model = ModelFile.find(params[:model_file_id])
+    @model_file = ModelFile.find(params[:model_file_id])
+    @model = @model_file
     @versions = @model.versions
     @dropbox_revisions = dropbox_client.revisions(@model.path)
     @member = current_member
     @breadcrumbs = to_breadcrumbs(@model.path)
     @versions = @model.versions
-    @dropbox_revisions = @dropbox_revisions.map do |revision|
-      version = Version.find_by_revision_number(revision["rev"])
-      { rev: revision["rev"],
-        modified: version ? version.revision_date : revision["modified"],
-        version: version,
-        details: version ? version.details : ""
-      }
-    end
-    # TODO: clean this up
+
+    @history = get_history_for(@model_file)
+    p @history
 
     respond_to do |format|
       format.html

@@ -148,6 +148,22 @@ module DropboxHelper
     end
   end
 
+  # Retrieves all Versions and Dropbox revisions for a ModelFile, returning it in a unified format.
+  def get_history_for(model_file)
+    versions = model_file.versions
+    dropbox_revisions = dropbox_client.revisions(model_file.path)
+
+    dropbox_revisions.map do |revision|
+      version = versions.find_by_revision_number(revision["rev"])
+      { rev: revision["rev"],
+        modified: version ? version.revision_date : revision["modified"],
+        version: version,
+        details: version ? version.details : ""
+      }
+    end
+
+  end
+
   private
 
     # Create a file name for the cache that should not conflict with any other files.
