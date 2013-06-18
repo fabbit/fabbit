@@ -192,27 +192,3 @@ $(document).ready(function(){
 
 });
 </script>
-
-<h1> <%= @model.id %> </h1>
-<div class="row versions">
-
-  <ul>
-    <li class="subtitle"> 
-      <div class="dropbox"> Version number</div>
-      <div class="date"> Last changed</div>
-      <div class="action"> </div>
-      <div class="message"> Commit message </div>
-    </li>
-
-    <!-- THIS NEEDS TO BE REPLACED. SHOULD DO A GET AND THen perform operations -->
-    <% @history.each do |revision| %>
-    <li>
-      <div class="dropbox"> <%= revision[:rev] %> </div>
-      <div class="date"> <%= revision[:modified].to_datetime.strftime("%B %d, %Y") %> </div>
-      <div class=" <%= revision[:version] ? "action marked" : "action unmarked" %>" > </div>
-      <div class="message"> <%= link_to revision[:details], revision[:version] %> </div>
-    </li>
-    <% end %>
-
-  </ul>
-</div>

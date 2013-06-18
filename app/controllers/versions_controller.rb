@@ -49,15 +49,15 @@ class VersionsController < ApplicationController
     )
     if version.save
       respond_to do |format|
-        format.js { render text: version.id }
+        format.js { render json: version }
       end
     end
   end
 
   # Deletes/unmarks a Version
   def destroy
-    Version.find(params[:id]).destroy
-    respond_to { |format| format.js }
+    version = Version.find(params[:id]).destroy
+    respond_to { |format| format.js { render json: version } }
   end
 
   # Returns the contents of the Version file
