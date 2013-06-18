@@ -1,6 +1,30 @@
 <%= render "dropbox/breadcrumbs" %>
 
-<script>
+<h1> <%= @model.id %> </h1>
+<div class="row versions">
+
+  <ul>
+    <li class="subtitle"> 
+      <div class="dropbox"> Version number</div>
+      <div class="date"> Last changed</div>
+      <div class="action"> </div>
+      <div class="message"> Commit message </div>
+    </li>
+
+    <!-- THIS NEEDS TO BE REPLACED. SHOULD DO A GET AND THen perform operations -->
+    <% @history.each do |revision| %>
+    <li>
+      <div class="dropbox"> <%= revision[:rev] %> </div>
+      <div class="date"> <%= revision[:modified].to_datetime.strftime("%B %d, %Y") %> </div>
+      <div class=" <%= revision[:version] ? "action marked" : "action unmarked" %>" > </div>
+      <div class="message"> <%= link_to revision[:details], revision[:version] %> </div>
+    </li>
+    <% end %>
+
+  </ul>
+</div>
+
+<script type="text/javascript">
 
 var dropbox_to_version = {};
 
@@ -12,11 +36,8 @@ function addMap(dropbox_id, version){
 
 $(document).ready(function(){
 
-  //     var viewer = new modelViewer("#container", "#annotation_list",<%= @model.id %>, <%= @member.id %>);
-  // this.id = 
 
-  //UI METHODS
-
+  //UI METHODS YOU CAN IGNORE THESE
   //HOVER OVER for marked -> unmark
   $('.versions').on('hover', 'div.action.marked', function(event){
     event.preventDefault();
@@ -49,50 +70,64 @@ $(document).ready(function(){
     commiteRevision(this); 
   });
 
+  //************* KEIEN YOU CAN START READING HERE ******************
 
   //MODEL FOR REVISIONS
-  Revision = function(modelID, json) 
+  Revision = function(id, json) 
   {
 
-    var modelID = modelID;
-    var revision_id = ;
-    var date = ;
-    var version = null;
-    var message = "Test";
+    var modelID = id;
+    var revision_id;
+    var date;
+    var version;
+    var message;
 
-    var genFromJson(j){
-      revision_id = parseInt(j.revision_number);
-      message = j.details;
-      date =  j.revision_date;
-      //TODO: version =?
+    //Generates an object from the JSON passed into the objects creator
+    function genFromJson(j){
+      console.log("Gen rev from json");
+      console.log(j);
+      //TODO CLEAN!
+      revision_id = j.rev;
+      date =  j.modified;
+      if (isNaN(parseInt(j.revision))) {
+        version = null;
+        message = "";
+      } else {
+        version = parseInt(j.revision);
+        message = "TODO: How will i get this message? do another post request"; //KEIEN?
+      }
     }
 
-    var returnUI() {
-      //TODO could do caching
+    this.revision_id = function(){
+      return revision_id;
+    }
+
+    //Simply returns associated HTML for this revision model
+    this.returnUI = function() {
       var rev_html = "";
-      rev_html += "<div class='dropbox'>" + revision_id + '</div>';
-      rev_html += "<div class='date'>" + date + '</div>';
+      rev_html += "<div class='dropbox'>" + revision_id + "</div>";
+      rev_html += "<div class='date'>" + date + "</div>";
       if (version === null) {
         rev_html += "<div class='action unmarked'></div>"
       } else {
          rev_html += "<div class='action marked'></div>"
-         rev_html += "<div class='message'> <a href=\"/versions/" + version + '\">' + message + "</div>";
+         rev_html += "<div class='message'> <a href=\"/versions/" + version + '\">' + message + "</a></div>";
       }
+      console.log("returning" + rev_html);
+      return rev_html;
     }
 
-    this.revision_id = function() {
-      return revision_id;
-    }
-
+    //Converts this revision model to a version, makes a POST request
     this.commit = function() {
       $.post('/model_files/' + modelID + '/versions', {"revision_number": revision_id, "details": message, "revision_date": date}, function(data){
         version = data.trim();
-      }
+      });
     }
 
-    this.rollback = function(){
+    //Rolls back this revision model to a version (no longer revision), makes a DEL request
+    this.rollback = function() {
       $.ajax({
-      url: '/versions/' + version,
+      url: '/versions/'+ version,
       type: 'DELETE',
       success: function(result) {
           version = null;
@@ -100,39 +135,60 @@ $(document).ready(function(){
       });
     }
 
+    //initialize this bitch from its json
+    genFromJson(json);
   }
 
-  //USE MODEL TO GENERATE UI
+  //THIS IS WHERE WE INTIALIZE EVERYTHING AND USE THE MODEL
   var revisionList = {};
+  var modelID = "<%= @model.id %>"
 
+  //Updates the revisions ui based on the revisionList
   function updateRevisionUI() {
-    $('.versions').html("");
+    var save = $('.versions').find('.subtitle').html();
+    var ul = $('.versions').find('ul');
+    $(ul).html("<li class='subtitle'>" + save + "</li>");
+    console.log(revisionList);
     for (var key in revisionList){
-      $('.versions').append("<li>" + revisionsList[key].returnUI() + "</li>");
+      console.log(revisionList[key]);
+      $(ul).append("<li>" + revisionList[key].returnUI() + "</li>");
     }
   }
 
-  function initializeRevisions()) {
-    //GET DATA for revisions then for each revision r 
-    //var r = new Revision(id);
-    //revisionList[r.revision_id()] = r;
-    updateRevisionUI();
+   //I go through all the revisions I have for this particular model_file and create objects for each (GET request)
+  function initializeRevisions() {
+    var r;
+    $.getJSON('/model_files/' + modelID + '/dropbox_revisions', function(data)
+    {
+      console.log(data);
+      for (var i =0; i < data.length; i++){
+        var e = data[i];
+        r = new Revision(modelID, e);
+        console.log(r);
+        revisionList[r.revision_id()] = r;
+        console.log(revisionList);
+      }
+      updateRevisionUI();
+
+    });
   }
 
-
+  //Commits a specific revision to a version (tied to mark.click ui)
   function commitRevision(element) {
       var dropbox_id = message_element.parent().find('.dropbox').html().trim();
       revisionList[dropbox_id].commit();
       updateRevisionUI();
   }
 
-  //Unmark click deletes it
+  //Rolls back a specific version to a revision (tied to unmark click)
   $('.versions').on('click', 'div.action.marked.unmark', function(){
     var dropbox_id = $(this).parent().find('.dropbox').html().trim();
     revisionList[dropbox_id].rollback();
     updateRevisionUI();
   });
-  
+   
+  //Initialize the revisions from db to start things off
+  initializeRevisions();
 
 });
 </script>
