@@ -8,9 +8,15 @@ class VersionsController < ApplicationController
   def show
     @version = Version.find(params[:id])
     @model = @version.model_file
-    @file = @version.retrieve_from_dropbox(dropbox_client)
+    @content = @version.retrieve_from_dropbox(dropbox_client)
+    @file = @content
     @member = current_member
     @breadcrumbs = to_breadcrumbs(@model.path)
+
+    respond_to do |format|
+      format.html
+      format.js { render json: [@content, @version] }
+    end
   end
 
   # Displays all versions and Dropbox revisions of a ModelFile.

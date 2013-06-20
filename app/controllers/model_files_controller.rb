@@ -6,10 +6,16 @@ class ModelFilesController < ApplicationController
 
   # Reads and displays a ModelFile
   def show
-    @model = ModelFile.find(params[:id])
+    @model_file = ModelFile.find(params[:id])
+    @model = @model_file
     update_content_of(@model)
     @member = current_member
     @breadcrumbs = to_breadcrumbs(@model.path)
+
+    respond_to do |format|
+      format.html
+      format.js { render json: @model_file.to_json(methods: :content) }
+    end
   end
 
   # Loads the requested model file, initializing the file cache if necessary.
@@ -35,8 +41,7 @@ class ModelFilesController < ApplicationController
   end
 
   # Returns the content of the file
-  # - NOTE: Move to a JS response for show?
-  # - TODO: Rename to content
+  # *NOTE:* Moved to JS response under show
   def contents
     model_file = ModelFile.find(params[:id])
     update_content_of(model_file)
