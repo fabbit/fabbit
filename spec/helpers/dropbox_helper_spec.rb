@@ -11,7 +11,7 @@ require 'spec_helper'
 #   end
 # end
 describe DropboxHelper do
-  describe "to_link method" do
+  describe "#to_link" do
     let(:root_dir) { "path" }
     let(:paths) { [
       "/#{root_dir}/for/testing",
@@ -25,7 +25,7 @@ describe DropboxHelper do
     end
   end
 
-  describe "to_breadcrumbs method" do
+  describe "#to_breadcrumbs" do
     let(:dir) { random_directory }
 
     it "should break down each directory in order" do

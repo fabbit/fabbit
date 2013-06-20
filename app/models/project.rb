@@ -30,11 +30,15 @@ class Project < ActiveRecord::Base
 
   validates :name, presence: true
 
-  has_many :project_members, dependent: :destroy
-  has_many :members, through: :project_members
+  # has_many :project_members, dependent: :destroy
+  # has_many :members, through: :project_members
 
   has_many :project_model_files, dependent: :destroy
-  has_many :model_files, through: :project_members
+  has_many :model_files, through: :project_model_files
 
   belongs_to :project_type
+
+  def members
+    self.model_files.map { |model_file| model_file.member }.compact.uniq
+  end
 end

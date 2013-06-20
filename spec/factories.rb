@@ -16,4 +16,14 @@ FactoryGirl.define do
     details { Faker::Lorem.sentence(10) }
     model_file
   end
+
+  factory :project_type do
+    name { Faker::Lorem.words(1) }
+  end
+
+  factory :project do
+    name { Faker::Lorem.words(4) }
+    project_type
+  end
+
 end
