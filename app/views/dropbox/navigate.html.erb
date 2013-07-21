@@ -1,20 +1,41 @@
+<%= render "layouts/header" %>
 
-<%= render "dropbox/breadcrumbs" %>
+<section>
 
-<ul class="row files">
+  <%= render "dropbox/breadcrumbs" %>
 
-  <% @contents.each do |content| %>
-    <li <%= raw content[:is_dir] ? "class='inset blue' " : "class='inset gray'" %> >
-      <div> <%= link_to content[:content], content[:link] %> </div>
-      <div > 3 new events </div>
-      <div> Last viewed 2 months </div>
-    </li>
-  <% end %>
-  <script>
-  $(".files .inset").click(function(){
-	   var h = this.children[0].children[0];
-	   console.log(h);
-	   window.location = h;
-	});
-  </script>
-</ul>
+  <ul class="row files">
+
+    <% @contents.each do |content| %>
+      <li <%= raw content[:is_dir] ? "class='inset blue' " : "class='inset gray'" %> >
+        <div> <%= link_to content[:content], content[:link] %> </div>
+        <div > In x projects </div>
+        <div> Last viewed x months </div>
+      </li>
+    <% end %>
+    <script>
+    $(".files .inset").click(function(){
+  	   var h = this.children[0].children[0];
+  	   console.log(h);
+  	   window.location = h;
+  	});
+    </script>
+  </ul>
+
+</section>
+
+<section>
+  <div class="row navigate projects">
+    <ul class="subtitle crumbs green">
+      <li> <a href="#"> Your projects </a> </li>
+      <li></li>
+    </ul>
+  </div>
+
+  <ul class="row files">
+    <li class="inset green" >
+      <div> Folder name </div>
+      <div> 3 files </div>
+    <div> x Participants </div>
+  </li>
+</section>

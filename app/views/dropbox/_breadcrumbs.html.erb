@@ -1,28 +1,9 @@
 
-<div class="row header">
-	<div class="logo title"> Fabbit </div>
-	<div class="member"> 
-        	<div class="subtitle" id="me"> <%= current_member.name %> </div>
-		<ul>
-			<li> Notifications </li>
-			<li> Logout </li>
-		</ul>
-		<script>
-		$(document).ready(function(){
-			$(".header .member .subtitle").click(function(){ $(".header .member ul").slideToggle()});
-			$(".navigate .revisions li:first-child").toggle(
-				function(){ $(".navigate .revisions").addClass("expanded")}, 
-				function(){ $(".navigate .revisions").removeClass("expanded")}
-				);
-		});
-		</script>
-	</div>
-</div>
 
 <div class="row navigate">
 
   <ul class="subtitle crumbs">
-        <li> <%= link_to "Your projects", navigate_url %> </li>
+        <li> <%= link_to "Your files", navigate_url %> </li>
 
         <% @breadcrumbs.each do |crumb| %>
           <li><%= link_to crumb[:text], crumb[:link] %></li>
@@ -36,6 +17,8 @@
 		  <% end %>
         </li>
   </ul>
+
+  
   
 
 </div>

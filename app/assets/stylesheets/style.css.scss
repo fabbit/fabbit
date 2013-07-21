@@ -1,5 +1,6 @@
 $blue: #3079ed;
 $black: #1c1c1c;
+$green: green;
 $gray: gray;
 $red: red;
 
@@ -9,6 +10,8 @@ $red: red;
 	font-size: 14px;
 	height: 100%;
 }
+
+
 
 .container {
 	background: white;
@@ -21,6 +24,7 @@ $red: red;
 	-moz-box-sizing: border-box; -webkit-box-sizing: border-box; box-sizing: border-box;
 
 }
+
 
 .row {
 	float:left;
@@ -73,6 +77,12 @@ $red: red;
 	background: rgba(103, 176, 253,.3);
 }
 
+.inset.green {
+	border:1px solid rgb(120,228,120);
+	background: rgba(120,228,120,.4);
+	color: $green;
+}
+
 .header {
 	width: 100%;
 	float:left;
@@ -115,6 +125,10 @@ $red: red;
 .navigate {
 	width:100%;
 }
+
+.navigate.projects {
+	margin-top: 40px;
+}
 .navigate ul.crumbs {
 	float: left;
 	padding: 10px 0px;
@@ -131,6 +145,10 @@ $red: red;
 .navigate ul.crumbs > li {
 	color: $blue;
 	float:left;
+}
+
+.navigate ul.crumbs.green > li {
+	color: $green;
 }
 
 .navigate ul.crumbs > li:before {
@@ -152,7 +170,7 @@ $red: red;
 	display:none;
 }
 
-
+//TODO! THIS IS MESSED UP IT LEADS TO JANKY HTML
 .navigate ul.crumbs > li:last-child{
 	cursor: default;
 	color: $black;
