@@ -5,6 +5,9 @@ class DiscussionsController < ApplicationController
 
   # List all Discussion objects for a given Annotation
   #
+  # === Variables
+  # - @discussions: list of discussions in the annotation
+  #
   # === Responses
   #
   # - JSON: Return a JSON object of all discussions, with access to its member_name method
@@ -18,18 +21,21 @@ class DiscussionsController < ApplicationController
 
   # Create a new Discussion for the current Member.
   #
+  # === Variables
+  # - @discussion = the newly created discussion
+  #
   # === Responses
   # - JS: Return the member's name
   def create
     annotation = Annotation.find(params[:annotation_id])
-    discussion = annotation.discussions.new(
+    @discussion = annotation.discussions.new(
       text: params[:text],
     )
-    discussion.member = current_member
+    @discussion.member = current_member
 
-    if discussion.save
+    if @discussion.save
       respond_to do |format|
-        format.js { render text: discussion.member_id } # TODO change to member name
+        format.js { render text: @discussion.member_id } # TODO change to member name
       end
     else
       # error message

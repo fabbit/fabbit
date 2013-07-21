@@ -5,12 +5,16 @@
 class ModelFilesController < ApplicationController
 
   # Reads and displays a ModelFile
+  #
+  # === Variables
+  # - @model_file: the model file object
+  # - @breadcrumbs: data for generating the navigational breadcrumbs
   def show
     @model_file = ModelFile.find(params[:id])
     @model = @model_file
-    update_content_of(@model)
+    update_content_of(@model_file)
     @member = current_member
-    @breadcrumbs = to_breadcrumbs(@model.path)
+    @breadcrumbs = to_breadcrumbs(@model_file.path)
 
     respond_to do |format|
       format.html

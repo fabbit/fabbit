@@ -8,6 +8,11 @@ class AnnotationsController < ApplicationController
   # Currently also allows calls without a version, which will load the most recent version of the
   # model file.
   #
+  # *NOTE*: doesn't work (will fix if put in use)
+  #
+  # === Variables
+  # - @annotations: list of annotations for the version of the model file
+  #
   # === Responses
   # - HTML: Redirect to the corresponding model file page
   #   - NOTE: I have no idea why I'm doing this at the moment
@@ -26,6 +31,9 @@ class AnnotationsController < ApplicationController
   end
 
   # Create a new annotation based on what is created on the 3D viewer.
+  #
+  # === Variables
+  # - @annotation = the newly created annotation
   #
   # === Responses
   # - JS: Return the ID of the new annotation

@@ -17,6 +17,14 @@ FactoryGirl.define do
     model_file
   end
 
+  factory :annotation do
+    camera { 3.times.map { Random.rand }.to_s }
+    coordinates { 3.times.map { Random.rand }.to_s }
+    text { Faker:: Lorem.sentence(10) }
+    version
+    member
+  end
+
   factory :project_type do
     name { Faker::Lorem.words(1) }
   end

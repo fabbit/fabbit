@@ -17,7 +17,7 @@ describe ModelFile do
 
   let(:member) { FactoryGirl.create(:member) }
   let(:model_file) { FactoryGirl.create(:model_file, member: member) }
-  let!(:first_version) { FactoryGirl.create(:version, model_file: model_file) }
+  let(:first_version) { FactoryGirl.create(:version, model_file: model_file) }
 
   subject { model_file }
 

@@ -4,7 +4,7 @@ gem 'rails', '3.2.12'
 gem 'bootstrap-sass', '2.1'
 gem 'bcrypt-ruby', '3.0.1'
 gem 'faker', '1.0.1'
-gem 'annotate', ">=2.5.0"
+gem 'annotate', ">= 2.5.0"
 
 gem 'dropbox-sdk'
 gem 'json'
@@ -13,8 +13,10 @@ gem 'oauth'
 
 gem 'pg'
 
+gem 'jquery-rails'
+
 group :development, :test do
-  gem 'rspec-rails', '2.11.0'
+  gem 'rspec-rails', '~> 2.14'
 end
 
 group :assets do
@@ -27,6 +29,5 @@ group :test do
   gem 'capybara', '1.1.2'
   gem 'selenium-webdriver'
   gem 'factory_girl_rails', '~> 4.0.0'
+  gem 'shoulda-matchers'
 end
-
-gem 'jquery-rails'

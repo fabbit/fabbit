@@ -15,5 +15,23 @@
 require 'spec_helper'
 
 describe Annotation do
-  pending "add some examples to (or delete) #{__FILE__}"
+
+  let(:member) { FactoryGirl.create(:member) }
+  let(:model_file) { FactoryGirl.create(:model_file, member: member) }
+  let(:first_version) { FactoryGirl.create(:version, model_file: model_file) }
+  let(:first_annotation) { FactoryGirl.create(:annotation, version: first_version, member: member) }
+
+  subject { first_annotation }
+
+  describe "attributes" do
+
+    it { should respond_to :camera, :coordinates, :text }
+    it { should respond_to :member, :version }
+    it { should respond_to :discussions }
+
+    it { should_not allow_mass_assignment_of :member_id }
+    it { should_not allow_mass_assignment_of :version_id }
+
+  end
+
 end

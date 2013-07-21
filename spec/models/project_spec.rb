@@ -12,5 +12,14 @@
 require 'spec_helper'
 
 describe Project do
-  pending "add some examples to (or delete) #{__FILE__}"
+
+  let(:project_type) { FactoryGirl.create(:project_type) }
+  let(:project) { FactoryGirl.create(:project, project_type: project_type) }
+
+  subject { project }
+
+  describe "responses" do
+    it { should respond_to :members }
+  end
+
 end
