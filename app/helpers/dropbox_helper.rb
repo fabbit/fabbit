@@ -99,7 +99,7 @@ module DropboxHelper
     # Extract and split path
     dir_list = File.dirname(path).split(File::SEPARATOR).map do |x|
       x.blank? ? File::SEPARATOR : x
-    end[1..-1]
+    end
     file_name = File.basename(path)
 
     link = ""
