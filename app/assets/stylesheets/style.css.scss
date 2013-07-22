@@ -83,6 +83,33 @@ $red: red;
 	color: $green;
 }
 
+.inset .project_list {
+	position: absolute;
+	top: 0px;
+	right: 0px;
+	padding: 10px;
+	background: rgba(255,255,255,0.8);
+
+}
+
+.inset .project_list .opener {
+	position: absolute;
+	top: 5px;
+	right: 5px;
+}
+.inset .project_list ul {
+	display:none;
+	margin-top:10px;
+	color: black;
+
+}
+
+.inset .project_list li {
+	float: left;
+	clear: left;
+	margin-bottom: 5px;
+}
+
 .header {
 	width: 100%;
 	float:left;
@@ -262,13 +289,12 @@ $red: red;
 }	
 
 .files .inset div:first-child{
-	opacity:.8;
 	margin-bottom: 8px;
 }
 
 
 .files .inset:hover div {
-	opacity: .8;
+	opacity: 1;
 }
 
 .files .inset:hover div:first-child{

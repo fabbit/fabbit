@@ -1,3 +1,4 @@
+<%= render "layouts/header" %>
 <%= render "dropbox/breadcrumbs" %>
 
 <div class="row versions">
@@ -47,6 +48,7 @@ $(document).ready(function(){
 
     //Updates the revisions ui based on the revisionList
     this.updateRevisionUI = function() {
+      console.log("UPDATING UI!!!");
       var save = $('.versions').find('.subtitle').html();
       var ul = $('.versions').find('ul');
       $(ul).html("<li class='subtitle'>" + save + "</li>");
@@ -61,7 +63,7 @@ $(document).ready(function(){
     this.commitRevision = function(message_element) {
       console.log($(message_element));
         var dropbox_id = $(message_element).parent().parent().find('.dropbox').html().trim();
-        revisionList[dropbox_id].commit();
+        revisionList[dropbox_id].commit($(message_element).val());
     }
 
     //Rolls back a specific version to a revision (tied to unmark click)
@@ -121,12 +123,13 @@ $(document).ready(function(){
     }
 
     //Converts this revision model to a version, makes a POST request
-    this.commit = function() {
-      var j = {"revision_number": revision_id, "details": message, "revision_date": date};
-      console.log("KKKKJJJJ");
-      console.log(j);
+    this.commit = function(msg) {
+      var j = {"revision_number": revision_id, "details": msg, "revision_date": date};
       $.post('/model_files/' + modelID + '/versions', j , function(data){
+        console.log("COMMITED - DATA IS:");
+        console.log(data);
         version = data.trim();
+        message = msg;
         list.updateRevisionUI();
       });
     }
@@ -138,6 +141,7 @@ $(document).ready(function(){
       type: 'DELETE',
       success: function(result) {
           version = null;
+          message = "";
           list.updateRevisionUI();
         }
       });

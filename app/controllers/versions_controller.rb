@@ -53,7 +53,7 @@ class VersionsController < ApplicationController
       revision_date: params[:revision_date],
       details: params[:details],
     )
-    if version.save
+    if version.save!
       respond_to do |format|
         format.js { render json: version }
       end
