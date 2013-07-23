@@ -100,14 +100,13 @@ ActiveRecord::Schema.define(:version => 20130601212348) do
 
   create_table "versions", :force => true do |t|
     t.integer  "model_file_id"
-    t.string   "revision_number"
     t.datetime "created_at",      :null => false
     t.datetime "updated_at",      :null => false
+    t.string   "revision_number"
     t.string   "details"
     t.datetime "revision_date"
   end
 
-  add_index "versions", ["model_file_id", "revision_number"], :name => "index_revisions_on_model_file_id_and_revision_number"
   add_index "versions", ["revision_date"], :name => "index_versions_on_revision_date"
 
 end

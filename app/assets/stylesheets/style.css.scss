@@ -1,5 +1,6 @@
 $blue: #3079ed;
 $black: #1c1c1c;
+$green: green;
 $gray: gray;
 $red: red;
 
@@ -9,6 +10,8 @@ $red: red;
 	font-size: 14px;
 	height: 100%;
 }
+
+
 
 .container {
 	background: white;
@@ -21,6 +24,7 @@ $red: red;
 	-moz-box-sizing: border-box; -webkit-box-sizing: border-box; box-sizing: border-box;
 
 }
+
 
 .row {
 	float:left;
@@ -73,6 +77,39 @@ $red: red;
 	background: rgba(103, 176, 253,.3);
 }
 
+.inset.green {
+	border:1px solid rgb(120,228,120);
+	background: rgba(120,228,120,.4);
+	color: $green;
+}
+
+.inset .project_list {
+	position: absolute;
+	top: 0px;
+	right: 0px;
+	padding: 10px;
+	background: rgba(255,255,255,0.8);
+
+}
+
+.inset .project_list .opener {
+	position: absolute;
+	top: 5px;
+	right: 5px;
+}
+.inset .project_list ul {
+	display:none;
+	margin-top:10px;
+	color: black;
+
+}
+
+.inset .project_list li {
+	float: left;
+	clear: left;
+	margin-bottom: 5px;
+}
+
 .header {
 	width: 100%;
 	float:left;
@@ -115,6 +152,10 @@ $red: red;
 .navigate {
 	width:100%;
 }
+
+.navigate.projects {
+	margin-top: 40px;
+}
 .navigate ul.crumbs {
 	float: left;
 	padding: 10px 0px;
@@ -131,6 +172,10 @@ $red: red;
 .navigate ul.crumbs > li {
 	color: $blue;
 	float:left;
+}
+
+.navigate ul.crumbs.green > li {
+	color: $green;
 }
 
 .navigate ul.crumbs > li:before {
@@ -152,7 +197,7 @@ $red: red;
 	display:none;
 }
 
-
+//TODO! THIS IS MESSED UP IT LEADS TO JANKY HTML
 .navigate ul.crumbs > li:last-child{
 	cursor: default;
 	color: $black;
@@ -244,13 +289,12 @@ $red: red;
 }	
 
 .files .inset div:first-child{
-	opacity:.8;
 	margin-bottom: 8px;
 }
 
 
 .files .inset:hover div {
-	opacity: .8;
+	opacity: 1;
 }
 
 .files .inset:hover div:first-child{
