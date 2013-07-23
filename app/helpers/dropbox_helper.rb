@@ -55,7 +55,9 @@ module DropboxHelper
   #     that they always see the most recent revision.
   #   - This should be the *only* method that makes any modifications to a ModelFile.
   def update_content_of(model_file)
-    dropbox_rev = dropbox_client.metadata(model_file.path)["rev"]
+    dropbox_rev = 0
+    if model_file.member != current_member
+      dropbox_rev = dropbox_client.metadata(model_file.path)["rev"]
     if model_file.cached_revision != dropbox_rev or !File.exists?(cache_file_name_of(model_file))
       model_file.content = dropbox_client.get_file(model_file.path)   # update content
       cache(model_file, dropbox_rev)                                  # update cache
