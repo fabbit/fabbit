@@ -1,0 +1,8 @@
+<li <%= raw content[:is_dir] ? "class='inset blue' " : "class='inset gray'" %> >
+  <div> <%= link_to content[:content], content[:link] %> </div>
+  <div> In x projects </div>
+  <div> Last viewed x months </div>
+  <% if !content[:is_dir] %>
+    <%= render "dropbox/projects_dropdown", projects: content[:projects] %>
+  <% end %>
+</li>

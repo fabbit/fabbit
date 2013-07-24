@@ -39,6 +39,10 @@ class DropboxController < ApplicationController
   end
 
   # Parses directory path from URL to display and navigate through the current member's Dropbox.
+  #
+  # === Variables
+  # - @breadcrumbs: array for breadcrumbs
+  # - @contents: return value of Dropbox content call, processed
   def navigate
     member = current_member
     path = params[:dropbox_path] || "/"

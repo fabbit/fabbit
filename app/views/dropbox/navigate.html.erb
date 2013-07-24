@@ -4,21 +4,8 @@
 
   <%= render "dropbox/breadcrumbs" %>
   <ul class="row files">
-
     <% @contents.each do |content| %>
-      <li <%= raw content[:is_dir] ? "class='inset blue' " : "class='inset gray'" %> >
-        <div> <%= link_to content[:content], content[:link] %> </div>
-        <div > In x projects </div>
-        <div> Last viewed x months </div>
-        <%= raw content [:is_dir] ? " " : "
-                  <div class='project_list'> 
-                    <div class='opener'> v </div> 
-                    <ul>
-                      <li id='project_id_1'> <input type='checkbox' > Projectasdadasdasd 1 </li> 
-                      <li id='project_id_2'> <input type='checkbox' > Project 2 </li>
-                    </ul>
-                  </div>" %>
-      </li>
+      <%= render "dropbox/content", content: content %>
     <% end %>
     <script>
     //This section makes the whole thing clickable - but we remove it for now because it fucks with the opener
@@ -42,7 +29,7 @@
       
       if (this.checked) {
         console.log("POSTING " + id);
-        $.post('#', {"project_id" :id} , function(data){
+        $.post('/project_model_files/', {"project_id": id, "model_file_id": 5}, function(data) {
           console.log(data);
         });
       } else {
