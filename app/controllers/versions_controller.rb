@@ -48,12 +48,12 @@ class VersionsController < ApplicationController
   # - JS: Returns the new version's ID
   def create
     model_file = ModelFile.find(params[:model_file_id])
-    version = model_file.versions.build(
+    @version = model_file.versions.build(
       revision_number: params[:revision_number],
       revision_date: params[:revision_date],
       details: params[:details],
     )
-    if version.save!
+    if @version.save!
       respond_to do |format|
         format.js
       end
@@ -62,7 +62,7 @@ class VersionsController < ApplicationController
 
   # Deletes/unmarks a Version
   def destroy
-    version = Version.find(params[:id]).destroy
+    @version = Version.find(params[:id]).created
     respond_to do |format|
       format.js
     end

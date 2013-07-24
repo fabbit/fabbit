@@ -28,8 +28,8 @@
       var id = $(this).parent().attr('id');
       
       if (this.checked) {
-        console.log("POSTING " + id);
-        $.post('/project_model_files/', {"project_id": id, "model_file_id": 5}, function(data) {
+        console.log("POSTING " + id); 
+        $.post('/project_model_files/', {"project_id": id, "model_file_id": 5}, function(data) {//KTODO: I NEED THE
           console.log(data);
         });
       } else {
