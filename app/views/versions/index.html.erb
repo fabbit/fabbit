@@ -125,7 +125,7 @@ $(document).ready(function(){
     //Converts this revision model to a version, makes a POST request
     this.commit = function(msg) {
       var j = {"revision_number": revision_id, "details": msg, "revision_date": date};
-      $.post('/model_files/' + modelID + '/versions', j , function(data){
+      $.post('/model_files/' + modelID + '/versions', j, function(data){
         console.log("COMMITED - DATA IS:");
         console.log(data);
         version = data.trim();
