@@ -48,14 +48,14 @@ class VersionsController < ApplicationController
   # - JS: Returns the new version's ID
   def create
     model_file = ModelFile.find(params[:model_file_id])
-    version = model_file.versions.build(
+    @version = model_file.versions.build(
       revision_number: params[:revision_number],
       revision_date: params[:revision_date],
       details: params[:details],
     )
-    if version.save!
+    if @version.save!
       respond_to do |format|
-        format.js { render json: version }
+        format.js { render json: @version } 
       end
     end
   end

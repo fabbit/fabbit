@@ -10,7 +10,9 @@
       <div class="action"> </div>
       <div class="message"> Commit message </div>
     </li>
-
+    <% @history.each do |rev| %>"
+      <%= render "layouts/version", :revision => rev%> <!-- TODO: we should probably change where this is stored -->
+    <% end %>
   </ul>
 </div>
 
@@ -18,145 +20,28 @@
 
 $(document).ready(function(){
 
+  //TODO: MOVE THIS SCRIPT TO A GENERAL VERSION SCRIPT AND HAVE THAT INCLUDED!!
 
-  //Model for list of revisions
-  List = function() {
-    var containerID = '.versions'; //TODO Actually use this
-    var revisionList = {}; //map of dropbox id to revision class
+  //Takes an element and gets the id from the parent
+  function getInfoFromElement(el){
 
-    /* <!-- THIS NEEDS TO BE REPLACED. SHOULD DO A GET AND THen perform operations -->
-    <% @history.each do |revision| %>
-    <li>
-      <div class="dropbox"> <%= revision[:rev] %> </div>
-      <div class="date"> <%= revision[:modified].to_datetime.strftime("%B %d, %Y") %> </div>
-      <div class=" <%= revision[:version] ? "action marked" : "action unmarked" %>" > </div>
-      <div class="message"> <%= link_to revision[:details], revision[:version] %> </div>
-    </li>
-    <% end %>*/
+    var details;
 
-    function instantiateRevisions() {
-      "<% @history.each do |revision| %>"
-      var r = new Revision("<%= @model.id  %>", {
-        "rev" : "<%= revision[:rev] %>",
-        "modified": "<%=revision[:modified].to_datetime.strftime('%B %d, %Y') %>",
-        "version": "<%= revision[:version] ? revision[:version].id : 'null' %>",
-        "details": "<%= revision[:version] ? revision[:version].details : 'null' %>"
-      });
-      revisionList[r.revision_id()] = r;
-      "<% end %>"
+    if ($(el).is('input')) { //If its the input - we gotta skip a layer and set the message to the right thing (jankkk!)
+      details = $(el).val();
+      el = $(el).parent(); 
+    } else {
+      el = $(el);
+      details = null;
     }
-
-    //Updates the revisions ui based on the revisionList
-    this.updateRevisionUI = function() {
-      console.log("UPDATING UI!!!");
-      var save = $('.versions').find('.subtitle').html();
-      var ul = $('.versions').find('ul');
-      $(ul).html("<li class='subtitle'>" + save + "</li>");
-      console.log(revisionList);
-      for (var key in revisionList){
-        console.log(revisionList[key]);
-        $(ul).append("<li>" + revisionList[key].returnUI() + "</li>");
-      }
-    }
-
-    //Commits a specific revision to a version (tied to mark.click ui)
-    this.commitRevision = function(message_element) {
-      console.log($(message_element));
-        var dropbox_id = $(message_element).parent().parent().find('.dropbox').html().trim();
-        revisionList[dropbox_id].commit($(message_element).val());
-    }
-
-    //Rolls back a specific version to a revision (tied to unmark click)
-    $('.versions').on('click', 'div.action.marked.unmark', function(){
-      var dropbox_id = $(this).parent().find('.dropbox').html().trim();
-      console.log(revisionList);
-      revisionList[dropbox_id].rollback();
-    });
-
-    instantiateRevisions();
+    var id = el.siblings('.dropbox').html().trim();
+    var date = el.siblings('.date').html().trim();
+    return {"id": id, "date": date, "details": details};
   }
-
-  //Model for revisions
-  Revision = function(id, json) 
-  {
-
-    var modelID = id;
-    var revision_id;
-    var date;
-    var version;
-    var message;
-
-    //Generates an object from the JSON passed into the objects creator
-    function genFromJson(j){
-      console.log("Gen rev from json");
-      console.log(j);
-      //TODO CLEAN!
-      revision_id = j.rev;
-      date =  j.modified;
-      if (isNaN(parseInt(j.version))) { //TODO: make this cleanar
-        version = null;
-        message = "";
-      } else {
-        version = parseInt(j.version);
-        message = j.details;
-      }
-    }
-
-    this.revision_id = function(){
-      return revision_id;
-    }
-
-    //Simply returns associated HTML for this revision model
-    this.returnUI = function() {
-      var rev_html = "";
-      rev_html += "<div class='dropbox'>" + revision_id + "</div>";
-      rev_html += "<div class='date'>" + date + "</div>";
-      if (version === null) {
-        rev_html += "<div class='action unmarked'></div>"
-        rev_html += "<div class='message'> </div>"
-      } else {
-         rev_html += "<div class='action marked'></div>"
-         rev_html += "<div class='message'> <a href=\"/versions/" + version + '\">' + message + "</a></div>";
-      }
-      console.log("returning" + rev_html);
-      return rev_html;
-    }
-
-    //Converts this revision model to a version, makes a POST request
-    this.commit = function(msg) {
-      var j = {"revision_number": revision_id, "details": msg, "revision_date": date};
-      $.post('/model_files/' + modelID + '/versions', j , function(data){
-        console.log("COMMITED - DATA IS:");
-        console.log(data);
-        version = data.trim();
-        message = msg;
-        list.updateRevisionUI();
-      });
-    }
-
-    //Rolls back this revision model to a version (no longer revision), makes a DEL request
-    this.rollback = function() {
-      $.ajax({
-      url: '/versions/'+ version,
-      type: 'DELETE',
-      success: function(result) {
-          version = null;
-          message = "";
-          list.updateRevisionUI();
-        }
-      });
-    }
-
-    //initialize this bitch from its json
-    genFromJson(json);
-  }
-   
-  var list = new List();
-  list.updateRevisionUI();
 
   //UI METHODS to add/remove input
   //HOVER OVER for marked -> unmark
-  $('.versions').on('hover', 'div.action.marked', function(event){
+  $('.version').on('hover', 'div.action.marked', function(event){
     event.preventDefault();
     if (event.type == "mouseenter"){
       $(this).addClass('unmark');
@@ -167,7 +52,7 @@ $(document).ready(function(){
   });
 
   //Add input on unmarked click
-  $('.versions').on('click', 'div.action.unmarked', function(){
+  $('.version').on('click', 'div.action.unmarked', function(){
     console.log("click");
     var parent = $($(this).parent());
     var input_element = "<input type='text' placeholder='Enter commit message here'>";
@@ -176,19 +61,40 @@ $(document).ready(function(){
   });
 
   //Input enter just blurs it
-  $('.versions .message').on('keyup', 'input', function(event){
+  $('.version .message').on('keyup', 'input', function(event){
     if (event.keyCode == 13) {
         $(this).blur();
     }
   });
 
   //Blur calls success
-  $('.versions .message').on('blur', 'input', function(event){
-    //TODO: BLUR IS BEING CALLED TWICE SO THATS TWO POSTS!!
-    list.commitRevision(this); 
+  $('.version .message').on('blur', 'input', function(event){
+    //TODO: POST REQUEST WHY DO YOU NEED ALL THE DATA! why can I not send you just the version number?
+    var elJson = getInfoFromElement(this);
+    console.log(elJson);
+    $.post('/model_files/' + "<%= @model.id  %>" + '/versions', {"revision_number": elJson.id , "details": elJson.details, "revision_date": elJson.date}, function(data){
+      console.log(this); //TODO: THIS FUNCTION ISN'T CALLING
+      console.log(data);    
+    });
+    
+  });
+
+  //Rolls back a specific version to a revision (tied to unmark click)
+  $('.version').on('click', 'div.action.marked.unmark', function(){
+    console.log(this);
+     $.ajax({
+      url: '/versions/'+ getInfoFromElement(this).id,
+      type: 'DELETE',
+      success: function(result) {
+          console.log(this); //TODO: THIS FUNCTION ISN'T CALLING?
+          console.log(result);
+        }
+      });
   });
 
   
 
 });
 </script>
+
+
