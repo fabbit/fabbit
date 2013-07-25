@@ -147,7 +147,6 @@ module DropboxHelper
       if not content["is_dir"]
         link = init_model_file_url(to_link(content["path"]))
         model_file = current_member.model_files.where(path: to_link(content["path"])).first
-        p content["path"]
         projects = model_file.projects if model_file
       end
       # TODO: change to ?: format

@@ -3,16 +3,12 @@ class ProjectsController < ApplicationController
   before_filter :live_dropbox_session
 
   def show
+    @project = Project.find(params[:id])
+    @model_files = @project.model_files
   end
 
   def index
-    if params[:member_id]
-      @projects = Member.find(params[:member_id]).projects
-    elsif current_user?
-      @projects = current_user.projects
-    else
-      @projects = Project.all
-    end
+    @projects = Project.all
   end
 
   def new

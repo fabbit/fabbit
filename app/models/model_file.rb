@@ -98,6 +98,11 @@ class ModelFile < ActiveRecord::Base
     version = Version.where(id: version_id).first || self.latest_version
   end
 
+  # Shortcut for getting the model file's file name
+  def filename
+    File.basename(self.path)
+  end
+
   # Retrieve the content of this model file. Should always return the most recent revision.
   def content
     @content

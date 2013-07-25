@@ -49,6 +49,7 @@ class DropboxController < ApplicationController
     meta = dropbox_client.metadata(path)
     @breadcrumbs = to_breadcrumbs(meta["path"])
     @contents = process_contents(meta["contents"])
+    @projects = Project.all
   end
 
 end

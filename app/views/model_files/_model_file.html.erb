@@ -1,0 +1,4 @@
+<li class="inset gray" id="<%= encrypt_id(model_file.id) %>" >
+    <div> <%= link_to model_file.filename, model_file %> </div>
+    <div> <%= "Owned by #{model_file.member.name}" %> </div>
+</li>
