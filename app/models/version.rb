@@ -44,4 +44,16 @@ class Version < ActiveRecord::Base
   def path
     self.model_file.path
   end
+
+  def member
+    self.model_file.member
+  end
+
+  def content
+    @content
+  end
+
+  def content=(content)
+    @content = content
+  end
 end

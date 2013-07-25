@@ -54,6 +54,7 @@ module DropboxHelper
   #   - This method should always be called whenever a member wants to interact with a ModelFile so
   #     that they always see the most recent revision.
   #   - This should be the *only* method that makes any modifications to a ModelFile.
+  #   - Looking to be replaced by Version default caching
   def update_content_of(model_file)
     dropbox_rev = 0
     if model_file.member == current_member
@@ -175,14 +176,20 @@ module DropboxHelper
 
   end
 
-  private
+  # private
 
     # Create a file name for the cache that should not conflict with any other files.
     # If a revision is given, uses it instead of its own cached revision number.
     def cache_file_name_of(model_file, revision=nil)
       file_name = File.basename(model_file.path)
       cache_folder = "cache"
-      Rails.root.join(cache_folder,"#{model_file.member.dropbox_uid}_#{revision || model_file.cached_revision}_#{file_name}")
+
+      # Temporary abstraction, in case a switch back is required
+      if model_file.instance_of? Version
+        Rails.root.join(cache_folder, model_file.id.to_s)   # NOTE: maybe want to encrypt?
+      else
+        Rails.root.join(cache_folder,"#{model_file.member.dropbox_uid}_#{revision || model_file.cached_revision}_#{file_name}")
+      end
     end
 
     # Load the contents of the cached ModelFile
@@ -192,7 +199,7 @@ module DropboxHelper
     end
 
     # Write the contents of a ModelFile to the cache.
-    def cache(model_file, revision_number)
+    def cache(model_file, revision_number=nil)
       File.open(cache_file_name_of(model_file, revision_number), "wb") { |f| f.write(model_file.content) }
       puts("[DROPBOX_HELPER] Wrote #{cache_file_name_of(model_file, revision_number)} to cache")
     end

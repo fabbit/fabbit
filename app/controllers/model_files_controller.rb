@@ -12,7 +12,11 @@ class ModelFilesController < ApplicationController
   def show
     @model_file = ModelFile.find(params[:id])
     @model = @model_file
-    update_content_of(@model_file)
+    if @model_file.member == current_member
+      update_content_of(@model_file)
+    else
+      @model_file.content = load_cached(@model_file.latest_version)
+    end
     @member = current_member
     @breadcrumbs = to_breadcrumbs(@model_file.path)
 
@@ -33,11 +37,13 @@ class ModelFilesController < ApplicationController
 
     if model_file.new_record? and model_file.save
       update_content_of(model_file)    # initialize cache
-      model_file.versions.create!(
+      version = model_file.versions.create!(
         revision_number: model_file.cached_revision,
         details: "First version",
         revision_date: DateTime.now
       )
+
+      cache(version)
     end
 
     redirect_to model_file_path(model_file)
@@ -48,7 +54,11 @@ class ModelFilesController < ApplicationController
   # *NOTE:* Moved to JS response under show
   def contents
     model_file = ModelFile.find(params[:id])
-    update_content_of(model_file)
+    if model_file.member == current_member
+      update_content_of(model_file)
+    else
+      model_file.content = load_cached(model_file.latest_version)
+    end
     respond_to do |format|
       format.js { render text: model_file.content }
     end

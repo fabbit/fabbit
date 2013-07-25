@@ -54,6 +54,7 @@ class VersionsController < ApplicationController
       details: params[:details],
     )
     if @version.save!
+      cache(@version)
       respond_to do |format|
         format.js
       end
