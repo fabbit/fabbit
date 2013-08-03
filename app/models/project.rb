@@ -21,6 +21,7 @@
 #
 # Has many:
 # - ModelFile
+# - Group
 #
 # Belongs to:
 # - ProjectType
@@ -35,6 +36,9 @@ class Project < ActiveRecord::Base
 
   has_many :project_model_files, dependent: :destroy
   has_many :model_files, through: :project_model_files
+
+  has_many :group_projects, dependent: :destroy
+  has_many :groups, through: :group_projects
 
   belongs_to :project_type
 

@@ -26,10 +26,11 @@
     $('.inset .project_list ul li input').change(function(){
       
       var id = $(this).parent().attr('id');
+      var model_file_id = $(this).parent().parent().parent().parent().attr('id') // BTODO: lol idk js fix this k
       
       if (this.checked) {
         console.log("POSTING " + id); 
-        $.post('/project_model_files/', {"project_id": id, "model_file_id": 5}, function(data) {//KTODO: I NEED THE
+        $.post('/project_model_files/', {"project_id": id, "model_file_id": model_file_id}, function(data) {
           console.log(data);
         });
       } else {

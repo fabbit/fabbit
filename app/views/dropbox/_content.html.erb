@@ -1,4 +1,4 @@
-<li <%= raw content[:is_dir] ? "class='inset blue' " : "class='inset gray'" %> >
+<li <%= raw content[:is_dir] ? "class='inset blue' " : "class='inset gray'" %> id="<%= encrypt_id(content[:model_file_id]) %>">
   <div> <%= link_to content[:content], content[:link] %> </div>
   <div> In x projects </div>
   <div> Last viewed x months </div>

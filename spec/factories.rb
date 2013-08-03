@@ -34,4 +34,8 @@ FactoryGirl.define do
     project_type
   end
 
+  factory :group do
+    name { Faker::Lorem.words(1) }
+  end
+
 end

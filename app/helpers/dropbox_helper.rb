@@ -101,7 +101,8 @@ module DropboxHelper
   def to_breadcrumbs(path)
 
     # Extract and split path
-    dir_list = File.dirname(path).split(File::SEPARATOR).map do |x|
+    dirname = File.dirname(path) == "." ? "" : File.dirname(path)
+    dir_list = dirname.split(File::SEPARATOR).map do |x|
       x.blank? ? File::SEPARATOR : x
     end
     file_name = File.basename(path)
@@ -126,6 +127,12 @@ module DropboxHelper
     return breadcrumbs
   end
 
+  def debug_list
+    @debug = Array.new if not @debug
+    @debug
+  end
+
+
   # Process the path given to navigate
   # - TODO: use File methods
   def parse_path(path)
@@ -144,10 +151,14 @@ module DropboxHelper
     contents.map do |content|
       link = navigate_url(to_link(content["path"]))
       projects = []
+      model_file_id = nil
       if not content["is_dir"]
         link = init_model_file_url(to_link(content["path"]))
         model_file = current_member.model_files.where(path: to_link(content["path"])).first
-        projects = model_file.projects if model_file
+        if model_file
+          projects = Project.all
+          model_file_id = model_file.id
+        end
       end
       # TODO: change to ?: format
 
@@ -155,6 +166,7 @@ module DropboxHelper
         link: link,
         is_dir: content["is_dir"],
         projects: projects,
+        model_file_id: model_file_id,
       }
     end
   end

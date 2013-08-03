@@ -43,6 +43,7 @@ class ModelFilesController < ApplicationController
         revision_date: DateTime.now
       )
 
+      version.content = model_file.content
       cache(version)
     end
 

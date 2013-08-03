@@ -54,6 +54,7 @@ class VersionsController < ApplicationController
       details: params[:details],
     )
     if @version.save!
+      @version.content = version.retrieve_from_dropbox(dropbox_client)
       cache(@version)
       respond_to do |format|
         format.js

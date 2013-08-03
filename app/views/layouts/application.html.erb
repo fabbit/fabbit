@@ -10,5 +10,10 @@
   <div class="container">
     <%= yield %>
   </div>
+  <% if not debug_list.empty? %>
+    <div>
+      <%= debug_list.inspect %>
+    </div>
+  <% end %>
 </body>
 </html>

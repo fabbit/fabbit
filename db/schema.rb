@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130601212348) do
+ActiveRecord::Schema.define(:version => 20130803082306) do
 
   create_table "annotations", :force => true do |t|
     t.integer  "version_id"
@@ -29,6 +29,33 @@ ActiveRecord::Schema.define(:version => 20130601212348) do
     t.integer  "annotation_id"
     t.string   "member_id"
     t.string   "text"
+    t.datetime "created_at",    :null => false
+    t.datetime "updated_at",    :null => false
+  end
+
+  create_table "group_members", :force => true do |t|
+    t.integer  "group_id"
+    t.integer  "member_id"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
+  add_index "group_members", ["group_id"], :name => "index_group_members_on_group_id"
+  add_index "group_members", ["member_id"], :name => "index_group_members_on_member_id"
+
+  create_table "group_projects", :force => true do |t|
+    t.integer  "group_id"
+    t.integer  "project_id"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
+  add_index "group_projects", ["group_id"], :name => "index_group_projects_on_group_id"
+  add_index "group_projects", ["project_id"], :name => "index_group_projects_on_project_id"
+
+  create_table "groups", :force => true do |t|
+    t.string   "name"
+    t.integer  "group_type_id"
     t.datetime "created_at",    :null => false
     t.datetime "updated_at",    :null => false
   end

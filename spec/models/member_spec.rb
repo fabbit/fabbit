@@ -1,10 +1,22 @@
+# == Schema Information
+#
+# Table name: members
+#
+#  id          :integer          not null, primary key
+#  dropbox_uid :integer
+#  created_at  :datetime         not null
+#  updated_at  :datetime         not null
+#  name        :string(255)
+#
+
 require 'spec_helper'
 
 describe Member do
 
+  let(:member) { FactoryGirl.create(:member) }
+
   describe "#projects" do
 
-    let(:member) { FactoryGirl.create(:member) }
     let(:model_file_1) { FactoryGirl.create(:model_file, member: member) }
     let(:model_file_2) { FactoryGirl.create(:model_file, member: member) }
     let(:version) { FactoryGirl.create(:version, model_file: model_file) }
@@ -40,4 +52,32 @@ describe Member do
       member.projects.count(project_1).should == 1
     end
   end
+
+  describe "groups" do
+
+    subject { member }
+
+    it { should respond_to :groups }
+    it { should respond_to :projects }
+
+    describe "adding a member to a group" do
+
+      let(:group) { FactoryGirl.create(:group) }
+
+      before do
+        group.members << member
+      end
+
+      it "should have increased the group's member count" do
+        group.members.count.should be 1
+      end
+
+      it "should have increased the member's group count" do
+        member.groups.count.should be 1
+      end
+
+    end
+
+  end
+
 end

@@ -22,6 +22,8 @@
 #
 # Has many:
 # - Discussion
+# - ModelFile
+# - Group
 
 class Member < ActiveRecord::Base
   attr_accessible :dropbox_uid, :name
@@ -30,6 +32,9 @@ class Member < ActiveRecord::Base
 
   has_many :discussions, dependent: :destroy
   has_many :model_files, dependent: :destroy
+
+  has_many :group_members, dependent: :destroy
+  has_many :groups, through: :group_members
 
   def projects
     self.model_files.map { |model_file| model_file.projects }.flatten.compact.uniq

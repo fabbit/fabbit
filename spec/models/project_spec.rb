@@ -20,6 +20,7 @@ describe Project do
 
   describe "responses" do
     it { should respond_to :members }
+    it { should respond_to :groups }
   end
 
 end

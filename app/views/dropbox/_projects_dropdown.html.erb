@@ -1,8 +1,9 @@
 <div class='project_list'> 
   <div class='opener'> v </div> 
   <ul>
-    <li id='project_id_1'> <input type='checkbox' > Projectasdadasdasd 1 </li> 
-    <li id='project_id_2'> <input type='checkbox' > Project 2 </li>
+    <% if projects.empty? %>
+      <li> You have not opened this file yet! </li>
+    <% end %>
     <% projects.each do |project| %>
       <li id='<%= project.id %>'> <input type='checkbox'> <%= project.name %> </li>
     <% end %>
