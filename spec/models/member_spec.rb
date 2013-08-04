@@ -15,7 +15,7 @@ describe Member do
 
   let(:member) { FactoryGirl.create(:member) }
 
-  describe "#projects" do
+  describe "#participating_participating_projects" do
 
     let(:model_file_1) { FactoryGirl.create(:model_file, member: member) }
     let(:model_file_2) { FactoryGirl.create(:model_file, member: member) }
@@ -29,13 +29,13 @@ describe Member do
     end
 
     it "should return project if project has a member's model_file" do
-      member.projects.should include(project_1)
+      member.participating_projects.should include(project_1)
     end
 
     it "should be a flat array" do
       project_2.model_files << model_file_2
 
-      member.projects.each do |item|
+      member.participating_projects.each do |item|
         item.should_not be_an(Array)
       end
     end
@@ -43,39 +43,36 @@ describe Member do
     it "should not have any nils" do
       project_2.model_files << model_file_2
 
-      member.projects.should_not include(nil)
+      member.participating_projects.should_not include(nil)
     end
 
-    it "should not have duplicate projects" do
+    it "should not have duplicate participating_projects" do
       project_1.model_files << model_file_2
 
-      member.projects.count(project_1).should == 1
+      member.participating_projects.count(project_1).should == 1
     end
   end
 
   describe "groups" do
 
+    let(:group) { FactoryGirl.create(:group) }
+
     subject { member }
 
     it { should respond_to :groups }
-    it { should respond_to :projects }
+    it { should respond_to :accessible_projects }
 
-    describe "adding a member to a group" do
+    describe "auto add to default group" do
 
-      let(:group) { FactoryGirl.create(:group) }
 
       before do
-        group.members << member
+        group.save
+        member.save
       end
 
-      it "should have increased the group's member count" do
-        group.members.count.should be 1
+      it "should have been added to the first group by default" do
+        member.groups.first.should == group
       end
-
-      it "should have increased the member's group count" do
-        member.groups.count.should be 1
-      end
-
     end
 
   end
