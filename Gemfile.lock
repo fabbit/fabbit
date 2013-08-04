@@ -50,10 +50,12 @@ GEM
       coffee-script-source
       execjs
     coffee-script-source (1.6.3)
+    daemons (1.1.9)
     diff-lcs (1.2.4)
     dropbox-sdk (1.6.1)
       json
     erubis (2.7.0)
+    eventmachine (1.0.3)
     execjs (1.4.0)
       multi_json (~> 1.0)
     factory_girl (4.0.0)
@@ -84,6 +86,8 @@ GEM
     oauth (0.4.7)
     pg (0.15.1)
     polyglot (0.3.3)
+    quiet_assets (1.0.2)
+      railties (>= 3.1, < 5.0)
     rack (1.4.5)
     rack-cache (1.2)
       rack (>= 0.4)
@@ -142,6 +146,10 @@ GEM
     therubyracer (0.11.4)
       libv8 (~> 3.11.8.12)
       ref
+    thin (1.5.1)
+      daemons (>= 1.0.9)
+      eventmachine (>= 0.12.6)
+      rack (>= 1.0.0)
     thor (0.18.1)
     tilt (1.4.1)
     treetop (1.4.14)
@@ -171,10 +179,12 @@ DEPENDENCIES
   json
   oauth
   pg
+  quiet_assets
   rails (= 3.2.12)
   rspec-rails (~> 2.14)
   sass-rails (~> 3.2.3)
   selenium-webdriver
   shoulda-matchers
   therubyracer
+  thin
   uglifier (>= 1.0.3)

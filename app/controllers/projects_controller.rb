@@ -8,6 +8,7 @@ class ProjectsController < ApplicationController
   end
 
   def index
+    @group = Group.find(params[:id]) if params[:id]
     @projects = Project.all
   end
 

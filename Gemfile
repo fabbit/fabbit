@@ -15,6 +15,11 @@ gem 'pg'
 
 gem 'jquery-rails'
 
+group :development do
+  gem 'thin'
+  gem 'quiet_assets'
+end
+
 group :development, :test do
   gem 'rspec-rails', '~> 2.14'
 end
