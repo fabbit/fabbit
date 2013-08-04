@@ -5,6 +5,8 @@ Fabbit::Application.routes.draw do
   resources :dropbox, only: [:new]
 
   resources :groups, only: [:show]
+  resources :group_members, only: [:create, :destroy]
+  resources :group_projects, only: [:create, :destroy]
 
   resources :projects, only: [:index, :new, :create]
   resources :project_model_files, only: [:create, :destroy]

@@ -13,7 +13,7 @@ class ProjectModelFilesController < ApplicationController
     end
 
     respond_to do |format|
-      format.js { render text: @successful }
+      format.js
     end
   end
 
