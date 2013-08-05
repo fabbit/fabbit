@@ -50,6 +50,7 @@ class DropboxController < ApplicationController
     @breadcrumbs = to_breadcrumbs(meta["path"])
     @contents = process_contents(meta["contents"])
     @projects = Project.all
+    @new_project = Project.new
   end
 
 end
