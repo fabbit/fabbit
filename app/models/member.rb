@@ -36,7 +36,7 @@ class Member < ActiveRecord::Base
   has_many :group_members, dependent: :destroy
   has_many :groups, through: :group_members
 
-  after_save :add_to_default_group
+  after_create :add_to_default_group
 
   def participating_projects
     self.model_files.map { |model_file| model_file.projects }.flatten.compact.uniq

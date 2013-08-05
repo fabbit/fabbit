@@ -42,7 +42,7 @@ class Project < ActiveRecord::Base
 
   belongs_to :project_type
 
-  after_save :add_to_default_group
+  after_create :add_to_default_group
 
   def members
     self.model_files.map { |model_file| model_file.member }.compact.uniq
