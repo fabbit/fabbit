@@ -26,6 +26,22 @@ $red: red;
 }
 
 
+.form {
+	background: white;
+	border: 1px solid lighten($gray, 40%);
+	padding: 10px 0px;
+	float: left;
+}
+
+.form input {
+	margin: 5px 0px;
+	float:left;
+	clear: left;
+	padding: 10px 0px;
+}
+
+
+
 .row {
 	float:left;
 	clear:both;
@@ -156,6 +172,46 @@ $red: red;
 .navigate.projects {
 	margin-top: 40px;
 }
+
+.navigate.projects .add {
+	float:right;
+	cursor: pointer;
+	padding: 10px 0px;
+	position:relative;
+}
+
+.navigate.projects .add span {
+	font-weight: 300;
+}	
+
+.navigate.projects .add:hover span {
+	font-weight: bold;
+};
+
+.navigate.projects .add .form {
+	position: absolute;
+	top: 40px;
+	left: -30px;
+	display: none;
+}
+
+.navigate.projects .add .form input[type=text] {
+	padding: 5px;
+	margin: 10px;
+	border-bottom: 1px solid lighten(gray, 40%);
+}
+
+.navigate.projects .add .form input[type=submit]{
+	padding: 10px;
+	margin-left: 35px;
+	background: rgba(100,100,100,0.3);
+	color: $gray;
+}
+
+.navigate.projects .add .form input[type=submit]:focus,.navigate.projects .add .form input[type=submit]:hover{
+	color:black;
+}
+
 .navigate ul.crumbs {
 	float: left;
 	padding: 10px 0px;
@@ -174,7 +230,7 @@ $red: red;
 	float:left;
 }
 
-.navigate ul.crumbs.green > li {
+.navigate .green, .navigate ul.crumbs.green > li{
 	color: $green;
 }
 

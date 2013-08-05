@@ -6,53 +6,71 @@
   <ul class="row files">
     <% @contents.each do |content| %>
       <%= render "dropbox/content", content: content %>
-    <% end %>
-    <script>
-    //This section makes the whole thing clickable - but we remove it for now because it fucks with the opener
-    //  $(".files .inset").click(function(){
-  	//    var h = this.children[0].children[0];
-  	//    console.log(h);
-  	//    window.location = h;
-  	// });
+     
+      <script>
+        //This section makes the whole thing clickable - but we remove it for now because it fucks with the opener
+        //  $(".files .inset").click(function(){
+        //    var h = this.children[0].children[0];
+        //    console.log(h);
+        //    window.location = h;
+        // });
 
-    //This project opens and closes the project list
-    $('.inset .project_list .opener').toggle(
-      function() { console.log($(this).siblings()); $(this).next().show(); }, 
-      function() { $(this).next().hide(); }
-    );
+        //This project opens and closes the project list
+        $('.inset .project_list .opener').toggle(
+          function() { console.log($(this).siblings()); $(this).next().show(); }, 
+          function() { $(this).next().hide(); }
+        );
 
 
-    //This function keep tracks of checkbox toggling
-    $('.inset .project_list ul li input').change(function(){
-      
-      var id = $(this).parent().attr('id');
-      var model_file_id = $(this).parent().parent().parent().parent().attr('id') // BTODO: lol idk js fix this k
-      
-      if (this.checked) {
-        console.log("POSTING " + id); 
-        $.post('/project_model_files/', {"project_id": id, "model_file_id": model_file_id}, function(data) {
-          console.log(data);
-        });
-      } else {
-        console.log("DELETING " + id);
-        $.ajax({
-          url: '#' + id,
-          type: 'DELETE',
-          success: function(result) {
-            console.log(result);
+        //This function keep tracks of checkbox toggling
+        $('.inset .project_list ul li input').change(function(){
+          
+          var id = $(this).parent().attr('id');
+          var model_file_id = $(this).parent().parent().parent().parent().attr('id') 
+          //var model_file_id = "<%= content[:model_file_id] %>"; //KTODO: this is what we should be doing, but it don't work :\
+
+          if (this.checked) {
+            console.log("POSTING " + id); 
+            $.post('/project_model_files/', {"project_id": id, "model_file_id": model_file_id}, function(data) {
+              console.log(data);
+            });
+          } else {
+            console.log("DELETING " + id);
+            $.ajax({
+              url: '#' + id,
+              type: 'DELETE',
+              success: function(result) {
+                console.log(result);
+              }
+            });
           }
-        });
-      }
-    })
+        })
+      </script>
 
-    </script>
+    <% end %>
   </ul>
 </section>
 
 <section>
   <div class="row navigate projects">
+    <div class="add"> 
+       <div class="subtitle green" id="add_project"> <span> + </span> Add a project   </div>
+
+        <form class="form" id="project_form"  accept-charset="UTF-8" action="/projects" method="post">
+          <input  name="new_project[title]" type="text" id="new_project_title" value="Default project" placeholder="Project name">
+          <input type="submit" name="commit" value="Create project"/>
+        </form>
+
+        <script>
+        $("#add_project").toggle(
+          function(){ $("#project_form").show(); $("#project_form").children()[0].focus(); },
+          function(){ $("#project_form").hide(); }
+          )
+        </script>
+     </div>  <!-- TODO: Currently the entire css for breadcrumbs is very janky -->
+
     <ul class="subtitle crumbs green">
-      <li> <a href="#"> Your projects </a> </li>
+      <li> <a href="#">Your projects </a>   </li>
       <li></li>
     </ul>
   </div>
