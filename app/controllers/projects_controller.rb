@@ -19,12 +19,8 @@ class ProjectsController < ApplicationController
   def create
     project = Project.new(params[:new_project])
 
-    if project.save
-      flash[:success] = "Successfully created #{project.name}"
-      redirect_to project.members
-    else
-      flash.now["error"] = "Sorry, there was a problem with the new project."
-      render "new"
+    respond_to do |format|
+      format.js
     end
   end
 
