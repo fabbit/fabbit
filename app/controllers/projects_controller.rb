@@ -17,7 +17,9 @@ class ProjectsController < ApplicationController
   end
 
   def create
-    project = Project.new(params[:new_project])
+    project = Project.new(params[:project])
+
+    project.save
 
     respond_to do |format|
       format.js

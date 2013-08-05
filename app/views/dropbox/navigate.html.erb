@@ -56,7 +56,7 @@
     <div class="add"> 
        <div class="subtitle green" id="add_project"> <span> + </span> Add a project   </div>
 
-         <%= form_for @new_project, url: {action: "create", remote:true, controller:"project"}, html: {class: "form", id: "project_form"} do |f| %>
+         <%= form_for @new_project, url: {action: :create, controller: :projects}, html: {class: "form", id: "project_form", remote: true} do |f| %>
                 <%= f.text_field :name,  :placeholder => "Project name" %>
                 <%= f.submit "Create project" %>
         <% end %>
