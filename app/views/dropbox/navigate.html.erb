@@ -63,8 +63,8 @@
 
         <script>
         $("#add_project").toggle(
-          function(){ $("#project_form").show(); $("#project_form").children()[0].focus(); },
-          function(){ $("#project_form").hide(); }
+          function(){ $("#project_form").show(); $("#project_form").children()[0].focus(); $(this).find('span').html("-"); },
+          function(){ $("#project_form").hide(); $(this).find('span').html("+"); }
           )
         </script>
      </div>  <!-- TODO: Currently the entire css for breadcrumbs is very janky -->

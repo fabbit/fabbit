@@ -181,11 +181,13 @@ $red: red;
 }
 
 .navigate.projects .add span {
-	font-weight: 300;
+	top: -1px;
+	left: -2px;
+	position: relative;
 }	
 
 .navigate.projects .add:hover span {
-	font-weight: bold;
+	font-style: italic;
 };
 
 .navigate.projects .add .form {
