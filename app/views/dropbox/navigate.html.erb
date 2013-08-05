@@ -56,15 +56,15 @@
     <div class="add"> 
        <div class="subtitle green" id="add_project"> <span> + </span> Add a project   </div>
 
-        <form class="form" id="project_form"  accept-charset="UTF-8" action="/projects" method="post">
-          <input  name="new_project[title]" type="text" id="new_project_title" value="Default project" placeholder="Project name">
-          <input type="submit" name="commit" value="Create project"/>
-        </form>
+         <%= form_for @new_project, url: {action: "create"}, html: {class: "form", id: "project_form"}, remote:true do |f| %>
+                <%= f.text_field :name,  :placeholder => "Project name" %>
+                <%= f.submit "Create project" %>
+        <% end %>
 
         <script>
         $("#add_project").toggle(
-          function(){ $("#project_form").show(); $("#project_form").children()[0].focus(); },
-          function(){ $("#project_form").hide(); }
+          function(){ $("#project_form").show(); $("#project_form").children()[0].focus(); $(this).find('span').html("-"); },
+          function(){ $("#project_form").hide(); $(this).find('span').html("+"); }
           )
         </script>
      </div>  <!-- TODO: Currently the entire css for breadcrumbs is very janky -->
