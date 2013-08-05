@@ -169,48 +169,49 @@ $red: red;
 	width:100%;
 }
 
-.navigate.projects {
+.projects .navigate {
 	margin-top: 40px;
 }
 
-.navigate.projects .add {
+.projects .navigate .add {
 	float:right;
 	cursor: pointer;
 	padding: 10px 0px;
 	position:relative;
+	z-index: 20;
 }
 
-.navigate.projects .add span {
+.projects .navigate .add span {
 	top: -1px;
 	left: -2px;
 	position: relative;
 }	
 
-.navigate.projects .add:hover span {
+.projects .navigate .add:hover span {
 	font-style: italic;
 };
 
-.navigate.projects .add .form {
+.projects .navigate .add .form {
 	position: absolute;
 	top: 40px;
 	left: -30px;
 	display: none;
 }
 
-.navigate.projects .add .form input[type=text] {
+.projects .navigate .add .form input[type=text] {
 	padding: 5px;
 	margin: 10px;
 	border-bottom: 1px solid lighten(gray, 40%);
 }
 
-.navigate.projects .add .form input[type=submit]{
+.projects .navigate .add .form input[type=submit]{
 	padding: 10px;
 	margin-left: 35px;
 	background: rgba(100,100,100,0.3);
 	color: $gray;
 }
 
-.navigate.projects .add .form input[type=submit]:focus,.navigate.projects .add .form input[type=submit]:hover{
+.projects .navigate .add .form input[type=submit]:focus,.projects .navigate .add .form input[type=submit]:hover{
 	color:black;
 }
 
