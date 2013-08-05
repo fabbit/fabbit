@@ -1,6 +1,4 @@
 <%= render "layouts/header" %>
+<h1> <%= @group.name %> </h1>
 
-<h1><%= @group.name %></h1>
-<ul class="row files">
-  <%= render @projects, view: :nav_view %>
-</ul>
+<%= render "layouts/project_list" %>
