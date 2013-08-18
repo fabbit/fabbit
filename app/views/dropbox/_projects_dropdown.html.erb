@@ -5,7 +5,7 @@
       <li> You have not opened this file yet! </li>
     <% end %>
     <% projects.each do |project| %>
-      <li id='<%= project[:id] %>'> <input type='checkbox' checked='<%= project[:has_model_file] %>'>
+      <li id='<%= project[:id] %>'> <input type='checkbox' <%= project[:has_model_file] ? "checked" : ""%>>
         <%= project[:name] %>
       </li>
     <% end %>

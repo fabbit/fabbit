@@ -7,6 +7,7 @@ require 'dropbox_sdk'
 class DropboxController < ApplicationController
 
   skip_before_filter :live_dropbox_session, only: :new
+  skip_before_filter :refresh_name, only: :new
   # avoiding redirect loop
 
   # Connects Fabbit to a Dropbox account and start the session.

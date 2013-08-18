@@ -202,6 +202,11 @@ module DropboxHelper
 
   end
 
+  # Refresh the current member's name
+  def refresh_name
+    current_member.name = dropbox_client.account_info["display_name"]
+  end
+
   # Initializes the cache for a Version
   def initialize_cache(version)
     cache(version) if version
