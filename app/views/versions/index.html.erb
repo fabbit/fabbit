@@ -16,13 +16,12 @@
   </ul>
 </div>
 
-<script type="text/javascript">
+<script>
 
+//TODO: Move this to its own file
 $(document).ready(function(){
 
-  //TODO: MOVE THIS SCRIPT TO A GENERAL VERSION SCRIPT AND HAVE THAT INCLUDED!!
-
-  //Takes an element and gets the id from the parent
+  //Takes an element and returns JSON with its info
   function getInfoFromElement(el){
 
     var details;
@@ -39,7 +38,8 @@ $(document).ready(function(){
     return {"id": id, "date": date, "details": details};
   }
 
-  //UI METHODS to add/remove input
+  /* UI METHODS to add/remove input */
+
   //HOVER OVER for marked -> unmark
   $('.version').on('hover', 'div.action.marked', function(event){
     event.preventDefault();
@@ -67,34 +67,31 @@ $(document).ready(function(){
     }
   });
 
-  //Blur calls success
+  /* ACTION METHODS */
+
+  //On input blur (finished typing) -> Post new version to DB
   $('.version .message').on('blur', 'input', function(event){
     //TODO: POST REQUEST WHY DO YOU NEED ALL THE DATA! why can I not send you just the version number?
     var elJson = getInfoFromElement(this);
     console.log(elJson);
     $.post('/model_files/' + "<%= @model.id  %>" + '/versions', {"revision_number": elJson.id , "details": elJson.details, "revision_date": elJson.date}, function(data){
-      console.log(this); //TODO: THIS FUNCTION ISN'T CALLING
-      console.log(data);    
+      //Nothing happens here, we use create.js.erb (btodo remove?)
     });
     
   });
 
-  //Rolls back a specific version to a revision (tied to unmark click)
+  //On unmark click -> Rollback (delete) version from db
   $('.version').on('click', 'div.action.marked.unmark', function(){
     console.log(this);
      $.ajax({
       url: '/versions/'+ getInfoFromElement(this).id,
       type: 'DELETE',
       success: function(result) {
-          console.log(this); //TODO: THIS FUNCTION ISN'T CALLING?
-          console.log(result);
+          //Nothing happens here, we use destroy.js.erb (btodo remove?)
         }
       });
   });
 
-  
-
 });
+
 </script>
-
-

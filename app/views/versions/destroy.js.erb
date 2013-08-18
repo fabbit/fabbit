@@ -1,1 +1,3 @@
-console.log("removed")
+var position = $(".versions ul").children("#revision_<%= @version.revision_number %>").index(); //Find the position of the guy we're replacing
+$(".versions ul").children("#revision_<%= @version.revision_number %>").remove(); //Remove the guy
+$(".versions ul li:eq(" + (parseInt(position) - 1) + ")").after("<%= j render @version %>"); //Put in a new guy!
