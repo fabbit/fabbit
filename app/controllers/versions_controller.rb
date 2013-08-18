@@ -63,6 +63,11 @@ class VersionsController < ApplicationController
   # Deletes/unmarks a Version
   def destroy
     @version = Version.find(params[:id]).destroy
+    @rev = {
+      id: @version.revision_number,
+      modified: @version.revision_date,
+      version: nil
+    }
     respond_to do |format|
       format.js
     end
