@@ -35,7 +35,7 @@ class DiscussionsController < ApplicationController
 
     if @discussion.save
       respond_to do |format|
-        format.js { render text: @discussion.member_id } # TODO change to member name
+        format.js { render text: @discussion.member_id } # just format.js if using callback
       end
     else
       # error message

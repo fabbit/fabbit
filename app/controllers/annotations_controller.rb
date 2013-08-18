@@ -49,7 +49,7 @@ class AnnotationsController < ApplicationController
     @annotation.member = current_member
     if @annotation.save
       respond_to do |format|
-        format.js { render text: @annotation.id }
+        format.js { render text: @annotation.id } # just format.js if using callback
       end
     end
   end
