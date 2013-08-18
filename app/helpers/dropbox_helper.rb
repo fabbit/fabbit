@@ -169,7 +169,9 @@ module DropboxHelper
           projects = Project.all.map do |project|
             { name: project.name,
               id: project.id,
-              has_model_file: model_file.projects.include?(project)
+              has_model_file: model_file.projects.include?(project),
+              model_file_id: model_file.id,
+              project_model_file: project.project_model_files.where(model_file_id: model_file.id).first
             }
           end
           model_file_id = model_file.id

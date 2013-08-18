@@ -5,6 +5,7 @@
 class HomeController < ApplicationController
 
   skip_before_filter :live_dropbox_session
+  skip_before_filter :refresh_name
 
   # Renders home page or redirects to root folder if already logged in
   def home
