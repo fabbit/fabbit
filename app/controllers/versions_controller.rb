@@ -7,11 +7,10 @@ class VersionsController < ApplicationController
   # Loads and renders using the Version retrieve_from_dropbox method
   def show
     @version = Version.find(params[:id])
-    @model = @version.model_file
-    @content = @version.retrieve_from_dropbox(dropbox_client)
-    @file = @content
+    @model_file = @version.model_file
+    @model_file.content = load_cached(@version)
     @member = current_member
-    @breadcrumbs = to_breadcrumbs(@model.path)
+    @breadcrumbs = to_breadcrumbs(@model_file.path)
 
     respond_to do |format|
       format.html
@@ -54,7 +53,6 @@ class VersionsController < ApplicationController
       details: params[:details],
     )
     if @version.save!
-      @version.content = version.retrieve_from_dropbox(dropbox_client)
       cache(@version)
       respond_to do |format|
         format.js
@@ -64,7 +62,7 @@ class VersionsController < ApplicationController
 
   # Deletes/unmarks a Version
   def destroy
-    @version = Version.find(params[:id]).created
+    @version = Version.find(params[:id]).destroy
     respond_to do |format|
       format.js
     end

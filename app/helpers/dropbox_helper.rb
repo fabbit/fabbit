@@ -178,7 +178,7 @@ module DropboxHelper
 
     dropbox_revisions.map do |revision|
       version = versions.find_by_revision_number(revision["rev"])
-      { rev: revision["rev"],
+      { id: version ? version.id : revision["rev"],
         modified: version ? version.revision_date : revision["modified"],
         version: version,
         details: version ? version.details : ""
@@ -187,32 +187,39 @@ module DropboxHelper
 
   end
 
-  # private
+  # Initializes the cache for a Version
+  def initialize_cache(version)
+    cache(version) if version
+  end
 
-    # Create a file name for the cache that should not conflict with any other files.
-    # If a revision is given, uses it instead of its own cached revision number.
-    def cache_file_name_of(model_file, revision=nil)
-      file_name = File.basename(model_file.path)
-      cache_folder = "cache"
+  # Create a file name for the cache that should not conflict with any other files.
+  # If a revision is given, uses it instead of its own cached revision number.
+  def cache_file_name_of(model_file, revision=nil)
+    file_name = File.basename(model_file.path)
+    cache_folder = "cache"
 
-      # Temporary abstraction, in case a switch back is required
-      if model_file.instance_of? Version
-        Rails.root.join(cache_folder, model_file.id.to_s)   # NOTE: maybe want to encrypt?
-      else
-        Rails.root.join(cache_folder,"#{model_file.member.dropbox_uid}_#{revision || model_file.cached_revision}_#{file_name}")
-      end
+    # Temporary abstraction, in case a switch back is required
+    if model_file.instance_of? Version
+      Rails.root.join(cache_folder, model_file.id.to_s)   # NOTE: maybe want to encrypt?
+    else
+      Rails.root.join(cache_folder,"#{model_file.member.dropbox_uid}_#{revision || model_file.cached_revision}_#{file_name}")
+    end
+  end
+
+  # Load the contents of the cached Version
+  def load_cached(version)
+    if !File.exists?(cache_file_name_of(version))
+      cache(version)
     end
 
-    # Load the contents of the cached ModelFile
-    def load_cached(model_file)
-      puts("[DROPBOX_HELPER] Loading cached file #{cache_file_name_of(model_file)}...")
-      File.open(cache_file_name_of(model_file), "rb") { |f| f.read }
-    end
+    puts("[DROPBOX_HELPER] Loading cached file #{cache_file_name_of(version)}...")
+    File.open(cache_file_name_of(version), "rb") { |f| f.read }
+  end
 
-    # Write the contents of a ModelFile to the cache.
-    def cache(model_file, revision_number=nil)
-      File.open(cache_file_name_of(model_file, revision_number), "wb") { |f| f.write(model_file.content) }
-      puts("[DROPBOX_HELPER] Wrote #{cache_file_name_of(model_file, revision_number)} to cache")
-    end
+  # Write the contents of a Version to the cache.
+  def cache(version)
+    File.open(cache_file_name_of(version), "wb") { |f| f.write(dropbox_client.get_file(version.path)) }
+    puts("[DROPBOX_HELPER] Wrote #{cache_file_name_of(version)} to cache")
+  end
 
 end

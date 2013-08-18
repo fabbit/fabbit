@@ -1,8 +1,8 @@
 <div class="row model">
-  <p id="stlstring"><%= @file %></p>
+  <p id="stlstring"><%= @model_file.content %></p>
   <script>
     $(document).ready(function(){
-      var viewer = new modelViewer("#container", "#annotation_list",<%= @model.id %>, <%= @member.id %>);
+      var viewer = new modelViewer("#container", "#annotation_list",<%= @model_file.id %>, <%= @member.id %>);
       viewer.addModel("<%= escape_javascript( @version ? contents_version_url : contents_model_file_url) %>");
 
       $("#annotation_controller").toggle(
