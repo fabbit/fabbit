@@ -52,6 +52,11 @@ class VersionsController < ApplicationController
       revision_date: params[:revision_date],
       details: params[:details],
     )
+    @rev = {
+      id: @version.revision_number,
+      modified: @version.revision_date,
+      version: @version
+    }
     if @version.save!
       cache(@version)
       respond_to do |format|

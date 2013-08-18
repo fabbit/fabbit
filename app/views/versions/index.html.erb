@@ -10,7 +10,7 @@
       <div class="action"> </div>
       <div class="message"> Commit message </div>
     </li>
-    <% @history.each do |rev| %>"
+    <% @history.each do |rev| %>
       <%= render "layouts/version", :revision => rev%> <!-- TODO: we should probably change where this is stored -->
     <% end %>
   </ul>
@@ -41,7 +41,7 @@ $(document).ready(function(){
   /* UI METHODS to add/remove input */
 
   //HOVER OVER for marked -> unmark
-  $('.version').on('hover', 'div.action.marked', function(event){
+  $('.versions').on('hover', 'li div.action.marked', function(event){
     event.preventDefault();
     if (event.type == "mouseenter"){
       $(this).addClass('unmark');
@@ -52,7 +52,7 @@ $(document).ready(function(){
   });
 
   //Add input on unmarked click
-  $('.version').on('click', 'div.action.unmarked', function(){
+  $('.versions').on('click', 'li div.action.unmarked', function(){
     console.log("click");
     var parent = $($(this).parent());
     var input_element = "<input type='text' placeholder='Enter commit message here'>";
@@ -61,7 +61,7 @@ $(document).ready(function(){
   });
 
   //Input enter just blurs it
-  $('.version .message').on('keyup', 'input', function(event){
+  $('.versions').on('keyup', 'li .message input', function(event){
     if (event.keyCode == 13) {
         $(this).blur();
     }
@@ -70,7 +70,7 @@ $(document).ready(function(){
   /* ACTION METHODS */
 
   //On input blur (finished typing) -> Post new version to DB
-  $('.version .message').on('blur', 'input', function(event){
+  $('.versions').on('blur', 'li .message input', function(event){
     //TODO: POST REQUEST WHY DO YOU NEED ALL THE DATA! why can I not send you just the version number?
     var elJson = getInfoFromElement(this);
     console.log(elJson);
@@ -81,7 +81,7 @@ $(document).ready(function(){
   });
 
   //On unmark click -> Rollback (delete) version from db
-  $('.version').on('click', 'div.action.marked.unmark', function(){
+  $('.versions').on('click', 'li div.action.marked.unmark', function(){
     console.log(this);
      $.ajax({
       url: '/versions/'+ getInfoFromElement(this).id,

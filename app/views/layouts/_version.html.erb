@@ -1,5 +1,5 @@
- <li class='version'>
- 	<div class='dropbox'/> <%= revision[:id] %> </div>
+<li class='version' id="revision_<%= revision[:id] %>">
+ 	<div class='dropbox'> <%= revision[:id] %> </div>
  	<div class='date'> <%= revision[:modified].to_datetime.strftime('%B %d, %Y') %> </div>
  	<% if revision[:version] != nil %> <!-- Meant to be null check - maybe theres a better way to do this  -->
  		<div class='action marked'> </div>
@@ -8,5 +8,5 @@
  		<div class='action unmarked'> </div>
  		<div class='message'> </div>
  	<% end %>
- </li>
+</li>
 
