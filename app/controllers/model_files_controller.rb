@@ -14,7 +14,7 @@ class ModelFilesController < ApplicationController
     @model = @model_file
     @model_file.content = load_cached(@model_file.latest_version)
     @member = current_member
-    @breadcrumbs = to_breadcrumbs(@model_file.path)
+    @breadcrumbs = to_breadcrumbs(@model_file)
 
     respond_to do |format|
       format.html

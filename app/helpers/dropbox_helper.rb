@@ -96,9 +96,15 @@ module DropboxHelper
     path.split('/')[0..-2].join('/')
   end
 
-  # Formats a path to be made into breadcrumbs
+  # Formats a path (with or without a ModelFile) to be made into breadcrumbs
   # - NOTE: uses absolute path
-  def to_breadcrumbs(path)
+  def to_breadcrumbs(model_file_or_path)
+    path = model_file_or_path
+    model_file = nil
+    if model_file_or_path.instance_of? ModelFile
+      path = model_file_or_path.path
+      model_file = model_file_or_path
+    end
 
     # Extract and split path
     dirname = File.dirname(path) == "." ? "" : File.dirname(path)
@@ -121,7 +127,11 @@ module DropboxHelper
     # Map the file name to an init_model_file_url
     # TODO: figure out how to figure out if the last bit is a file
     if file_name and file_name != File::SEPARATOR
-      breadcrumbs << { text: file_name, link: "#" } # init_model_file_url(to_link(path)) }
+      if model_file
+        breadcrumbs << { text: file_name, link: init_model_file_url(to_link(path)) }
+      else
+        breadcrumbs << { text: file_name, link: navigate_url(to_link(path)) }
+      end
     end
 
     return breadcrumbs
@@ -156,7 +166,12 @@ module DropboxHelper
         link = init_model_file_url(to_link(content["path"]))
         model_file = current_member.model_files.where(path: to_link(content["path"])).first
         if model_file
-          projects = Project.all
+          projects = Project.all.map do |project|
+            { name: project.name,
+              id: project.id,
+              has_model_file: model_file.projects.include?(project)
+            }
+          end
           model_file_id = model_file.id
         end
       end

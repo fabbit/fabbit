@@ -10,7 +10,7 @@ class VersionsController < ApplicationController
     @model_file = @version.model_file
     @model_file.content = load_cached(@version)
     @member = current_member
-    @breadcrumbs = to_breadcrumbs(@model_file.path)
+    @breadcrumbs = to_breadcrumbs(@model_file)
 
     respond_to do |format|
       format.html
@@ -29,7 +29,7 @@ class VersionsController < ApplicationController
     @versions = @model.versions
     @dropbox_revisions = dropbox_client.revisions(@model.path)
     @member = current_member
-    @breadcrumbs = to_breadcrumbs(@model.path)
+    @breadcrumbs = to_breadcrumbs(@model)
     @versions = @model.versions
 
     @history = get_history_for(@model_file)
