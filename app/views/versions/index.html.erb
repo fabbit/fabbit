@@ -72,23 +72,39 @@ $(document).ready(function(){
   /* ACTION METHODS */
 
   //On input blur (finished typing) -> Post new version to DB
-  $('.versions').on('blur', 'li .message input', function(event){
+  $('.versions').on('blur', 'li .message input', function(event) {
     //TODO: POST REQUEST WHY DO YOU NEED ALL THE DATA! why can I not send you just the version number?
     var elJson = getInfoFromElement(this);
     console.log(elJson);
-    var jqxhr = $.post(
-      '/model_files/' + "<%= @model.id  %>" + '/versions', 
-      {"revision_number": elJson.id , "details": elJson.details, "revision_date": elJson.date})
-      .fail(function(){ alert("Error") } );
+    $.ajax({
+      type: "POST",
+      url: '/model_files/' + "<%= @model.id  %>" + '/versions',
+      data: {
+        "revision_number": elJson.id,
+        "details": elJson.details,
+        "revision_date": elJson.date
+      },
+      error: function(request, textStatus, errorThrown) {
+        console.log("CAUGHT ERROR!");
+        var message = (request.status == 403) ? request.responseText : "An unknown error has occured";
+        alert(message);
+      }
+    });
   });
+
 
   //On unmark click -> Rollback (delete) version from db
   $('.versions').on('click', 'li div.action.marked.unmark', function(){
     console.log(this);
-     var jqxhr = $.ajax({
+    $.ajax({
         url: '/versions/'+ getInfoFromElement(this).id,
-        type: 'DELETE'})
-        .fail(function(){ alert("error") } );
+        type: 'DELETE',
+        error: function(request, textStatus, errorThrown) {
+          console.log("CAUGHT ERROR!");
+          var message = (request.status == 403) ? request.responseText : "An unknown error has occured";
+          alert(message);
+        }
+      });
   });
 
 });
