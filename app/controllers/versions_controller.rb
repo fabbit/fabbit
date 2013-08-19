@@ -53,13 +53,16 @@ class VersionsController < ApplicationController
       revision_date: params[:revision_date],
       details: params[:details],
     )
-    @rev = {
-      id: @version.revision_number,
-      modified: @version.revision_date,
-      version: @version
-    }
+
     if @version.save!
       cache(@version)
+
+      @rev = {
+        id: @version.id,
+        modified: @version.revision_date,
+        version: @version
+      }
+
       respond_to do |format|
         format.js
       end
@@ -96,8 +99,11 @@ class VersionsController < ApplicationController
 
     # Filter for actions requiring ownership
     def owner_member
-      @version = Version.find(params[:id])
-      redirect_to mew_dropbox_path if @version.member != current_member
+      @version = Version.find(params[:id]) if params[:id]
+      @model_file = ModelFile.find(params[:model_file_id]) if params[:model_file_id]
+      if (@version and @version.member != current_member) or (@model_file and @model_file.member != current_member)
+        redirect_to new_dropbox_path
+      end
     end
 
 

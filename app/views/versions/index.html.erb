@@ -80,7 +80,6 @@ $(document).ready(function(){
       '/model_files/' + "<%= @model.id  %>" + '/versions', 
       {"revision_number": elJson.id , "details": elJson.details, "revision_date": elJson.date})
       .fail(function(){ alert("Error") } );
-    
   });
 
   //On unmark click -> Rollback (delete) version from db
