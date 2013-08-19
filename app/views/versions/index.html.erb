@@ -71,13 +71,6 @@ $(document).ready(function(){
 
   /* ACTION METHODS */
 
-  function errorHandler(request, textStatus, errorThrown) {
-      console.log("CAUGHT ERROR!" + request + "," + textStatus + "," );
-      console.log(request);
-      var message = (request.status == 403) ? request.responseText : "An unknown error has occured";
-      alert(message);
-  }
-
   //On input blur (finished typing) -> Post new version to DB
   $('.versions').on('blur', 'li .message input', function(event) {
     //TODO: POST REQUEST WHY DO YOU NEED ALL THE DATA! why can I not send you just the version number?
@@ -91,7 +84,7 @@ $(document).ready(function(){
         "details": elJson.details,
         "revision_date": elJson.date
       },
-      error: errorHandler
+      error: AJAXerrorHandler
     });
   });
 
@@ -102,7 +95,7 @@ $(document).ready(function(){
     $.ajax({
         url: '/versions/'+ getInfoFromElement(this).id,
         type: 'DELETE',
-        error: errorHandler
+        error: AJAXerrorHandler
       });
   });
 
