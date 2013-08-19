@@ -67,7 +67,11 @@ class VersionsController < ApplicationController
       @error = true
     end
     respond_to do |format|
-      format.js { render status: 403 if @error }
+      format.js do
+        if @error
+          render text: @version.errors.full_messages.join(", "), status: 403
+        end
+      end
     end
   end
 
@@ -85,7 +89,11 @@ class VersionsController < ApplicationController
       @error = true
     end
     respond_to do |format|
-      format.js { render status: 403 if @error }
+      format.js do
+        if @error
+          render text: "Cannot delete this version", status: 403
+        end
+      end
     end
   end
 
