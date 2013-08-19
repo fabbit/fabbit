@@ -54,7 +54,7 @@ class VersionsController < ApplicationController
       details: params[:details],
     )
 
-    if @version.save!
+    if @version.save
       cache(@version)
 
       @rev = {
@@ -63,9 +63,11 @@ class VersionsController < ApplicationController
         version: @version
       }
 
-      respond_to do |format|
-        format.js
-      end
+    else
+      @error = true
+    end
+    respond_to do |format|
+      format.js { render status: 403 if @error }
     end
   end
 
@@ -79,11 +81,11 @@ class VersionsController < ApplicationController
         modified: @version.revision_date,
         version: nil
       }
-      respond_to do |format|
-        format.js
-      end
     else
-      # Handle error
+      @error = true
+    end
+    respond_to do |format|
+      format.js { render status: 403 if @error }
     end
   end
 
