@@ -77,7 +77,6 @@ $(document).ready(function(){
     $.post('/model_files/' + "<%= @model.id  %>" + '/versions', {"revision_number": elJson.id , "details": elJson.details, "revision_date": elJson.date}, function(data){
       //Nothing happens here, we use create.js.erb (btodo remove?)
     });
-    
   });
 
   //On unmark click -> Rollback (delete) version from db
