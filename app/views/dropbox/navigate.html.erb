@@ -27,7 +27,7 @@
           
           var id = $(this).parent().attr('id');
           var model_file_id = $(this).parent().parent().parent().parent().attr('id') 
-          //var model_file_id = "<%= content[:model_file_id] %>"; //KTODO: this is what we should be doing, but it don't work :\
+          var model_file_id = "<%= content[:model_file_id] %>";
 
           if (this.checked) {
             console.log("POSTING " + id); 
@@ -37,7 +37,7 @@
           } else {
             console.log("DELETING " + id);
             $.ajax({
-              url: '#' + id,
+              url: '/project_model_files/' + id,
               type: 'DELETE',
               success: function(result) {
                 console.log(result);
