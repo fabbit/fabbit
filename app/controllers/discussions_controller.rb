@@ -34,12 +34,17 @@ class DiscussionsController < ApplicationController
     @discussion.member = current_member
 
     if @discussion.save
-      respond_to do |format|
-        format.js { render text: @discussion.member_id } # just format.js if using callback
+      @error = true
+    end
+
+    respond_to do |format|
+      format.js do
+        if @error
+          render text: @discussion.errors.full_messages.join(", "), status: 403
+        else
+          render text: @discussion.member_id } # just format.js if using callback
+        end
       end
-    else
-      # error message
-      # most likely the message was blank, so show a warning
     end
   end
 

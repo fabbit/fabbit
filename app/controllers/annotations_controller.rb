@@ -47,9 +47,17 @@ class AnnotationsController < ApplicationController
     )
 
     @annotation.member = current_member
-    if @annotation.save
-      respond_to do |format|
-        format.js { render text: @annotation.id } # just format.js if using callback
+    if not @annotation.save
+      @error = true
+    end
+
+    respond_to do |format|
+      format.js do
+        if @error
+          render text: @annotation.errors.full_messages.join(", "), status: 403
+        else
+          render text: @annotation.id # just format.js if using callback
+        end
       end
     end
   end
