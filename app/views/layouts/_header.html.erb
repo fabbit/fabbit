@@ -5,10 +5,18 @@
 			Default error message
   		</div>
   		<script>
+  			//Error handling UI function
   			function displayError(message){
-  				$("#errorMessage").html(message);
+  				$("#errorMessage").html("ERROR:" + message);
   				$("#errorMessage").fadeIn(600).delay(7000).fadeOut(600);
   			}
+
+  			//Error handling AJAX function - to be used as callback for AJAX errors
+			function AJAXerrorHandler(request, textStatus, errorThrown) {
+			      console.log(request);
+			      var message = (request.status == 403) ? request.responseText : "An unknown error has occured";
+			      displayError(message);
+			}
   		</script>
   	</div>
   <div class="logo title"> <%= link_to Fabbit, navigate_url %> </div>
