@@ -385,6 +385,10 @@ $red: red;
 	border: 1px solid rgb(255, 233, 194);
 }
 
+.row.versions {
+	margin-top: 40px;
+}
+
 .versions ul li {
 	float:left;
 	clear:left;
@@ -405,14 +409,13 @@ $red: red;
 }
 
 .versions ul li div.date {
-	width: 200px;
+	width: 160px;
 }
 
 .versions ul li div.action {
 	text-align: center;
-	width: 160px;
-	margin-right: 75px;
-
+	width: 130px;
+	margin-right: 60px;
 	height: 20%;
 	border-radius: 4px;
 	height: 10px;
@@ -425,7 +428,7 @@ $red: red;
 }
 
 .versions ul li div.message {
-	width: 300px;
+	width: 250px;
 }
 
 .versions ul li div.message input {

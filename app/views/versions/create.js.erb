@@ -1,3 +1,7 @@
+//At this state it does not exist so its id will be the revision number?
 var position = $(".versions ul").children("#revision_<%= @version.revision_number %>").index(); //Find the position of the guy we're replacing
-$(".versions ul").children("#revision_<%= @version.revision_number %>").remove(); //Remove the guy
-$(".versions ul li:eq(" + (parseInt(position) - 1) + ")").after("<%= j render @version %>"); //Put in a new guy!
+console.log("NUMBER IS <%= @version.revision_number %>");
+var renderedUI = "<%= j render 'layouts/version', revision: @rev %>";
+console.log(renderedUI);
+$(".versions ul").children("#revision_<%= @version.revision_number %>").remove(); //Remove the guy with the revision id
+$(".versions ul li:eq(" + (parseInt(position) - 1) + ")").after(renderedUI); //Put in a new guy! It's ID will be the actual id

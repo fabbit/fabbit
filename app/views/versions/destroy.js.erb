@@ -1,3 +1,5 @@
+//At this state the version exists, therefore it has an ID
 var position = $(".versions ul").children("#revision_<%= @version.revision_number %>").index(); //Find the position of the guy we're replacing
-$(".versions ul").children("#revision_<%= @version.revision_number %>").remove(); //Remove the guy
-$(".versions ul li:eq(" + (parseInt(position) - 1) + ")").after("<%= j render "layouts/version", revision: @rev %>"); //Put in a new guy!
+console.log("NUMBER IS <%= @version.id %>");
+$(".versions ul li:eq(" + (parseInt(position) - 1) + ")").after("<%= j render 'layouts/version', revision: @rev %>"); //Put in a new guy!
+$(".versions ul").children("#revision_<%= @version.id %>").remove(); //Remove the guy
