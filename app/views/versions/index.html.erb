@@ -75,7 +75,7 @@ $(document).ready(function(){
       console.log("CAUGHT ERROR!" + request + "," + textStatus + "," );
       console.log(request);
       var message = (request.status == 403) ? request.responseText : "An unknown error has occured";
-      alert(message);
+      displayError(message);
   }
 
   //On input blur (finished typing) -> Post new version to DB

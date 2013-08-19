@@ -11,7 +11,28 @@ $red: red;
 	height: 100%;
 }
 
+.messageWrapper {
+	position: absolute;
+	left: 50%;
+	bottom: -15px;	
+}
 
+.messageDialogue {
+	position: relative;
+	left: -50%;
+	padding: 10px;
+	border-radius: 5px;
+	background: rgba(200,200,200,.4);
+	border: 1px solid rgb(200,200,200);	
+	color: $gray;
+}
+
+#errorMessage {
+	color: rgba(255, 66, 66,0.8);
+	border: 1px solid rgb(255, 66, 66);
+	background: rgba(252, 215, 215, 1);
+	display:none;
+}
 
 .container {
 	background: white;
@@ -46,6 +67,7 @@ $red: red;
 	float:left;
 	clear:both;
 	width: 100%;
+	position: relative; //To have absolute elements
 }
 
 .title, h1{

@@ -1,5 +1,16 @@
 
 <div class="row header">
+	<div class="messageWrapper">
+  		<div class="messageDialogue" id="errorMessage">
+			Default error message
+  		</div>
+  		<script>
+  			function displayError(message){
+  				$("#errorMessage").html(message);
+  				$("#errorMessage").fadeIn(600).delay(7000).fadeOut(600);
+  			}
+  		</script>
+  	</div>
   <div class="logo title"> <%= link_to Fabbit, navigate_url %> </div>
 	<div class="member"> 
         	<div class="subtitle" id="me"> <%= current_member.name %> </div>
