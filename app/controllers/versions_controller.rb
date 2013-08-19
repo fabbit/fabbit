@@ -4,6 +4,8 @@
 
 class VersionsController < ApplicationController
 
+  before_filter :owner_member, only: [:create, :destroy]
+
   # Loads and renders using the Version retrieve_from_dropbox method
   def show
     @version = Version.find(params[:id])
@@ -33,7 +35,6 @@ class VersionsController < ApplicationController
     @versions = @model.versions
 
     @history = get_history_for(@model_file)
-    p @history
 
     respond_to do |format|
       format.html
@@ -62,14 +63,19 @@ class VersionsController < ApplicationController
 
   # Deletes/unmarks a Version
   def destroy
-    @version = Version.find(params[:id]).destroy
-    @rev = {
-      id: @version.revision_number,
-      modified: @version.revision_date,
-      version: nil
-    }
-    respond_to do |format|
-      format.js
+    @version = Version.find(params[:id])
+    if @version.model_file.versions.count > 1
+      @version.destroy
+      @rev = {
+        id: @version.revision_number,
+        modified: @version.revision_date,
+        version: nil
+      }
+      respond_to do |format|
+        format.js
+      end
+    else
+      # Handle error
     end
   end
 
@@ -80,5 +86,14 @@ class VersionsController < ApplicationController
       format.js { render text: @file }
     end
   end
+
+  private
+
+    # Filter for actions requiring ownership
+    def owner_member
+      @version = Version.find(params[:id])
+      redirect_to mew_dropbox_path if @version.member != current_member
+    end
+
 
 end

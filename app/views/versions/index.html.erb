@@ -10,7 +10,7 @@
       <div class="action"> </div>
       <div class="message"> Commit message </div>
     </li>
-    <% @history.each do |rev| %>"
+    <% @history.each do |rev| %>
       <%= render "layouts/version", :revision => rev%> <!-- TODO: we should probably change where this is stored -->
     <% end %>
   </ul>
@@ -28,7 +28,7 @@ $(document).ready(function(){
 
     if ($(el).is('input')) { //If its the input - we gotta skip a layer and set the message to the right thing (jankkk!)
       details = $(el).val();
-      el = $(el).parent(); 
+      el = $(el).parent();
     } else {
       el = $(el);
       details = null;
