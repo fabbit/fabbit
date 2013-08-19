@@ -21,6 +21,8 @@
 //TODO: Move this to its own file
 $(document).ready(function(){
 
+
+
   //Takes an element and returns JSON with its info
   function getInfoFromElement(el){
 
@@ -74,21 +76,19 @@ $(document).ready(function(){
     //TODO: POST REQUEST WHY DO YOU NEED ALL THE DATA! why can I not send you just the version number?
     var elJson = getInfoFromElement(this);
     console.log(elJson);
-    $.post('/model_files/' + "<%= @model.id  %>" + '/versions', {"revision_number": elJson.id , "details": elJson.details, "revision_date": elJson.date}, function(data){
-      //Nothing happens here, we use create.js.erb (btodo remove?)
-    });
+    var jqxhr = $.post(
+      '/model_files/' + "<%= @model.id  %>" + '/versions', 
+      {"revision_number": elJson.id , "details": elJson.details, "revision_date": elJson.date})
+      .fail(function(){ alert("Error") } );
   });
 
   //On unmark click -> Rollback (delete) version from db
   $('.versions').on('click', 'li div.action.marked.unmark', function(){
     console.log(this);
-     $.ajax({
-      url: '/versions/'+ getInfoFromElement(this).id,
-      type: 'DELETE',
-      success: function(result) {
-          //Nothing happens here, we use destroy.js.erb (btodo remove?)
-        }
-      });
+     var jqxhr = $.ajax({
+        url: '/versions/'+ getInfoFromElement(this).id,
+        type: 'DELETE'})
+        .fail(function(){ alert("error") } );
   });
 
 });
