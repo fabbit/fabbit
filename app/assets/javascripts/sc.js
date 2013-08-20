@@ -50,7 +50,7 @@ modelViewer = function(sceneContainer, annotationContainer, uniqueID, memberID) 
 		
 		objects = [];
 		//Set up scene
-		scene = { "width": 850, "height": 480, "scene": new THREE.Scene()};	
+		scene = { "width": 845, "height": 480, "scene": new THREE.Scene()};	
 		camera = new THREE.PerspectiveCamera(45, 1.77, scene.width /scene.height, 10000); //view_angle, aspect = width/height, near, far
 		moveCamera(new THREE.Vector3(0,0,100));
 		scene.scene.add(camera);
