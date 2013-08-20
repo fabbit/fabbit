@@ -1,26 +1,33 @@
 <%= render "layouts/header" %>
 <%= render "dropbox/breadcrumbs" %>
 
-<div class="row versions">
-
-  <ul>
-    <li class="subtitle"> 
-      <div class="dropbox"> Version number</div>
-      <div class="date"> Last changed</div>
-      <div class="action"> </div>
-      <div class="message"> Commit message </div>
-    </li>
-    <% @history.each do |rev| %>
-      <%= render "layouts/version", :revision => rev%> <!-- TODO: we should probably change where this is stored -->
-    <% end %>
-  </ul>
+<div class="section">
+  <div class="row subtitle divider">
+    Projects
+  </div>
+  <div class="row project_list">
+    <%= render "dropbox/projects_dropdown", projects: @projects, model_file_id: @model.id %>
+  </div>
 </div>
+
+<div class="section">
+  <div class="row subtitle divider">
+    Versions
+  </div>
+  <div class="row versions">
+    <ul>
+      <% @history.each do |rev| %>
+        <%= render "layouts/version", :revision => rev%> <!-- TODO: we should probably change where this is stored -->
+      <% end %>
+    </ul>
+</div>
+</div>
+
 
 <script>
 
 //TODO: Move this to its own file
 $(document).ready(function(){
-
 
 
   //Takes an element and returns JSON with its info

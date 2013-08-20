@@ -1,11 +1,35 @@
-<div class='project_list'> 
-  <div class='opener'> v </div> 
-  <ul>
-    <% if projects.empty? %>
-      <li> You have not opened this file yet! </li>
-    <% end %>
-    <% projects.each do |project| %>
-      <%= render 'dropbox/project_checkbox', project: project %>
-    <% end %>
-  </ul>
-</div>
+
+<ul class="project_list">
+	<% if projects.empty? %>
+	  <li> You have not opened this file yet! </li>
+	<% end %>
+	<% projects.each do |project| %>
+	  <%= render 'dropbox/project_checkbox', project: project %>
+	<% end %>
+</ul>
+
+<script>
+//This function keep tracks of checkbox toggling
+$('.project_list li input').change(function(){
+  
+  var id = $(this).parent().attr('id');
+  var model_file_id = $(this).parent().parent().parent().parent().attr('id') 
+  var model_file_id = "<%= model_file_id %>";
+
+  if (this.checked) {
+    console.log("POSTING " + id); 
+    $.post('/project_model_files/', {"project_id": id, "model_file_id": model_file_id}, function(data) {
+      console.log(data);
+    });
+  } else {
+    console.log("DELETING " + id);
+    $.ajax({
+      url: '/project_model_files/' + id,
+      type: 'DELETE',
+      success: function(result) {
+        console.log(result);
+      }
+    });
+  }
+});
+</script>

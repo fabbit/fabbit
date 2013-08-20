@@ -1,11 +1,12 @@
 <li class='version' id="revision_<%= revision[:id] %>">
  	<div class='dropbox'> <%= revision[:id] %> </div>
- 	<div class='date'> <%= revision[:modified].to_datetime.strftime('%B %d, %Y') %> </div>
  	<% if revision[:version] != nil %> <!-- Meant to be null check - maybe theres a better way to do this  -->
  		<div class='action marked'> </div>
+ 		<div class='date'> <%= revision[:modified].to_datetime.strftime('%B %d, %Y') %> </div>
  		<div class='message'><a href="/versions/<%= revision[:version].id %>"> <%= revision[:version].details %> </a> </div>
  	<% else %>
  		<div class='action unmarked'> </div>
+	 	<div class='date'> <%= revision[:modified].to_datetime.strftime('%B %d, %Y') %> </div>
  		<div class='message'> </div>
  	<% end %>
 </li>

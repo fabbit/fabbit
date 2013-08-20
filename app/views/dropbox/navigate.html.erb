@@ -1,6 +1,6 @@
 <%= render "layouts/header" %>
 
-<section>
+<div class="section">
 
   <%= render "dropbox/breadcrumbs" %>
   <ul class="row files">
@@ -14,41 +14,10 @@
         //    console.log(h);
         //    window.location = h;
         // });
-
-        //This project opens and closes the project list
-        $('.inset .project_list .opener').toggle(
-          function() { console.log($(this).siblings()); $(this).next().show(); }, 
-          function() { $(this).next().hide(); }
-        );
-
-
-        //This function keep tracks of checkbox toggling
-        $('.inset .project_list ul li input').change(function(){
-          
-          var id = $(this).parent().attr('id');
-          var model_file_id = $(this).parent().parent().parent().parent().attr('id') 
-          var model_file_id = "<%= content[:model_file_id] %>";
-
-          if (this.checked) {
-            console.log("POSTING " + id); 
-            $.post('/project_model_files/', {"project_id": id, "model_file_id": model_file_id}, function(data) {
-              console.log(data);
-            });
-          } else {
-            console.log("DELETING " + id);
-            $.ajax({
-              url: '/project_model_files/' + id,
-              type: 'DELETE',
-              success: function(result) {
-                console.log(result);
-              }
-            });
-          }
-        })
       </script>
 
     <% end %>
   </ul>
-</section>
+</div>
 
 <%= render "layouts/project_list" %>

@@ -13,7 +13,6 @@ class VersionsController < ApplicationController
     @model_file.content = load_cached(@version)
     @member = current_member
     @breadcrumbs = to_breadcrumbs(@model_file)
-
     respond_to do |format|
       format.html
       format.js { render json: [@content, @version] }
@@ -33,7 +32,7 @@ class VersionsController < ApplicationController
     @member = current_member
     @breadcrumbs = to_breadcrumbs(@model)
     @versions = @model.versions
-
+    @projects = Project.all
     @history = get_history_for(@model_file)
 
     respond_to do |format|

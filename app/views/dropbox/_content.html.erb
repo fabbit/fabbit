@@ -3,6 +3,19 @@
   <div> In x projects </div>
   <div> Last viewed x months </div>
   <% if !content[:is_dir] %>
-    <%= render "dropbox/projects_dropdown", projects: content[:projects] %>
+  <div> 
+ 	<div class='opener'> v </div> 
+   	<%= render "dropbox/projects_dropdown", projects: content[:projects], model_file_id: content[:model_file_id] %>
+  </div>
+
+  <script>
+  	//This project opens and closes the project list
+    $('.inset .opener').toggle(
+        function() { console.log($(this).siblings()); $(this).next().show(); }, 
+        function() { $(this).next().hide(); }
+    );  
+  </script>
+
   <% end %>
 </li>
+

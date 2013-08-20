@@ -1,6 +1,6 @@
-<section class="projects">
+<div class="section projects">
   <div class="row navigate">
-    <div class="add"> 
+    <div class="add">  
        <div class="subtitle green" id="add_project"> <span> + </span> Add a project   </div>
 
          <%= form_for @new_project, url: {action: :create, controller: :projects}, html: {class: "form", id: "project_form", remote: true} do |f| %>
@@ -26,4 +26,4 @@
     <%= render @projects, view: :nav_view %>
   </ul>
 
-</section>
+</div>
