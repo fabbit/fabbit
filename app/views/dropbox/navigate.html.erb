@@ -3,6 +3,7 @@
 <div class="section">
 
   <%= render "dropbox/breadcrumbs" %>
+  
   <ul class="row files">
     <% @contents.each do |content| %>
       <%= render "dropbox/content", content: content %>

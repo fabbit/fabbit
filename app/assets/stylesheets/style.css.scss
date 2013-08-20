@@ -1,6 +1,6 @@
 $blue: #3079ed;
 $black: #1c1c1c;
-$green: green;
+$green: rgb(37, 134, 37);
 $gray: gray;
 $red: red;
 
@@ -9,7 +9,25 @@ $red: red;
 	font-family: Helvetica, Arial, serif;
 	font-size: 14px;
 	height: 100%;
+	background: #F9FEFF;
 }
+
+.container {
+	background: white;
+	height: 100%;
+	position: absolute;
+	margin-left: -475px;
+	left: 50%;
+	width: 900px;
+	padding: 25px ;
+	-moz-box-sizing: border-box; -webkit-box-sizing: border-box; box-sizing: border-box;
+	border: 1px solid rgb(237, 237, 255);
+	border-top: none;
+	border-bottom: none;
+
+}
+
+//UI ELEMENTS
 
 .messageWrapper {
 	position: absolute;
@@ -34,18 +52,6 @@ $red: red;
 	display:none;
 }
 
-.container {
-	background: white;
-	height: 100%;
-	position: absolute;
-	margin-left: -475px;
-	left: 50%;
-	width: 900px;
-	padding: 25px ;
-	-moz-box-sizing: border-box; -webkit-box-sizing: border-box; box-sizing: border-box;
-
-}
-
 
 .form {
 	background: white;
@@ -63,7 +69,7 @@ $red: red;
 
 //Sectionsa are groupings of rows! (Basically a row but with a margin at the bottom)
 .section {
-	margin-bottom: 20px;
+	margin-top: 20px;
 	float: left;
 	clear: left;
 	width: 100%;
@@ -112,19 +118,19 @@ $red: red;
 }
 
 .inset.gray {
-	background: rgba(200,200,200,.4);
-	border: 1px solid rgb(200,200,200);	
+	background-color: lighten($gray, 40%);
+	border: 1px solid lighten($gray, 20%);	
 	color: $gray;
 }
 .inset.blue {
-	border: 1px solid rgb(103, 176, 253);
+	background-color: lighten($blue, 40%);
+	border: 1px solid lighten($blue, 20%);
 	color: $blue;
-	background: rgba(103, 176, 253,.3);
 }
 
 .inset.green {
-	border:1px solid rgb(120,228,120);
-	background: rgba(120,228,120,.4);
+	background-color: #E0FFE0;
+	border: 1px solid lighten($green, 20%);
 	color: $green;
 }
 
