@@ -34,6 +34,7 @@ class VersionsController < ApplicationController
     @versions = @model.versions
     @projects = Project.all
     @history = get_history_for(@model_file)
+    @full_version_view = true
 
     respond_to do |format|
       format.html

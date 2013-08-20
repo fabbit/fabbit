@@ -3,15 +3,6 @@
 
 <div class="section">
   <div class="row subtitle divider">
-    Projects
-  </div>
-  <div class="row project_list">
-    <%= render "dropbox/projects_dropdown", projects: @projects, model_file_id: @model.id %>
-  </div>
-</div>
-
-<div class="section">
-  <div class="row subtitle divider">
     Versions
   </div>
   <div class="row versions">
@@ -21,6 +12,15 @@
       <% end %>
     </ul>
 </div>
+</div>
+
+<div class="section">
+  <div class="row subtitle divider">
+    Projects
+  </div>
+  <div class="row project_list">
+    <%= render "dropbox/projects_dropdown", projects: @projects, model_file_id: @model.id %>
+  </div>
 </div>
 
 

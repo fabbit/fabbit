@@ -8,7 +8,7 @@
         <% @breadcrumbs.each do |crumb| %>
           <li><%= link_to crumb[:text], crumb[:link] %></li>
         <% end %>
-        <% if @model %>
+        <% if @model && !@full_version_view%>
         <li class="revision_dropdown">
 		      <ul class="subtitle revisions">
 		        <%= render @model.versions %>
