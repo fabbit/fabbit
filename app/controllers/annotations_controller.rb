@@ -19,8 +19,9 @@ class AnnotationsController < ApplicationController
   # - JSON: Return a JSON object of all annotations, including all of the Discussions for each
   #   annotation
   def index
-    model_file = ModelFile.find(params[:model_file_id])
-    version = model_file.latest_or_version(params[:version_id])
+    model_file = ModelFile.find(params[:model_file_id]) if params[:model_file_id]
+    version = model_file ? model_file.latest_or_version(params[:version_id]) : Version.find(params[:version_id])
+    version = Version.find(params[:version_id])
     @annotations = version.annotations
     respond_to do |format|
       format.html { redirect_to ModelFile.find(params[:model_file_id]) }
@@ -38,8 +39,8 @@ class AnnotationsController < ApplicationController
   # === Responses
   # - JS: Return the ID of the new annotation
   def create
-    model_file = ModelFile.find(params[:model_file_id])
-    version = model_file.latest_or_version(params[:version_id])
+    model_file = ModelFile.find(params[:model_file_id]) if params[:model_file_id]
+    version = model_file ? model_file.latest_or_version(params[:version_id]) : Version.find(params[:version_id])
     @annotation = version.annotations.build(
       coordinates: params[:coordinates],
       camera: params[:camera],

@@ -22,7 +22,9 @@
     </li>
   </ul>
     <div class="add">
-      <%= link_to image_tag("settings.png", :alt => "file settings"), model_file_versions_url(@model) %>  <!-- KTODO: ONLY VISIBLE TO THIS USER! -->
+      <% if @model_file and @model_file.member == current_member %>
+        <%= link_to image_tag("settings.png", :alt => "file settings"), model_file_versions_url(@model) %>  <!-- KTODO: ONLY VISIBLE TO THIS USER! -->
+      <% end %>
     </div>
   <% else %>
   </ul>

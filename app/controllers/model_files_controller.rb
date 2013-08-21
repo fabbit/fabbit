@@ -11,6 +11,7 @@ class ModelFilesController < ApplicationController
   # - @breadcrumbs: data for generating the navigational breadcrumbs
   def show
     @model_file = ModelFile.find(params[:id])
+    @version = @model_file.latest_version
     @model = @model_file
     @model_file.content = load_cached(@model_file.latest_version)
     @member = current_member

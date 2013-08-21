@@ -4,7 +4,7 @@
 
 class VersionsController < ApplicationController
 
-  before_filter :owner_member, only: [:create, :destroy]
+  before_filter :owner_member, only: [:index, :create, :destroy]
 
   # Loads and renders using the Version retrieve_from_dropbox method
   def show
@@ -99,7 +99,8 @@ class VersionsController < ApplicationController
 
   # Returns the contents of the Version file
   def contents
-    @file = Version.find(params[:id]).retrieve_from_dropbox(dropbox_client)
+    @version = Version.find(params[:id])
+    @file = load_cached(@version)
     respond_to do |format|
       format.js { render text: @file }
     end

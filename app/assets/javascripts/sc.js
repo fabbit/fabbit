@@ -325,7 +325,7 @@ modelViewer = function(sceneContainer, annotationContainer, uniqueID, memberID) 
 
 		//Called automatically on init. Gets annotations from server and adds them to ds
 		function initializeAnnotations() {
-			$.getJSON('/model_files/' + sceneID + '/annotations', function(data) {
+			$.getJSON('/versions/' + sceneID + '/annotations', function(data) {
 				annotationList = data;
 				for (var i =0; i <annotationList.length; i++) {
 					var temp = parseAnnotation(annotationList[i]);
@@ -364,7 +364,7 @@ modelViewer = function(sceneContainer, annotationContainer, uniqueID, memberID) 
 			var name = prompt("Gimme an annotation please");
 			if (name!= null && name != ""){
 				
-				$.post('/model_files/' + sceneID + '/annotations', {"camera": v3ToString(camera.position.clone()), "coordinates": v3ToString(point) , "text": name}, function(data){
+				$.post('/versions/' + sceneID + '/annotations', {"camera": v3ToString(camera.position.clone()), "coordinates": v3ToString(point) , "text": name}, function(data){
 					addAnnotation({"text": name, "camera": camera.position.clone(), "coordinates": point, "discussions": []}, data);
 					updateUI();
 				});

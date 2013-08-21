@@ -2,8 +2,8 @@
   <p id="stlstring"><%= @model_file.content %></p>
   <script>
     $(document).ready(function(){
-      var viewer = new modelViewer("#container", "#annotation_list",<%= @model_file.id %>, <%= @member.id %>);
-      viewer.addModel("<%= escape_javascript( @version ? contents_version_url : contents_model_file_url) %>");
+      var viewer = new modelViewer("#container", "#annotation_list",<%= @version.id %>, <%= @member.id %>);
+      viewer.addModel("<%= escape_javascript(contents_version_url(@version)) %>");
 
       $("#annotation_controller").toggle(
           function(){ $("#annotation_controller").html("Turn annotations on"); viewer.toggleAnnotations(); },

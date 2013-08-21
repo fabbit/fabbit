@@ -82,7 +82,6 @@ $(document).ready(function(){
 
   //On input blur (finished typing) -> Post new version to DB
   $('.settings.versions').on('blur', 'li .message input', function(event) {
-    //TODO: POST REQUEST WHY DO YOU NEED ALL THE DATA! why can I not send you just the version number?
     var elJson = getInfoFromElement(this);
     console.log(elJson);
     $.ajax({

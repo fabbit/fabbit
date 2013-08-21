@@ -175,6 +175,7 @@ module DropboxHelper
             }
           end
           model_file_id = model_file.id
+          member = model_file.member
         end
       end
       # TODO: change to ?: format
@@ -184,6 +185,7 @@ module DropboxHelper
         is_dir: content["is_dir"],
         projects: projects,
         model_file_id: model_file_id,
+        member: member,
       }
     end
   end
