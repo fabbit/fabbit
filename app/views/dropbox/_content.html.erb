@@ -3,16 +3,9 @@
   <div> In x projects </div>
   <div> Last viewed x months </div>
   <% if !content[:is_dir] %>
-  <div> 
-
-  <script>
-  	//This project opens and closes the project list
-    $('.inset .opener').toggle(
-        function() { console.log($(this).siblings()); $(this).next().show(); }, 
-        function() { $(this).next().hide(); }
-    );  
-  </script>
-
+  <div class="opener">
+    <%= image_tag("settings.png", :alt => "file settings") %> <!-- KTODO: THIS SHOULD LINK TO THE VERSIONS PAGE! -->
+  </div>
   <% end %>
 </li>
 

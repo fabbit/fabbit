@@ -1,7 +1,12 @@
 <% if project.model_files.include?(model_file)%>
-  <li id='<%= project.project_model_file(model_file).id %>'> <input type='checkbox' checked >
+<li id='project_<%= project.project_model_file(model_file).id %>'> 
+  	<div class="action marked">
 <% else %>
-  <li id='<%= project.id %>'> <input type='checkbox'>
+<li id='project_<%= project.id %>'> 
+	<div class="action unmarked">
 <% end %>
-  <%= project.name %>
+	</div>
+	<div class="project_name">
+ 		<%= project.name %>
+	</div>
 </li>

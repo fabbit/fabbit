@@ -1,6 +1,7 @@
 $blue: #3079ed;
 $black: #1c1c1c;
 $green: rgb(37, 134, 37);
+$light_green: #E0FFE0;
 $gray: gray;
 $red: red;
 
@@ -52,6 +53,18 @@ $red: red;
 	display:none;
 }
 
+#progressMessage {
+	display: none;
+	background: white;
+	color: rgba(150,150,150,0.8);
+	border: 1px solid #eee;
+}
+
+#progressMessage img {
+	width: 20px;
+	margin-bottom: -5px;
+	margin-right: 5px;
+}
 
 .form {
 	background: white;
@@ -129,7 +142,7 @@ $red: red;
 }
 
 .inset.green {
-	background-color: #E0FFE0;
+	background-color: $light_green;
 	border: 1px solid lighten($green, 20%);
 	color: $green;
 }
@@ -144,14 +157,6 @@ $red: red;
 	background: rgba(255,255,255,0.8);
 
 }
-
-.inset .opener {
-	position: absolute;
-	top: 5px;
-	right: 5px;
-}
-
-
 
 .header {
 	width: 100%;
@@ -197,12 +202,21 @@ $red: red;
 	z-index:2;
 }
 
-.projects .navigate .add {
+.navigate .add {
 	float:right;
 	cursor: pointer;
 	padding: 10px 0px;
 	position:relative;
 	z-index: 20;
+}
+
+.navigate .add img {
+	height: 20px;
+	opacity: 0.8;
+}
+
+.navigate .add img:hover {
+	opacity: 1;
 }
 
 .projects .navigate .add span {
@@ -385,6 +399,22 @@ $red: red;
 	opacity: 1;
 }
 
+.files .inset .opener {
+	position: absolute;
+	top: 5px;
+	right: 5px;
+	display:none;
+}
+
+.files .inset:hover .opener {
+	display:block;
+}
+
+.files .inset .opener img {
+	width: 18px;
+}
+
+
 .model #stlstring {
 	display: none;
 }
@@ -416,28 +446,19 @@ $red: red;
 	padding: 10px 0px;
 }
 
-//Versions
+//!! General settings div stuff
 
-.versions ul li {
+.settings ul li {
 	float:left;
 	clear:left;
 	margin: 10px 0px;
 }
 
-.versions ul li div{
+.settings ul li div{
 	float:left;
 }
 
-
-.versions ul li div.dropbox {
-	display: none;
-}
-
-.versions ul li div.date {
-	width: 160px;
-}
-
-.versions ul li div.action {
+.settings ul li div.action {
 	text-align: center;
 	width: 130px;
 	margin-right: 30px;
@@ -452,6 +473,72 @@ $red: red;
 	
 }
 
+//Unmarked is always gray
+.settings ul li .action.unmarked {
+	color: $gray;
+	background-color: lighten($gray, 40%);
+	border: 1px solid lighten($gray, 20%);
+}
+
+.settings ul li .action.unmarked:hover {
+	color: darken($gray, 20%);
+}
+
+//Unmark is red
+.settings ul li .action.marked.unmark {
+	color: $red;
+	background-color: lighten($red, 40%);
+	border: 1px solid lighten($red, 20%);
+}
+
+// Project list specific
+// Marked is green
+.project_list ul li .action.marked {
+	background-color: $light_green;
+	border: 1px solid lighten($green, 20%);
+	color: $green;
+}
+
+.project_list ul li .action.unmarked:before {
+	content: "Add to project";
+}
+
+.project_list ul li .action.marked:before{
+	content: "Added to project";
+}
+
+.project_list ul li .action.marked.unmark:before{
+	content: "Remove";
+}
+
+//Actions > version specific
+//versions are blue
+.versions ul li .action.marked {
+	color: $blue;
+	background-color: lighten($blue, 40%);
+	border: 1px solid lighten($blue, 20%);
+}
+
+.versions ul li .action.unmarked:before {
+	content: "Mark as version";
+}
+
+.versions ul li .action.marked:before{
+	content: "Marked as version";
+}
+
+.versions ul li .action.marked.unmark:before{
+	content: "Unmark";
+}
+
+.versions ul li div.dropbox {
+	display: none;
+}
+
+.versions ul li div.date {
+	width: 160px;
+}
+
 .versions ul li div.message {
 	width: 250px;
 	color: $blue;
@@ -459,47 +546,6 @@ $red: red;
 
 .versions ul li div.message input {
 	width: 100%;
-}
-.versions ul li .action.unmarked {
-	color: $gray;
-	background-color: lighten($gray, 40%);
-	border: 1px solid lighten($gray, 20%);
-}
-
-.versions ul li .action.unmarked:before{
-	content: "Mark as version";
-}
-
-.versions ul li .action.marked {
-	color: $blue;
-	background-color: lighten($blue, 40%);
-	border: 1px solid lighten($blue, 20%);
-}
-
-.versions ul li .action.marked:before{
-	content: "Marked as version";
-}
-
-.versions ul li .action.marked.unmark {
-	color: $red;
-	background-color: lighten($red, 40%);
-	border: 1px solid lighten($red, 20%);
-}
-.versions ul li .action.marked.unmark:before{
-	content: "Unmark";
-}
-
-//Project list
-
-.project_list li {
-	padding: 10px 0px 10px 5px;
-	margin-bottom: 5px;
-	width: 100%;
-	background: #FAFAFA;
-}
-
-.project_list li input {
-	margin-right: 10px;
 }
 
 #annotations {

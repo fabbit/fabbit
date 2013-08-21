@@ -1,1 +1,3 @@
-console.log("This should not print")
+console.log("<%= @project_model_file.id %> and <%= @project.id %>");
+$("#project_<%= @project_model_file.id %>").children(".action").removeClass("marked").addClass("unmarked");
+$("#project_<%= @project_model_file.id %>").attr('id', '<%= @project.id %>');

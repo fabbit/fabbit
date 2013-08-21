@@ -1,4 +1,4 @@
-<ul class="project_list">
+<ul>
 	<% if projects.empty? %>
 	  <li> You have not opened this file yet! </li>
 	<% end %>
@@ -8,27 +8,39 @@
 </ul>
 
 <script>
-//This function keep tracks of checkbox toggling
-$('.project_list li input').change(function(){
-  
-  var id = $(this).parent().attr('id');
-  var model_file_id = $(this).parent().parent().parent().parent().attr('id') 
-  var model_file_id = "<%= model_file.id %>";
 
-  if (this.checked) {
-    console.log("POSTING " + id); 
+ //On unmarked click we commit it 
+  $('.settings.project_list').on('click', 'li div.action.unmarked', function(event) {
+
+    var id = $(this).parent().attr('id');
+    id = parseInt(id.replace("project_",""));
+    var model_file_id = "<%= model_file.id %>";
+
+    console.log("Commiting project" + id);
     $.post('/project_model_files/', {"project_id": id, "model_file_id": model_file_id}, function(data) {
-      console.log(data);
+      //Do nothing
     });
-  } else {
-    console.log("DELETING " + id);
+
+  });
+
+
+  //On unmark click -> Rollback (delete) version from db
+  $('.settings.project_list').on('click', 'li div.action.marked.unmark', function(){
+    //rollback!
+    var id = $(this).parent().attr('id');
+    id = parseInt(id.replace("project_",""));
+    var model_file_id = "<%= model_file.id %>";
+
+    console.log("Deleting project" + id);
+
     $.ajax({
       url: '/project_model_files/' + id,
       type: 'DELETE',
       success: function(result) {
-        console.log(result);
+        //Do nothing
       }
     });
-  }
-});
+
+  });
+
 </script>

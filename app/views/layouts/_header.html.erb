@@ -4,11 +4,18 @@
   		<div class="messageDialogue" id="errorMessage">
 			Default error message
   		</div>
+  	</div>
+  	<div class="messageWrapper">
+  		<div class="messageDialogue" id="progressMessage">
+  			<img src="http://i.forbesimg.com/assets/img/loading_spinners/43px_on_transparent.gif"> Fabbit is busy! 
+  		</div>
+  	</div>
+
   		<script>
   			//Error handling UI function
   			function displayError(message){
-  				$("#errorMessage").html("ERROR:" + message);
-  				$("#errorMessage").fadeIn(600).delay(7000).fadeOut(600);
+  				$("#errorMessage").html("Oops: " + message);
+  				$("#errorMessage").fadeIn(300).delay(5000).fadeOut(300);
   			}
 
   			//Error handling AJAX function - to be used as callback for AJAX errors
@@ -17,8 +24,18 @@
 			      var message = (request.status == 403) ? request.responseText : "An unknown error has occured";
 			      displayError(message);
 			}
+
+			$.ajaxSetup({
+			    beforeSend: function() {
+			    	console.log("ONG");
+			        $("#progressMessage").fadeIn(300);
+			    },
+			    complete: function() {
+			    	console.log("OFGS");
+			        $("#progressMessage").fadeOut(300);
+			    }
+			});
   		</script>
-  	</div>
   <div class="logo title"> <%= link_to Fabbit, navigate_url %> </div>
 	<div class="member"> 
         	<div class="subtitle" id="me"> <%= current_member.name %> </div>

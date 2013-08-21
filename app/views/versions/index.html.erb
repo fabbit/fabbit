@@ -2,11 +2,12 @@
 
 <div class="section">
   <%= render "dropbox/breadcrumbs" %>
-
+</div>
+<div class="section">
   <div class="row subtitle divider">
     Cached versions
   </div>
-  <div class="row versions">
+  <div class="row settings versions">
     <ul>
       <% @history.each do |rev| %>
         <%= render "layouts/version", :revision => rev%> <!-- TODO: we should probably change where this is stored -->
@@ -19,7 +20,7 @@
   <div class="row subtitle divider">
     Projects
   </div>
-  <div class="row project_list">
+  <div class="row settings project_list">
     <%= render "dropbox/projects_dropdown", projects: @projects, model_file: @model_file %>
   </div>
 </div>
@@ -27,7 +28,7 @@
 
 <script>
 
-//TODO: Move this to its own file
+//TODO: Move this to its own file (partial for all versions)
 $(document).ready(function(){
 
 
@@ -51,7 +52,7 @@ $(document).ready(function(){
   /* UI METHODS to add/remove input */
 
   //HOVER OVER for marked -> unmark
-  $('.versions').on('hover', 'li div.action.marked', function(event){
+  $('.settings').on('hover', 'li div.action.marked', function(event){
     event.preventDefault();
     if (event.type == "mouseenter"){
       $(this).addClass('unmark');
@@ -62,7 +63,7 @@ $(document).ready(function(){
   });
 
   //Add input on unmarked click
-  $('.versions').on('click', 'li div.action.unmarked', function(){
+  $('.settings.versions').on('click', 'li div.action.unmarked', function(){
     console.log("click");
     var parent = $($(this).parent());
     var input_element = "<input type='text' placeholder='Enter commit message here'>";
@@ -70,17 +71,17 @@ $(document).ready(function(){
     parent.find('.message').find('input').focus();
   });
 
-  //Input enter just blurs it
-  $('.versions').on('keyup', 'li .message input', function(event){
+  //Input enter just blurs it (only for versions)
+  $('.settings.versions').on('keyup', 'li .message input', function(event){
     if (event.keyCode == 13) {
         $(this).blur();
     }
   });
 
-  /* ACTION METHODS */
+  /* ACTION METHODS FOR VERSIONS! */
 
   //On input blur (finished typing) -> Post new version to DB
-  $('.versions').on('blur', 'li .message input', function(event) {
+  $('.settings.versions').on('blur', 'li .message input', function(event) {
     //TODO: POST REQUEST WHY DO YOU NEED ALL THE DATA! why can I not send you just the version number?
     var elJson = getInfoFromElement(this);
     console.log(elJson);
@@ -98,7 +99,7 @@ $(document).ready(function(){
 
 
   //On unmark click -> Rollback (delete) version from db
-  $('.versions').on('click', 'li div.action.marked.unmark', function(){
+  $('.settings.versions').on('click', 'li div.action.marked.unmark', function(){
     console.log(this);
     $.ajax({
         url: '/versions/'+ getInfoFromElement(this).id,

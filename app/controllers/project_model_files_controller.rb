@@ -4,9 +4,9 @@ class ProjectModelFilesController < ApplicationController
 
   # Add a ModelFile to a Project.
   def create
-    project = Project.find(params[:project_id])
+    @project = Project.find(params[:project_id])
     model_file = ModelFile.find(params[:model_file_id])
-    @project_model_file = project.project_model_files.build(model_file_id: model_file.id)
+    @project_model_file = @project.project_model_files.build(model_file_id: model_file.id)
     @successful = false
 
     if @project_model_file.save
