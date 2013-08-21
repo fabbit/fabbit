@@ -21,6 +21,7 @@ class ProjectModelFilesController < ApplicationController
   # Delete a ModelFile from a Project
   def destroy
     @project_model_file = ProjectModelFile.find(params[:id])
+    @project = @project_model_file.project
     if @project_model_file.destroy
       respond_to do |format|
         format.js
