@@ -6,9 +6,10 @@ class ProjectModelFilesController < ApplicationController
   def create
     project = Project.find(params[:project_id])
     model_file = ModelFile.find(params[:model_file_id])
+    @project_model_file = project.project_model_files.build(model_file_id: model_file.id)
     @successful = false
 
-    if project.model_files << model_file
+    if @project_model_file.save
       @successful = true
     end
 
@@ -22,7 +23,7 @@ class ProjectModelFilesController < ApplicationController
     @project_model_file = ProjectModelFile.find(params[:id])
     if @project_model_file.destroy
       respond_to do |format|
-        format.js { render json: @project_model_file }
+        format.js
       end
     end
   end

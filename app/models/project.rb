@@ -48,6 +48,10 @@ class Project < ActiveRecord::Base
     self.model_files.map { |model_file| model_file.member }.compact.uniq
   end
 
+  def project_model_file(model_file)
+    self.project_model_files.where(model_file_id: model_file.id).first
+  end
+
   private
 
     def add_to_default_group

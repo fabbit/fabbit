@@ -14,6 +14,7 @@
 # An association class for the many-to-many relationship between the Project and ModelFile models
 
 class ProjectModelFile < ActiveRecord::Base
+  attr_accessible :project_id, :model_file_id
   validates :project_id, :model_file_id, presence: true
 
   belongs_to :project

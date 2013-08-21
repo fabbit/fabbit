@@ -1,7 +1,7 @@
-<% if project[:has_model_file] %>
-  <li id='<%= project[:project_model_file].id %>'> <input type='checkbox' checked >
+<% if project.model_files.include?(model_file)%>
+  <li id='<%= project.project_model_file(model_file).id %>'> <input type='checkbox' checked >
 <% else %>
-  <li id='<%= project[:id] %>'> <input type='checkbox'>
+  <li id='<%= project.id %>'> <input type='checkbox'>
 <% end %>
-  <%= project[:name] %>
+  <%= project.name %>
 </li>

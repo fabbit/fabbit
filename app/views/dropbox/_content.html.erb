@@ -4,9 +4,6 @@
   <div> Last viewed x months </div>
   <% if !content[:is_dir] %>
   <div> 
- 	<div class='opener'> v </div> 
-   	<%= render "dropbox/projects_dropdown", projects: content[:projects], model_file_id: content[:model_file_id] %>
-  </div>
 
   <script>
   	//This project opens and closes the project list
