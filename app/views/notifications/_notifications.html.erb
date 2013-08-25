@@ -1,0 +1,4 @@
+<li class="subtitle"> <%= notifications.count %> events </li>
+<% notifications.each do |notification| %>
+  <%= render "notifications/notification", notification: notification %>
+<% end %>

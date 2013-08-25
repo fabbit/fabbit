@@ -47,8 +47,7 @@
   	<div class="logo title"> <%= link_to Fabbit, navigate_url %> </div>
   	<div class="right notifications">
 		<ul class="dropdown">
-	    	<li class="subtitle"> 0 events </li>
-	    	<li> Hey! </li>
+        <%= render "notifications/notifications", notifications: @notifications %>
 	    </ul>
 	</div>
 	<div class="right member"> 
