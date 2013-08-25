@@ -80,6 +80,48 @@ $red: red;
 	padding: 10px 0px;
 }
 
+//Generic dropdown UI
+ul.dropdown {
+	position: absolute;
+}
+
+ul.dropdown li {
+	text-align: left;
+	display: none;
+	min-width: 100px;
+	width: 100%;
+	margin-bottom: 0px;
+	margin-top:-1px; //BTODO WTF IS THIS JANK SHIT BRO
+	padding: 10px 10px;
+	background: none;
+	border: 1px solid rgba(0,0,0,0);
+	cursor:pointer;
+}
+
+//Dropdown li: The first-child is always block, when expanded they all are
+ul.dropdown li:first-child, ul.dropdown.expanded li {
+	display: block;
+}
+
+//To accomodate for header
+ul.dropdown.expanded li:first-child{ 
+	background:none;
+}
+
+ul.dropdown.expanded li {
+	color: $gray;
+	background: white;
+	border: 1px solid lighten($gray, 40%);
+}
+
+ul.dropdown.expanded li:last-child{
+	border-bottom: 2px solid lighten($gray, 40%);
+}
+
+ul.dropdown.expanded li:hover {
+	color: $black;
+}
+
 //Sectionsa are groupings of rows! (Basically a row but with a margin at the bottom)
 .section {
 	margin-top: 20px;
@@ -160,41 +202,51 @@ $red: red;
 
 .header {
 	width: 100%;
-	float:left;
 	vertical-align: bottom;
 	border-bottom: 1px solid rgba(200,200,200,.6);
 	padding-bottom: 10px;
 	margin-bottom: 15px;
+	position: relative;
+	z-index: 3;
 }
 
-.header .subtitle {
-	color: $gray;
+.header .right {
+	position: absolute;
+	top:0px;
 }
+
+.header .member {
+	right: 123px;
+}
+
+.header .member .dropdown {
+	width: 80px;
+}
+
+.header .dropdown li:first-child {
+	text-align: center; 
+}
+
+.header .notifications {
+	right: 247px;
+}
+
+.header .notifications .dropdown {
+	width: 160px;
+}
+
+
+.header .notifications li:first-child {
+	width: 80px;
+}
+
+
 .header .logo {
 	float: left;
 }
 
-.header .member {
-	float: right;
-	cursor: pointer;
-	padding-top: 8px; /* TODO: THIS IS DISGUSTING FIGURE OUT A BETTER WAY */;
-}
-
-.header .member ul {
-	display: none;
-}
-.header .member ul li {
-	text-align: right;
-	margin: 3px 0px;
-	color: gray;
-}
-
-.header .member ul li:hover {
-	color: $black;
-}
-
-.header .member .subtitle:hover {
-	color: $black;
+.header .subtitle {
+	color: $gray;
 }
 
 .row.navigate {
@@ -296,44 +348,18 @@ $red: red;
 }
 
 
-//Revision specific
-.navigate ul.revisions {
-	position: absolute;
-	margin-left: 5px;
-	border: 1px solid rgba(0,0,0,0);
-	margin-top: -10px;
-}
 
-.navigate ul.revisions li {
-	text-align: left;
-	display: none;
-	min-width: 100px;
-	background: white;
-	margin-bottom: 0px;
-	padding: 10px 10px;
 
-}
-
-//The first-child is always block, when expanded they all are
-.navigate ul.revisions li:first-child, .navigate ul.revisions.expanded li {
-	display: block;
-}
-.navigate ul.revisions.expanded  {
-	background: white;
-	border: 1px solid lighten($gray, 40%);
-}
-
-.navigate ul.revisions.expanded li {
-	border-bottom: 1px solid lighten($gray, 40%);
-	color: $gray;
-}
-
-.navigate ul.revisions.expanded li:hover {
-	color: $black;
-}
+//Revisions dropdown stuff
 
 //The date display for revisions
-.navigate ul.revisions li span {
+
+.navigate ul.revisions.dropdown {
+	position: absolute;
+	margin-left: 5px;
+	margin-top: -10px;
+}
+.navigate ul.revisions.dropdown li span {
 	color: $gray;
 	display: block;
 	font-size: 14px; //TODO: getting messy again, maybe have spans be the subtitles;
@@ -341,7 +367,7 @@ $red: red;
 
 
 //Only show date whn expanded
-.navigate ul.revisions li:first-child span {
+.navigate ul.revisions.dropdown li:first-child span {
 	display: none;
 }
 
@@ -349,7 +375,7 @@ $red: red;
 	display: block;
 }
 
-.navigate ul.revisions li:first-child:before {
+.navigate ul.revisions.dropdown li:first-child:before {
 	content: ">";
 	font-size: 15px;
 	position: absolute;
@@ -358,7 +384,7 @@ $red: red;
 	color: $gray;
 }
 
-.navigate ul.revisions.expanded li:first-child:before {
+.navigate ul.revisions.dropdown.expanded li:first-child:before {
 	content: "v";
 }
 

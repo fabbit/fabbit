@@ -35,12 +35,26 @@
 			        $("#progressMessage").fadeOut(300);
 			    }
 			});
+
+        $(document).ready(function(){
+          $(".dropdown li:first-child").toggle(
+            function(){ $(this).parent().addClass("expanded")}, 
+            function(){ $(this).parent().removeClass("expanded")}
+            );
+        });
+
   		</script>
-  <div class="logo title"> <%= link_to Fabbit, navigate_url %> </div>
-	<div class="member"> 
-        	<div class="subtitle" id="me"> <%= current_member.name %> </div>
-		<ul>
-			<li> Notifications </li>
+  	<div class="logo title"> <%= link_to Fabbit, navigate_url %> </div>
+  	<div class="right notifications">
+		<ul class="dropdown">
+	    	<li class="subtitle"> 0 events </li>
+	    	<li> Hey! </li>
+	    </ul>
+	</div>
+	<div class="right member"> 
+		<ul class="dropdown">
+			<li class="subtitle" id="me"> <%= current_member.name %> </li>
+			<li> Your account </li>
 			<li> Logout </li>
 		</ul>
 	</div>
