@@ -33,11 +33,11 @@ module DropboxHelper
   # Returns the Member corresponding to the active Dropbox user
   # - TODO: test
   def current_member
-    @current_member = Member.find_by_dropbox_uid(dropbox_client.account_info["uid"].to_s)
-    @current_member.name = dropbox_client.account_info["display_name"]
-    if @current_member.save
-      return @current_member
-    end
+    @current_member = Member.where(dropbox_uid: dropbox_uid).first
+  end
+
+  def dropbox_uid
+    @dropbox_uid ||= dropbox_client.account_info["uid"].to_s
   end
 
   # Checks for a current_member
@@ -208,7 +208,11 @@ module DropboxHelper
 
   # Refresh the current member's name
   def refresh_name
-    current_member.name = dropbox_client.account_info["display_name"]
+    if DateTime.now - current_member.updated_at.to_datetime > 1.hour
+      p "Updatting"
+      current_member.name = dropbox_client.account_info["display_name"]
+      current_member.save
+    end
   end
 
   # Initializes the cache for a Version
