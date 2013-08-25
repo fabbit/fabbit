@@ -8,7 +8,7 @@
     Cached versions
   </div>
   <div class="row settings versions">
-    <ul>
+    <ul> 
       <% @history.each do |rev| %>
         <%= render "layouts/version", :revision => rev%> <!-- TODO: we should probably change where this is stored -->
       <% end %>
