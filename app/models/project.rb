@@ -55,8 +55,8 @@ class Project < ActiveRecord::Base
   private
 
     def add_to_default_group
-      Group.create!(name: "Default") if Group.all.count == 0
-      Group.all.first.projects << self if Group.all.first
+      group = Group.where(name: "Default").first_or_create!
+      group.members << self
     end
 
 end

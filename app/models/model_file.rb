@@ -41,8 +41,10 @@ class ModelFile < ActiveRecord::Base
   validates :path, :member_id, presence: true
 
   has_many :versions, dependent: :destroy
+
   has_many :project_model_files, dependent: :destroy
   has_many :projects, through: :project_model_files
+
   belongs_to :member
 
 
@@ -99,7 +101,7 @@ class ModelFile < ActiveRecord::Base
   end
 
   # Shortcut for getting the model file's file name
-  def filename
+  def name
     File.basename(self.path)
   end
 

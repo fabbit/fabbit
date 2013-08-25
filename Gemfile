@@ -5,6 +5,7 @@ gem 'bootstrap-sass', '2.1'
 gem 'bcrypt-ruby', '3.0.1'
 gem 'faker', '1.0.1'
 gem 'annotate', ">= 2.5.0"
+gem 'will_paginate', '~> 3.0'
 
 gem 'dropbox-sdk'
 gem 'json'

@@ -31,12 +31,20 @@ class Member < ActiveRecord::Base
   validates :dropbox_uid, :name, presence: true
 
   has_many :discussions, dependent: :destroy
+  has_many :annotations, dependent: :destroy
+
   has_many :model_files, dependent: :destroy
+  has_many :versions, through: :model_files
+  has_many :tracked_annotations, through: :versions, source: :annotations
+  has_many :tracked_discussions, through: :annotations, source: :discussions
 
   has_many :group_members, dependent: :destroy
   has_many :groups, through: :group_members
 
+  has_one :notification, dependent: :destroy
+
   after_create :add_to_default_group
+  after_create :add_notifications
 
   def participating_projects
     self.model_files.map { |model_file| model_file.projects }.flatten.compact.uniq
@@ -49,7 +57,11 @@ class Member < ActiveRecord::Base
   private
 
     def add_to_default_group
-      Group.create!(name: "Default") if Group.all.count == 0
-      Group.all.first.members << self if Group.all.first
+      group = Group.where(name: "Default").first_or_create!
+      group.members << self
+    end
+
+    def add_notifications
+      Notification.where(member_id: self.id).first_or_create!
     end
 end

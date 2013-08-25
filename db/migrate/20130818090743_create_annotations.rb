@@ -12,5 +12,6 @@ class CreateAnnotations < ActiveRecord::Migration
 
     add_index :annotations, :version_id
     add_index :annotations, :member_id
+    add_index :annotations, :created_at
   end
 end

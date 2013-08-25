@@ -45,6 +45,8 @@ Fabbit::Application.routes.draw do
     resources :discussions, only: [:index, :create]
   end
 
+  resources :notifications, only: [:index, :update]
+
   match "/model_file/:filename", to: "model_files#init_model_file", filename: /.+/, as: "init_model_file"
   match "/navigate/(:dropbox_path)", to: "dropbox#navigate", dropbox_path: /.+/, as: "navigate"
   # match "/navigate", to: "dropbox#navigate"

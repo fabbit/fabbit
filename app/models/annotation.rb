@@ -39,4 +39,16 @@ class Annotation < ActiveRecord::Base
   belongs_to :version
   belongs_to :member
   has_many :discussions, dependent: :destroy
+
+  # Generate a message and a link for notifications
+  def to_notification(current_member)
+    member_name = self.member == current_member ? "You" : "#{self.member.name}"
+    owner_name = self.version.member == current_member ? "your" : "#{self.version.member.name}'s"
+    file_name = self.version.name
+    {
+      message: "#{member_name} added an annotation to #{owner_name} file #{file_name}",
+      link: "/versions/#{self.version.id}",
+      time: self.created_at,
+    }
+  end
 end

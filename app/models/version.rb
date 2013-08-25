@@ -45,6 +45,10 @@ class Version < ActiveRecord::Base
     self.model_file.path
   end
 
+  def name
+    self.model_file.name
+  end
+
   def member
     self.model_file.member
   end

@@ -10,5 +10,6 @@ class CreateProjectModelFiles < ActiveRecord::Migration
     add_index :project_model_files, [:project_id, :model_file_id], unique: true
     add_index :project_model_files, :project_id
     add_index :project_model_files, :model_file_id
+    add_index :project_model_files, :created_at
   end
 end

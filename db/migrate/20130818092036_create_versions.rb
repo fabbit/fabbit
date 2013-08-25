@@ -11,5 +11,6 @@ class CreateVersions < ActiveRecord::Migration
 
     add_index :versions, [:model_file_id, :revision_number], unique: true
     add_index :versions, :revision_date
+    add_index :versions, :created_at
   end
 end

@@ -10,5 +10,6 @@ class CreateDiscussions < ActiveRecord::Migration
 
     add_index :discussions, :annotation_id
     add_index :discussions, :member_id
+    add_index :discussions, :created_at
   end
 end
