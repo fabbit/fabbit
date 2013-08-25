@@ -118,7 +118,7 @@ ul.dropdown.expanded li:first-child{
 }
 
 ul.dropdown.expanded li {
-	color: $gray;
+	color: $black;
 	background: white;
 	border: 1px solid lighten($gray, 40%);
 }
@@ -128,7 +128,7 @@ ul.dropdown.expanded li:last-child{
 }
 
 ul.dropdown.expanded li:hover {
-	color: $black;
+	background: #eee;
 }
 
 //Sectionsa are groupings of rows! (Basically a row but with a margin at the bottom)
@@ -269,6 +269,14 @@ ul.dropdown.expanded li:hover {
 ._page .dropdown li {
 	width: 100%;
 	box-sizing: border-box;
+}
+
+._page .dropdown li:first-child {
+	color: $black;
+	border: none;
+}
+._page .dropdown li:first-child:hover{
+	background:none;
 }
 
 .row.navigate {
