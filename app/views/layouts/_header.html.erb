@@ -41,14 +41,29 @@
             function(){ $(this).parent().addClass("expanded")}, 
             function(){ $(this).parent().removeClass("expanded")}
             );
+
+          $(".notifications .dropdown li:first-child").click(function(){
+           	//Do a post
+          	//"Read" all the unread ones
+          	$(".notifications .dropdown").children(".unread").each(function(){
+          		var el = this;
+          		$(this).animate({backgroundColor: "#fff"}, 1000, 
+          			function(){
+          				$(el).removeClass('unread')
+          			});
+          	});
+          });
         });
+
 
   		</script>
   	<div class="logo title"> <%= link_to Fabbit, navigate_url %> </div>
   	<div class="right notifications">
 		<ul class="dropdown">
 	    	<li class="subtitle"> 0 events </li>
-	    	<li> Hey! </li>
+	    	<li class="unread"> Hey! </li>
+	    	<li class="unread"> Heya! </li>
+	    	<li> Read </li>
 	    </ul>
 	</div>
 	<div class="right member"> 

@@ -4,6 +4,7 @@ $green: rgb(37, 134, 37);
 $light_green: #E0FFE0;
 $gray: gray;
 $red: red;
+$yellow: rgb(255, 255, 234);
 
  body {
  	color: $black;
@@ -235,6 +236,10 @@ ul.dropdown.expanded li:hover {
 	width: 160px;
 }
 
+.header .notifications .dropdown.expanded .unread {
+	background:$yellow;
+}
+
 
 .header .notifications li:first-child {
 	width: 80px;
@@ -461,7 +466,7 @@ ul.dropdown.expanded li:hover {
 	margin-top: 10px;
 }
 .model canvas {
-	background: rgb(255, 255, 234);
+	background: $yellow;
 	cursor: pointer;
 	border: 1px solid rgb(255, 233, 194);
 }
