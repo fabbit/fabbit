@@ -33,7 +33,7 @@ class DiscussionsController < ApplicationController
     )
     @discussion.member = current_member
 
-    if @discussion.save
+    if !@discussion.save
       @error = true
     end
 
