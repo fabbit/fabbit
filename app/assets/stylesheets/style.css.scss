@@ -107,6 +107,15 @@ ul.dropdown li span {
 	margin-top: 5px;
 }
 
+//Only show date whn expanded
+ul.dropdown li:first-child span {
+	display: none;
+}
+
+ul.dropdown.expanded li:first-child span {
+	display: block;
+}
+
 //Dropdown li: The first-child is always block, when expanded they all are
 ul.dropdown li:first-child, ul.dropdown.expanded li {
 	display: block;
@@ -378,9 +387,7 @@ ul.dropdown.expanded li:hover {
 }
 
 
-
-
-//Revisions dropdown stuff
+//version dropdown stuff
 
 //The date display for revisions
 
@@ -390,13 +397,8 @@ ul.dropdown.expanded li:hover {
 	margin-top: -10px;
 }
 
-//Only show date whn expanded
-.navigate ul.revisions.dropdown li:first-child span {
-	display: none;
-}
-
-.navigate ul.revisions.expanded li:first-child span {
-	display: block;
+.navigate ul.revisions.dropdown.expanded li:first-child {
+	background: white;
 }
 
 .navigate ul.revisions.dropdown li:first-child:before {
@@ -411,8 +413,6 @@ ul.dropdown.expanded li:hover {
 .navigate ul.revisions.dropdown.expanded li:first-child:before {
 	content: "v";
 }
-
-
 
 .files .inset{
 	position: relative;
