@@ -99,6 +99,13 @@ ul.dropdown li {
 	cursor:pointer;
 }
 
+//For dates and details
+ul.dropdown li span {
+	color: $gray;
+	display: block;
+	font-size: 14px; //TODO: getting messy again, maybe have spans be the subtitles;
+}
+
 //Dropdown li: The first-child is always block, when expanded they all are
 ul.dropdown li:first-child, ul.dropdown.expanded li {
 	display: block;
@@ -364,12 +371,6 @@ ul.dropdown.expanded li:hover {
 	margin-left: 5px;
 	margin-top: -10px;
 }
-.navigate ul.revisions.dropdown li span {
-	color: $gray;
-	display: block;
-	font-size: 14px; //TODO: getting messy again, maybe have spans be the subtitles;
-}
-
 
 //Only show date whn expanded
 .navigate ul.revisions.dropdown li:first-child span {

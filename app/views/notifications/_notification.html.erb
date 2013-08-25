@@ -1,0 +1,4 @@
+<li <%= "class='unread'" if unread %> >
+<%= link_to notification[:message], notification[:link] %>
+<span> <%= time_ago_in_words(notification[:time]) %> ago</span>
+</li>
