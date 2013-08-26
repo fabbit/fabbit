@@ -36,24 +36,26 @@
 
         $(document).ready(function(){
           $(".dropdown li:first-child").toggle(
-            function(){ $(this).parent().addClass("expanded")}, 
+
+          	//One expand add class and post
+            function(){ 
+
+            	$(this).parent().addClass("expanded")
+
+	    	 	//Do a post
+	           	$.ajax({
+	           		type: "PUT",
+	           		url: "<%= j notification_url(current_member.notification) %>",
+	           		data: {"count": $(".notifications .unread").size()},
+	           		error: AJAXerrorHandler
+	           	});          	
+            }, 
+            //On collapse collapse, unless its permenant
             function(){ 
             	if (!$(this).parent().hasClass('perm'))
             		$(this).parent().removeClass("expanded");
             	}
             );
-
-          $(".notifications .dropdown li:first-child").click(function(){
-           	//Do a post
-          	//"Read" all the unread ones
-          	$(".notifications .dropdown").children(".unread").each(function(){
-          		var el = this;
-          		$(this).animate({backgroundColor: "#fff"}, 1000, 
-          			function(){
-          				$(el).removeClass('unread')
-          			});
-          	});
-          });
         });
 
 
