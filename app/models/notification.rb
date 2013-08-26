@@ -14,4 +14,6 @@ class Notification < ActiveRecord::Base
   attr_accessible :count, :member_id
 
   belongs_to :member
+
+  before_save { self.count = 0 if self.count < 0 }
 end

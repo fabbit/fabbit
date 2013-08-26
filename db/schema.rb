@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130818092036) do
+ActiveRecord::Schema.define(:version => 20130825182007) do
 
   create_table "annotations", :force => true do |t|
     t.integer  "version_id"
@@ -85,6 +85,15 @@ ActiveRecord::Schema.define(:version => 20130818092036) do
   end
 
   add_index "model_files", ["member_id", "path"], :name => "index_model_files_on_member_id_and_path", :unique => true
+
+  create_table "notifications", :force => true do |t|
+    t.integer  "member_id"
+    t.integer  "count",      :default => 0
+    t.datetime "created_at",                :null => false
+    t.datetime "updated_at",                :null => false
+  end
+
+  add_index "notifications", ["member_id"], :name => "index_notifications_on_member_id"
 
   create_table "project_model_files", :force => true do |t|
     t.integer  "project_id"

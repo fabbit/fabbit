@@ -50,7 +50,7 @@ class AnnotationsController < ApplicationController
     @annotation.member = current_member
     if not @annotation.save
       @error = true
-      current_member.notifications.count += 1
+      current_member.notification.count += 1
     end
 
     respond_to do |format|

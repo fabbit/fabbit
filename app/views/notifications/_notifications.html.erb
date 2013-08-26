@@ -1,4 +1,17 @@
-<li class="subtitle"> <%= notifications.count %> events </li>
+<li class="subtitle" id="notifications"> <%= notifications.count %> events </li>
 <% notifications.each do |notification| %>
   <%= render "notifications/notification", notification: notification, unread: notifications.count == 0 ? false : true %>
 <% end %>
+
+<script>
+  $("#notifications").click(function() {
+    console.log("clicl");
+    $.ajax({
+      type: "PUT",
+      url: "<%= j notification_url(current_member.notification) %>",
+      data: { count: <%= notifications.count %> }
+    }).done(function(data) {
+      console.log(data)
+    });
+  });
+</script>

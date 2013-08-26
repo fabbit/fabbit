@@ -56,7 +56,7 @@ class Project < ActiveRecord::Base
 
     def add_to_default_group
       group = Group.where(name: "Default").first_or_create!
-      group.members << self
+      group.projects << self
     end
 
 end
