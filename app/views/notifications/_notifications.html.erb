@@ -1,4 +1,4 @@
-<li class="subtitle" id="notifications"> <%= notifications.count %> events </li>
+<li class="subtitle" id="notifications"> <%= pluralize notifications.count, "event" %> </li>
 <% notifications.each do |notification| %>
   <%= render "notifications/notification", notification: notification %>
 <% end %>
