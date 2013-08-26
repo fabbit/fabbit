@@ -104,6 +104,16 @@ ul.dropdown li span {
 	color: $gray;
 	display: block;
 	font-size: 14px; //TODO: getting messy again, maybe have spans be the subtitles;
+	margin-top: 5px;
+}
+
+//Only show date whn expanded
+ul.dropdown li:first-child span {
+	display: none;
+}
+
+ul.dropdown.expanded li:first-child span {
+	display: block;
 }
 
 //Dropdown li: The first-child is always block, when expanded they all are
@@ -117,7 +127,7 @@ ul.dropdown.expanded li:first-child{
 }
 
 ul.dropdown.expanded li {
-	color: $gray;
+	color: $black;
 	background: white;
 	border: 1px solid lighten($gray, 40%);
 }
@@ -127,7 +137,7 @@ ul.dropdown.expanded li:last-child{
 }
 
 ul.dropdown.expanded li:hover {
-	color: $black;
+	background: #eee;
 }
 
 //Sectionsa are groupings of rows! (Basically a row but with a margin at the bottom)
@@ -240,7 +250,7 @@ ul.dropdown.expanded li:hover {
 }
 
 .header .notifications .dropdown {
-	width: 160px;
+	width: 250px;
 }
 
 .header .notifications .dropdown.expanded .unread {
@@ -259,6 +269,23 @@ ul.dropdown.expanded li:hover {
 
 .header .subtitle {
 	color: $gray;
+}
+
+._page .dropdown {
+	width: 100%;
+}
+
+._page .dropdown li {
+	width: 100%;
+	box-sizing: border-box;
+}
+
+._page .dropdown li:first-child {
+	color: $black;
+	border: none;
+}
+._page .dropdown li:first-child:hover{
+	background:none;
 }
 
 .row.navigate {
@@ -360,9 +387,7 @@ ul.dropdown.expanded li:hover {
 }
 
 
-
-
-//Revisions dropdown stuff
+//version dropdown stuff
 
 //The date display for revisions
 
@@ -372,13 +397,8 @@ ul.dropdown.expanded li:hover {
 	margin-top: -10px;
 }
 
-//Only show date whn expanded
-.navigate ul.revisions.dropdown li:first-child span {
-	display: none;
-}
-
-.navigate ul.revisions.expanded li:first-child span {
-	display: block;
+.navigate ul.revisions.dropdown.expanded li:first-child {
+	background: white;
 }
 
 .navigate ul.revisions.dropdown li:first-child:before {
@@ -393,8 +413,6 @@ ul.dropdown.expanded li:hover {
 .navigate ul.revisions.dropdown.expanded li:first-child:before {
 	content: "v";
 }
-
-
 
 .files .inset{
 	position: relative;

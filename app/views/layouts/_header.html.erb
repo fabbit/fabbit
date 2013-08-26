@@ -27,11 +27,9 @@
 
 			$.ajaxSetup({
 			    beforeSend: function() {
-			    	console.log("ONG");
 			        $("#progressMessage").fadeIn(300);
 			    },
 			    complete: function() {
-			    	console.log("OFGS");
 			        $("#progressMessage").fadeOut(300);
 			    }
 			});
@@ -39,7 +37,10 @@
         $(document).ready(function(){
           $(".dropdown li:first-child").toggle(
             function(){ $(this).parent().addClass("expanded")}, 
-            function(){ $(this).parent().removeClass("expanded")}
+            function(){ 
+            	if (!$(this).parent().hasClass('perm'))
+            		$(this).parent().removeClass("expanded");
+            	}
             );
 
           $(".notifications .dropdown li:first-child").click(function(){
@@ -60,7 +61,9 @@
   	<div class="logo title"> <%= link_to Fabbit, navigate_url %> </div>
   	<div class="right notifications">
 		<ul class="dropdown">
-        <%= render "notifications/notifications", notifications: @notifications %>
+        	<%= render "notifications/notifications", notifications: @notifications %>
+        	<li> <%= link_to "See all notifications", notifications_url %> </li>
+
 	    </ul>
 	</div>
 	<div class="right member"> 
