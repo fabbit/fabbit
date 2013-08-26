@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130825182007) do
+ActiveRecord::Schema.define(:version => 20130826113326) do
 
   create_table "annotations", :force => true do |t|
     t.integer  "version_id"
@@ -127,8 +127,12 @@ ActiveRecord::Schema.define(:version => 20130825182007) do
     t.string   "revision_number"
     t.string   "details"
     t.datetime "revision_date"
-    t.datetime "created_at",      :null => false
-    t.datetime "updated_at",      :null => false
+    t.datetime "created_at",        :null => false
+    t.datetime "updated_at",        :null => false
+    t.string   "file_file_name"
+    t.string   "file_content_type"
+    t.integer  "file_file_size"
+    t.datetime "file_updated_at"
   end
 
   add_index "versions", ["model_file_id", "revision_number"], :name => "index_versions_on_model_file_id_and_revision_number", :unique => true

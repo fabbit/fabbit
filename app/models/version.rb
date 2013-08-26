@@ -54,10 +54,9 @@ class Version < ActiveRecord::Base
   end
 
   def content
-    @content
+    Paperclip.io_adapters.for(self.file).read
   end
 
-  def content=(content)
-    @content = content
-  end
+  # Paperclip attachment
+  has_attached_file :file
 end

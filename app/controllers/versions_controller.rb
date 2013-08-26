@@ -10,7 +10,7 @@ class VersionsController < ApplicationController
   def show
     @version = Version.find(params[:id])
     @model_file = @version.model_file
-    @model_file.content = load_cached(@version)
+    @model_file.content = @version.content # load_cached(@version)
     @member = current_member
     @breadcrumbs = to_breadcrumbs(@model_file)
     respond_to do |format|
@@ -55,7 +55,8 @@ class VersionsController < ApplicationController
     )
 
     if @version.save
-      cache(@version)
+      @version.file = File.open(write_to_temp(dropbox_client.get_file(@version.path)), "rb") # cache(@version)
+      @version.save
 
       @rev = {
         id: @version.id,
@@ -100,7 +101,7 @@ class VersionsController < ApplicationController
   # Returns the contents of the Version file
   def contents
     @version = Version.find(params[:id])
-    @file = load_cached(@version)
+    @file = @version.content # load_cached(@version)
     respond_to do |format|
       format.js { render text: @file }
     end

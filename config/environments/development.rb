@@ -34,4 +34,13 @@ Fabbit::Application.configure do
 
   # Expands the lines which load the assets
   config.assets.debug = true
+
+  config.paperclip_defaults = {
+    :storage => :s3,
+    :s3_credentials => {
+      :bucket => "fabbit",
+      :access_key_id => "AKIAJUXKHSDBJLJR3DPQ",
+      :secret_access_key => "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"
+    }
+  }
 end

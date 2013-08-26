@@ -40,6 +40,23 @@ module DropboxHelper
     @dropbox_uid ||= dropbox_client.account_info["uid"].to_s
   end
 
+  # Temp folder for holding files to be sent to S3
+  def temp_dir
+    File.join(Rails.root, "tmp")
+  end
+
+  # Write a file to the tmp folder
+  def write_to_temp(content)
+    dir = File.join(temp_dir, rand_file_name)
+    File.open(dir, 'wb') {|f| f.write(content) }
+    return dir
+  end
+
+  # Random file name
+  def rand_file_name
+    (0...8).map{(65+rand(26)).chr}.join
+  end
+
   # Checks for a current_member
   # - NOTE: is this necessary with the addition of the live_dropbox_session global filter?
   def current_member?

@@ -18,6 +18,9 @@ gem 'jquery-rails'
 gem 'thin'
 gem 'quiet_assets'
 
+gem 'paperclip'
+gem 'aws-sdk'
+
 group :development do
 end
 

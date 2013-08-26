@@ -13,7 +13,7 @@ class ModelFilesController < ApplicationController
     @model_file = ModelFile.find(params[:id])
     @version = @model_file.latest_version
     @model = @model_file
-    @model_file.content = load_cached(@model_file.latest_version)
+    @model_file.content = @model_file.latest_version.content # load_cached(@model_file.latest_version)
     @member = current_member
     @breadcrumbs = to_breadcrumbs(@model_file)
 
@@ -40,7 +40,8 @@ class ModelFilesController < ApplicationController
         revision_date: DateTime.now
       )
 
-      initialize_cache(version)
+      version.file = File.open(write_to_temp(dropbox_client.get_file(version.path)), "rb") # cache(@version)
+      version.save
     end
 
     redirect_to model_file_path(model_file)
@@ -51,7 +52,7 @@ class ModelFilesController < ApplicationController
   # *NOTE:* Moved to JS response under show
   def contents
     model_file = ModelFile.find(params[:id])
-    model_file.content = load_cached(model_file.latest_version)
+    model_file.content = model_file.latest_version.content # load_cached(model_file.latest_version)
     respond_to do |format|
       format.js { render text: model_file.content }
     end
