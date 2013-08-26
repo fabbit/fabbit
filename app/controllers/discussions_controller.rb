@@ -34,6 +34,7 @@ class DiscussionsController < ApplicationController
     @discussion.member = current_member
 
     if !@discussion.save
+      current_member.notifications.count += 1
       @error = true
     end
 

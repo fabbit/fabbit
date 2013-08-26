@@ -6,7 +6,7 @@ require 'dropbox_sdk'
 
 class DropboxController < ApplicationController
 
-  skip_before_filter :live_dropbox_session, :refresh_name, :get_notifications, only: :new
+  skip_before_filter :live_dropbox_session, :refresh_name, :notifications, only: :new
 
   # Connects Fabbit to a Dropbox account and start the session.
   # Creates a new Member or find the corresponding member, and assign it to current_member.

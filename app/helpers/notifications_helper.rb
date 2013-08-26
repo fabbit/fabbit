@@ -1,7 +1,7 @@
 module NotificationsHelper
 
   # Get all notifications for the current member
-  def get_all_notifications
+  def get_notifications(page=1, per_page=nil)
     my_annots = current_member.annotations
     tracked_annots = current_member.tracked_annotations
 
@@ -32,7 +32,13 @@ module NotificationsHelper
       notifications << item.to_notification(current_member)
     end
 
-    notifications.sort_by { |item| item[:time] }.reverse
+    notifications = notifications.sort_by { |item| item[:time] }.reverse
+
+    per_page ||= 8
+
+    head = per_page * (page - 1)
+    tail = per_page * page - 1
+    notifications[head..tail]
   end
 
 end

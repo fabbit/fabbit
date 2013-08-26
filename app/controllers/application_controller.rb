@@ -5,7 +5,7 @@ class ApplicationController < ActionController::Base
   include DropboxHelper
   include NotificationsHelper
 
-  before_filter :live_dropbox_session, :refresh_name, :get_notifications
+  before_filter :live_dropbox_session, :refresh_name, :notifications
 
 
   # Filter for checking that the Dropbox session is still live for every request
@@ -15,8 +15,8 @@ class ApplicationController < ActionController::Base
     end
   end
 
-  def get_notifications
-    @notifications = get_all_notifications
+  def notifications
+    @notifications = get_notifications
   end
 
 end
