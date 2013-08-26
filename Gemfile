@@ -5,7 +5,6 @@ gem 'bootstrap-sass', '2.1'
 gem 'bcrypt-ruby', '3.0.1'
 gem 'faker', '1.0.1'
 gem 'annotate', ">= 2.5.0"
-gem 'will_paginate', '~> 3.0'
 
 gem 'dropbox-sdk'
 gem 'json'
@@ -16,9 +15,10 @@ gem 'pg'
 
 gem 'jquery-rails'
 
+gem 'thin'
+gem 'quiet_assets'
+
 group :development do
-  gem 'thin'
-  gem 'quiet_assets'
 end
 
 group :development, :test do

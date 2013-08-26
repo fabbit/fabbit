@@ -8,7 +8,7 @@ class NotificationsController < ApplicationController
 
   def update
     notification = Notification.find(params[:id])
-    notification.count -= params[:count]
+    notification.count -= params[:count].to_i
     notification.save
 
     respond_to do |format|
