@@ -1,0 +1,8 @@
+//"Read" all the unread ones
+$(".notifications .dropdown").children(".unread").each(function(){
+	var el = this;
+	$(this).delay(1000).animate({backgroundColor: "#fff"}, 1000, 
+		function(){
+			$(el).removeClass('unread')
+		});
+});

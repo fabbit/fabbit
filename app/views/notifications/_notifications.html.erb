@@ -1,17 +1,18 @@
 <li class="subtitle" id="notifications"> <%= notifications.count %> events </li>
 <% notifications.each do |notification| %>
-  <%= render "notifications/notification", notification: notification, unread: notifications.count == 0 ? false : true %>
+  <%= render "notifications/notification", notification: notification %>
 <% end %>
 
 <script>
-  $("#notifications").click(function() {
-    console.log("clicl");
-    $.ajax({
-      type: "PUT",
-      url: "<%= j notification_url(current_member.notification) %>",
-      data: { count: <%= notifications.count %> }
-    }).done(function(data) {
-      console.log(data)
-    });
-  });
+  //Actually make some unread and some read!
+  var numUnread = <%= current_member.notification.count %>;
+  console.log(numUnread);
+
+  $('.notifications ul li:not(:first-child)').each(function(){
+    if (numUnread != 0) {
+      $(this).addClass('unread');
+      numUnread --;
+    }
+  })
+
 </script>
