@@ -34,8 +34,11 @@ class DiscussionsController < ApplicationController
     @discussion.member = current_member
 
     if !@discussion.save
-      current_member.notifications.count += 1
       @error = true
+    else
+      notification = current_member.notification
+      notification.count = notification.count + 1
+      notification.save
     end
 
     respond_to do |format|

@@ -33,7 +33,7 @@ module DropboxHelper
   # Returns the Member corresponding to the active Dropbox user
   # - TODO: test
   def current_member
-    @current_member = Member.where(dropbox_uid: dropbox_uid).first
+    @current_member ||= Member.where(dropbox_uid: dropbox_uid).first
   end
 
   def dropbox_uid

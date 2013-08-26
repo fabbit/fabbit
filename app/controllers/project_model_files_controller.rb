@@ -10,8 +10,9 @@ class ProjectModelFilesController < ApplicationController
     @successful = false
 
     if @project_model_file.save
-      current_member.notification.count += 1
       @successful = true
+      current_member.notification.count += 1
+      current_member.notification.save
     end
 
     respond_to do |format|

@@ -5,26 +5,22 @@ module NotificationsHelper
     my_annots = current_member.annotations
     tracked_annots = current_member.tracked_annotations
 
+    annots = (my_annots + tracked_annots).uniq
+
     my_discs = current_member.discussions
     tracked_discs = current_member.tracked_discussions
+
+    discs = (my_discs + tracked_discs).uniq
 
     proj = ProjectModelFile.all
 
     notifications = []
 
-    my_annots.each do |item|
+    annots.each do |item|
       notifications << item.to_notification(current_member)
     end
 
-    tracked_annots.each do |item|
-      notifications << item.to_notification(current_member)
-    end
-
-    my_discs.each do |item|
-      notifications << item.to_notification(current_member)
-    end
-
-    tracked_discs.each do |item|
+    discs.each do |item|
       notifications << item.to_notification(current_member)
     end
 
