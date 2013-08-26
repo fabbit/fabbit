@@ -16,7 +16,7 @@ class ApplicationController < ActionController::Base
   end
 
   def notifications
-    @notifications = get_notifications
+    @notifications = get_notifications(1, nil, false)
   end
 
 end

@@ -1,7 +1,7 @@
 module NotificationsHelper
 
   # Get all notifications for the current member
-  def get_notifications(page=1, per_page=nil)
+  def get_notifications(page=1, per_page=nil, show_unread=true)
     my_annots = current_member.annotations
     tracked_annots = current_member.tracked_annotations
 
@@ -29,6 +29,11 @@ module NotificationsHelper
     end
 
     notifications = notifications.sort_by { |item| item[:time] }.reverse
+
+    if not show_unread
+      notifications = notifications[0..(current_member.notification.count - 1)]
+      notifications = [] if current_member.notification.count == 0
+    end
 
     per_page ||= 8
 

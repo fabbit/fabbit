@@ -1,4 +1,8 @@
-<li class="subtitle" id="notifications"> <%= pluralize notifications.count, "event" %> </li>
+<% if dropdown %>
+  <li class="subtitle" id="notifications"> <%= pluralize current_member.notification.count, "event" %> </li>
+<% else %>
+  <li class="subtitle" id="notifications"> <%= pluralize notifications.count, "event" %> </li>
+<% end %>
 <% notifications.each do |notification| %>
   <%= render "notifications/notification", notification: notification %>
 <% end %>
