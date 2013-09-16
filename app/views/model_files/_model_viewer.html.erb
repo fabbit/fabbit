@@ -1,24 +1,94 @@
 <div class="row model">
   <p id="stlstring"><%= @model_file.content %></p>
   <script>
-    $(document).ready(function(){
-      var viewer = new modelViewer("#container", "#annotation_list",<%= @version.id %>, <%= @member.id %>);
-      viewer.addModel("<%= escape_javascript(contents_version_url(@version)) %>");
 
-      $("#annotation_controller").toggle(
-          function(){ $("#annotation_controller").html("Turn annotations on"); viewer.toggleAnnotations(); },
-          function(){ $("#annotation_controller").html("Turn annotations off"); viewer.toggleAnnotations(); }
+    //We define this variable to be used by the annotation partial file!
+    var annotations = {};
+
+    $(document).ready(function(){
+
+        //UI ELEMENT FOR EVERAYTHING BTODO: MOVE TO A NEW CLASS AND MAKE MORE SENSIBLE?
+        var annotationUI = $("#annotations");
+
+        annotationUI.addAnnotation = function(annotation_html) {
+          $("#annotation_list").append(annotation_html); 
+        }
+
+        annotationUI.highlightAnnotation = function(annotation_id) {
+          $("#annotation_list").children().each(function(index, e){
+            var active_annot = "annotation-" + annotation_id;
+            if (e.id == active_annot) {
+              $(e).addClass("active");
+            } else {
+              $(e).removeClass("active");
+            }
+          })
+        }
+
+        annotationUI.addBindings = function(viewer) {
+          var me = this;
+          $("#annotation_list").on("click", "li", function(){
+
+            if ($(this).hasClass("active")) {
+              $(this).removeClass("active");
+            } else {
+
+              var id = this.id;
+              id = id.split("-")[1];
+              me.highlightAnnotation(id);
+              viewer.highlightAnnotation(id);
+            }
+        
+          });
+
+          $("#annotation_list li").on("keyup", "input", function(e){
+            if (e.which == 13) {
+              var id = $(this).parent().parent().attr('id');
+              id = id.split("-")[1];
+              var discussionText = $(this).val();
+              $.post('/annotations/' + id + '/discussions', {"member_id":0, "text": discussionText}, function(data){
+                //Do nothing on success
+              })
+            }
+          })
+
+        }
+
+        //VIEWER ELEMENT FOR EVERYTHING (initialized with the ui object)
+        var viewer = new modelViewer("#container", <%= @version.id %>, <%= @member.id %>, annotationUI);
+        viewer.initialize();
+        viewer.addModel("<%= escape_javascript(contents_version_url(@version)) %>");
+
+        for (var key in annotations){ 
+          viewer.registerAnnotation(key, annotations[key]);
+        }
+        
+        $("#annotation_controller").toggle(
+            function(){ $("#annotation_controller").html("View annotations"); viewer.toggleAnnotations(); },
+            function(){ $("#annotation_controller").html("Hide annotations"); viewer.toggleAnnotations(); }
         );
+
+
+        Window.objectViewer = viewer;
+
+        //bind the viewer object to the ui object
+        annotationUI.addBindings(Window.objectViewer);
+        Window.annotationUI = annotationUI;
     });
+  
   </script>
   <div id="container">
       <div class="status"> <span id="loader_status"> </span> </div>
-      <div id="annotation_controller" class="status" > Turn annotations off </div>
+      <div id="annotation_controller" class="status" > Hide annotations </div>
   </div>
 
   <div id="annotations">
     <div class="subtitle">Annotations </div>
     <ul id="annotation_list">
+      <!-- Renders each annotation using _annotation.html.erb -->
+      <%= render @version.annotations %> 
     </ul>
   </div>
 </div>
+
+

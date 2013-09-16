@@ -1,5 +1,15 @@
 <li id='annotation-<%= annotation.id %>'>
-  <%= annotation.text %>
-  <ul class='discussions'></ul>
-  <input class='discussion_input' placeholder='Add to discussion'>
+  <span class="member"> <%= annotation.member.name %> </span> <span class="annotation-text"> <%= annotation.text %> </span> 
+  <div class="discussions">
+  	<ul class='discussions_list'>
+  		<%= render annotation.discussions %>
+  		<script>
+        /*  We use this variable to store the metadata about annotations that we need to register them with the viewer. 
+            This should change based on what parent the annotation has (a 3d viewer, an image, a text document, etc)
+        */
+  			annotations[<%=annotation.id%>] = {"camera": "<%=annotation.camera%>", "coordinates": "<%= annotation.coordinates%>"};
+  		</script>
+  	</ul>
+  	<input class='discussion_input' placeholder='Add to discussion'>
+  </div>
 </li>

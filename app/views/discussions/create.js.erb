@@ -1,0 +1,3 @@
+var annotation_html = "#annotation-<%= @discussion.annotation.id %>"
+$(annotation_html + " .discussions_list").append("<%= j render @discussion %>");
+$(annotation_html + " input ").val("");

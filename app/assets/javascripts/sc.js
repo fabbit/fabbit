@@ -1,4 +1,4 @@
-modelViewer = function(sceneContainer, annotationContainer, uniqueID, memberID) {
+modelViewer = function(sceneContainer, uniqueID, memberID, annotationUI) {
 
 	//Essentials
 	var camera;
@@ -10,7 +10,6 @@ modelViewer = function(sceneContainer, annotationContainer, uniqueID, memberID) 
 	var sceneID = uniqueID;
         var memberID = memberID;
 	var sceneElement = $(sceneContainer);
-	var annotationContainer = annotationContainer;
 
 	//Intersection variables
 	var plane;
@@ -20,17 +19,39 @@ modelViewer = function(sceneContainer, annotationContainer, uniqueID, memberID) 
 	//Camera tween
 	var tween;
 
+	//Me
+	var me = this;
+
+	/* HELPER FUNCTIONS */
 	function debug(str){
 		if(true){
 			console.log(str);
 		}
 	}
+	function v3ToString(v){
+			return v.x + ',' + v.y + ',' + v.z;
+	}
+	function stringToV3(s){
+		s = s.split(',');
+		if (s.length != 3){
+			error("string length wasn't 3 in stringToV3");
+			return;
+		} else{
+			if (typeof s[0] == "string")
+				return new THREE.Vector3(parseFloat(s[0]), parseFloat(s[1]), parseFloat(s[2]));
+			else 
+				return new THREE.Vector3(s[0], s[1], s[2]);
+		}
+	}
+
+	/* PRIVATE FUNCTIONS */
 	function animate() {
 		requestAnimationFrame(animate);
 		controller.controls.update();
 		TWEEN.update();
 		renderer.render(scene.scene, camera);
 	}
+
 	function moveCamera(newPosition) {
 		//camera.position = newPosition;
 
@@ -46,6 +67,7 @@ modelViewer = function(sceneContainer, annotationContainer, uniqueID, memberID) 
 		camera.updateMatrix();
 	}
 
+	
 	function init(){
 		
 		objects = [];
@@ -59,6 +81,7 @@ modelViewer = function(sceneContainer, annotationContainer, uniqueID, memberID) 
 		renderer = new THREE.WebGLRenderer();
 		renderer.setSize(scene.width, scene.height);
 		sceneElement.append(renderer.domElement);
+		debug("Added renderer to dom");
 
 		//Add event listeners
 		renderer.domElement.addEventListener('mousedown', function(){ moveFlag = 0;}, false);
@@ -84,13 +107,14 @@ modelViewer = function(sceneContainer, annotationContainer, uniqueID, memberID) 
 		var pointLight2 = new THREE.PointLight(0xFFFFFF);
 		pointLight2.position = new THREE.Vector3(-40,-50,-130);
 		scene.scene.add(pointLight2);
+		debug("Added lighting to scene");
 
 		//Add plane!
 		plane = new Plane();
-		
-		//initialize annotations
-		annot = new Annotations(annotationContainer);
 
+		//Have a variable around for annotation functions
+		annot = new Annotations();
+		
 		animate();
 		
 	}
@@ -116,13 +140,46 @@ modelViewer = function(sceneContainer, annotationContainer, uniqueID, memberID) 
 		if(moveFlag === 0){
 			event.preventDefault();
 			var ray = intersector(event);
-			if (!annot.intersects(ray)){
-				if (!model.intersects(ray)) {
-					plane.intersects(ray);
-				}
-			}
+			var intersect_response = annot.intersects(ray);
+			if (intersect_response) {
+				//Highlight the right annotation
+				me.highlightAnnotation(intersect_response);
+				annotationUI.highlightAnnotation(intersect_response);
+				return;
+			} 
+
+			intersect_response = model.intersects(ray);
+			if (intersect_response) {
+				//Add a new annotation on the point
+				postAnnotation(intersect_response);
+				return;
+			} 
+
+			intersect_response = plane.intersects(ray);
+			if (intersect_response) {
+				//Add a new annotation on the point
+				postAnnotation(intersect_response);
+				return;
+			} 
 		}
 	}	
+
+	function postAnnotation(point){
+		var name;
+		name = prompt("Please enter a title for this annotation:");
+		debug("Annotation name is " + name);
+		if (name === null || name === ""){
+			//BTODO: ERROR!?
+		} else {
+
+			console.log("POST ANNOTATION AT " + point);
+			$.post('/versions/' + sceneID + '/annotations', {"camera": v3ToString(camera.position.clone()), "coordinates": v3ToString(point) , "text": name}, function(data){
+				//Do nothing on success
+			});
+		}
+	}
+
+	/* DATA MODELS/CLASSES */
 
 	//PLANE CLASS (subclass model?)
 	Plane = function(){
@@ -140,8 +197,7 @@ modelViewer = function(sceneContainer, annotationContainer, uniqueID, memberID) 
 			var intersect = ray.intersectObjects([plane]);
 			if(intersect.length >0){
 				debug("Intersected plane");
-				annot.newAnnotation(intersect[0].point);
-				return true;
+				return intersect[0].point;
 			} else {
 				return false;
 			}
@@ -154,7 +210,7 @@ modelViewer = function(sceneContainer, annotationContainer, uniqueID, memberID) 
 	Model = function(fileName, statusElement){
 
 		var file = fileName;
-		var loaderStatus_element = $(statusElement);
+		var loaderStatus_element = $("#loader_status"); //todo: make this better!
 
 		var objectColor = "#C0D8F0";
 		var object;
@@ -168,7 +224,7 @@ modelViewer = function(sceneContainer, annotationContainer, uniqueID, memberID) 
 			loader.addEventListener( 'load', function ( event ) {
 				
 				var geometry = event.content;
-				$(loaderStatus_element).html("Loaded element </br> s to zoom, a to pan");
+				$(loaderStatus_element).html("s to zoom, d to pan");
 
 				//Create material and mesh
 				var material = new THREE.MeshLambertMaterial({color:objectColor, shading: THREE.FlatShading});
@@ -198,8 +254,7 @@ modelViewer = function(sceneContainer, annotationContainer, uniqueID, memberID) 
 			var intersect = ray.intersectObjects([object]);
 			if(intersect.length >0){
 				debug("Intersects model");
-				annot.newAnnotation(intersect[0].point);
-				return true;
+				return intersect[0].point;
 			} else {
 				return false;
 			}
@@ -209,105 +264,37 @@ modelViewer = function(sceneContainer, annotationContainer, uniqueID, memberID) 
 	this.addModel = function(fileName){
 		model = new Model(fileName);
 		model.load();
-		//model.setColor("#eeee")
 	}
 
-	//CLASS ANNOTATIONS!!!! instantiated with id of ul you want to use
-	Annotations = function(annotationContainer) {
+	//ANNOTATIONS
+	Annotations = function() {
 		
-		var annotationContainer_element = $(annotationContainer);
-		var annotations = {}; // Dictionary of annotation id -> annotation json object
-		
-		var annotation_map = [[], []]; //Map of annotation objects to id's using 2 lists [ objects, id's]
-		var annotColor = "#3079ed"; 
 
-		var viewAnnots =  true;
+		var annotations = {}  //annotations[id] = [data in json,  actual object]
+		var obj_to_id = [[],[]]; //two arrays, one for id one for object
+		var annotColor =  "#3079ed";
+		var viewAnnots = true;
+
 
 		/* HELPER FUNCTIONS */
-		function v3ToString(v){
-			return v.x + ',' + v.y + ',' + v.z;
-		}
-		function stringToV3(s){
-			s = s.split(',');
-			if (s.length != 3){
-				error("string length wasn't 3 in stringToV3");
-				return;
-			} else{
-				return new THREE.Vector3(s[0], s[1], s[2]);
-			}
-		}
+
+		//Create a mapping between an object and its id (for click events)
 		function createMap(id, object) {
-			annotation_map[0].unshift(object);
-			annotation_map[1].unshift(id);
+			obj_to_id[0].unshift(object);
+			obj_to_id[1].unshift(id);
 		}
+
+		//Get an ID based on the actual 3d object that was clicked
 		function getIdWithObj(object){
-			return annotation_map[1][annotation_map[0].indexOf(object)];
-		}
-		function getIdWithHtml(html){
-			return html.split('-')[1];
+			return obj_to_id[1][obj_to_id[0].indexOf(object)]; 
 		}
 
-		/* PRIVATE METHODS */
+		/* ACTUAL FUNCTIONS */
+		//The register annotation function takes an id and position data (camera,point) and adds an actual annotation object to the viewer for it
+		this.newAnnotation = function(id, camera, point) {
+			annotations[id] =  [];
+			annotations[id][0] = {"camera": camera, "point": point}; //Register the data for the annotation
 
-		//UI FUNCTIONS 
-		function updateUI(){
-			var annotation_html = "";
-			for (var id in annotations){
-				var annotObj = annotations[id];
-
-				var discussion_html = "";
-				for(var j=0; j< annotObj.discussions.length; j++){
-					var discussionObj = annotObj.discussions;
-					//Each discussion is <li> <div class='member'> member id </div> <div class='text'> discussion text </div>
-					discussion_html += "<li> <div class='member'>" + discussionObj[j].member_id + "</div>" +
-											"<div class='text'>" + discussionObj[j].text + "</div> </li>";
-
-				}
-				//Finished with all the discussions, they are wrapped in "ul.discussions"
-				discussion_html = "<ul class='discussions'>" + discussion_html + "</ul>"
-
-				//Each annotation is "li#annotation-id" and has its text, the discussions, and the discussion input
-				annotation_html += "<li id='annotation-" + id + "'>" + annotObj.text + discussion_html + "<input class='discussion_input' placeholder='Add to discussion'> </li>";
-			} 
-
-			//Add all annotations to annotation container
-			annotationContainer_element.html(annotation_html);
-		}
-
-		function highlightAnnotation(id) {
-			annotationContainer_element.children("li").each(function(){
-				if ( getIdWithHtml(this.id) == id) {
-					$(this).addClass('active');
-				} else {
-					$(this).removeClass('active');
-				}
-			});
-			moveCamera(annotations[id].camera);
-		}
-
-
-		//OTHER
-		//parses dirty json -> returns clean json
-		function parseAnnotation(annotJSON){
-			var discussions = [];
-			for (var i=0; i< annotJSON.discussions.length; i++){
-				var disc = annotJSON.discussions[i];
-				discussions.unshift({"member_id": disc.member_id , "text": disc.text});
-			}
-
-			//TODO: What do we do if something goes wrong?
-
-			return [{"camera": stringToV3(annotJSON.camera), 
-					"coordinates": stringToV3(annotJSON.coordinates),
-					"text": annotJSON.text,
-					"discussions": discussions, 
-					}, annotJSON.id]
-		}
-
-		//adds clean annotObj (annotation json) with id to data structures
-		function addAnnotation(annotObj, id){
-			annotations[id] = annotObj;
-			
 			var sphereMaterial = new THREE.MeshBasicMaterial({ color: annotColor, transparent: true});
 			sphereMaterial.opacity = 0.6;
 			var sphere = new THREE.Mesh(
@@ -317,86 +304,51 @@ modelViewer = function(sceneContainer, annotationContainer, uniqueID, memberID) 
 			    100), //rings
 			  sphereMaterial);
 			createMap(id, sphere);
-			sphere.position = annotObj.coordinates;
+			sphere.position = point;
 			if (viewAnnots){ //TODO : could be less jank
 				scene.scene.add(sphere);
 			}
+
+			annotations[id][1] = sphere;  //Register the actual object for the annotation
+			createMap(id,sphere);
+		}
+		
+		//Actually move the camera to the right annotation
+		this.viewAnnotation = function(id) {
+			moveCamera(annotations[id][0].camera);
 		}
 
-		//Called automatically on init. Gets annotations from server and adds them to ds
-		function initializeAnnotations() {
-			$.getJSON('/versions/' + sceneID + '/annotations', function(data) {
-				annotationList = data;
-				for (var i =0; i <annotationList.length; i++) {
-					var temp = parseAnnotation(annotationList[i]);
-					addAnnotation(temp[0], temp[1]);
-				}
-
-				annotationContainer_element.on("keypress", "input", function(e){
-					if(e.keyCode == '13') {
-						newDiscussion(this.value, getIdWithHtml($(this).parent().attr('id')));
-					}
-				});
-
-				$("#annotation_list").on("click", "li", function(){
-					highlightAnnotation(getIdWithHtml(this.id));
-				});
-
-				updateUI();
-				//TODO: BIND CLICK EVENTS FOR ANNOTATIONS
-			});
-
-		}
-
-		/* PUBLIC METHODS */
-
-		//posts discussion to model and adds it to datastructures (doesn't need to be public, bound to click event)
-		function newDiscussion(discussionText, id) {
-			$.post('/annotations/' + id + '/discussions', {"member_id":0, "text": discussionText}, function(data){
-				console.log(data);
-				annotations[id].discussions.unshift({"member_id": data, "text": discussionText});
-				console.log(annotations);
-				updateUI();
-			})
-		}
-		//posts annotation to model and adds it do datastructures
-		this.newAnnotation = function(point) {
-			var name = prompt("Gimme an annotation please");
-			if (name!= null && name != ""){
-				
-				$.post('/versions/' + sceneID + '/annotations', {"camera": v3ToString(camera.position.clone()), "coordinates": v3ToString(point) , "text": name}, function(data){
-					addAnnotation({"text": name, "camera": camera.position.clone(), "coordinates": point, "discussions": []}, data);
-					updateUI();
-				});
-				
-			} else{
-				return;
-			}
-		}
-		//Intersection checking for annotations
+		//Intersection checking for annotations (returns id of actual object that was intersected)
 		this.intersects = function(ray){
-			var values =  annotation_map[0];
-			var intersect = ray.intersectObjects(values);
+			var spheres =  obj_to_id[0];
+			var intersect = ray.intersectObjects(spheres);
 			if (intersect.length > 0){
-				debug("Intersects an annotation");
-				highlightAnnotation(getIdWithObj(intersect[0].object));
-				return true;
+				debug("Intersects annotation");
+				return getIdWithObj(intersect[0].object);
 			} else {
 				return false;
 			}
 		}
-
+		//Turn annotations off and on
 		this.toggleAnnotationView = function(){
 			viewAnnots = !viewAnnots;
-			for (var i = 0; i < annotation_map[0].length; i++){
-				var obj = annotation_map[0][i];
+			for (var i = 0; i < obj_to_id[0].length; i++){
+				var obj = obj_to_id[0][i];
 				if (viewAnnots)	{scene.scene.add(obj);}
 				else  { scene.scene.remove(obj); }
 			}
-	
 		}
+	}
 
-		initializeAnnotations(); //Auto call to init annotations
+	//Simply just look at a specific annotation referenced by id
+	this.highlightAnnotation = function(id) {
+		annot.viewAnnotation(id);
+	}
+
+	//Accepts id, data (data should be in the form of {camera, coordinates})
+	this.registerAnnotation = function(id, data){
+		//TODO: ADD ERROR CHECKING FOR THIS!
+		annot.newAnnotation(id, stringToV3(data.camera), stringToV3(data.coordinates));
 	}
 
 	this.toggleAnnotations = function() {
@@ -404,5 +356,7 @@ modelViewer = function(sceneContainer, annotationContainer, uniqueID, memberID) 
 		animate();
 	}
 
-	init(); //Auto call to init viewer
+	this.initialize = function() {
+		init(); //Auto call to init viewer
+	}
 }

@@ -59,11 +59,10 @@ class AnnotationsController < ApplicationController
       format.js do
         if @error
           render text: @annotation.errors.full_messages.join(", "), status: 403
-        else
-          render text: @annotation.id # just format.js if using callback
         end
       end
     end
+
   end
 
 end

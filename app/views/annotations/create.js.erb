@@ -1,2 +1,2 @@
-var newAnnotId = <%= @annotation.id %>;
-var uid = 1; //TODO change
+Window.objectViewer.registerAnnotation(<%= @annotation.id %>, {"camera": "<%= @annotation.camera%>", "coordinates": "<%= @annotation.coordinates%>"});
+Window.annotationUI.addAnnotation("<%= j render @annotation %>");

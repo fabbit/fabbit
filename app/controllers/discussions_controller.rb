@@ -45,8 +45,6 @@ class DiscussionsController < ApplicationController
       format.js do
         if @error
           render text: @discussion.errors.full_messages.join(", "), status: 403
-        else
-          render text: @discussion.member_id # just format.js if using callback
         end
       end
     end

@@ -23,6 +23,7 @@ ActiveRecord::Schema.define(:version => 20130826113326) do
     t.datetime "updated_at",  :null => false
   end
 
+  add_index "annotations", ["created_at"], :name => "index_annotations_on_created_at"
   add_index "annotations", ["member_id"], :name => "index_annotations_on_member_id"
   add_index "annotations", ["version_id"], :name => "index_annotations_on_version_id"
 
@@ -35,6 +36,7 @@ ActiveRecord::Schema.define(:version => 20130826113326) do
   end
 
   add_index "discussions", ["annotation_id"], :name => "index_discussions_on_annotation_id"
+  add_index "discussions", ["created_at"], :name => "index_discussions_on_created_at"
   add_index "discussions", ["member_id"], :name => "index_discussions_on_member_id"
 
   create_table "group_members", :force => true do |t|
@@ -102,6 +104,7 @@ ActiveRecord::Schema.define(:version => 20130826113326) do
     t.datetime "updated_at",    :null => false
   end
 
+  add_index "project_model_files", ["created_at"], :name => "index_project_model_files_on_created_at"
   add_index "project_model_files", ["model_file_id"], :name => "index_project_model_files_on_model_file_id"
   add_index "project_model_files", ["project_id", "model_file_id"], :name => "index_project_model_files_on_project_id_and_model_file_id", :unique => true
   add_index "project_model_files", ["project_id"], :name => "index_project_model_files_on_project_id"
@@ -135,6 +138,7 @@ ActiveRecord::Schema.define(:version => 20130826113326) do
     t.datetime "file_updated_at"
   end
 
+  add_index "versions", ["created_at"], :name => "index_versions_on_created_at"
   add_index "versions", ["model_file_id", "revision_number"], :name => "index_versions_on_model_file_id_and_revision_number", :unique => true
   add_index "versions", ["revision_date"], :name => "index_versions_on_revision_date"
 

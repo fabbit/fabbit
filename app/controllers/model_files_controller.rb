@@ -44,7 +44,7 @@ class ModelFilesController < ApplicationController
       version.save
     end
 
-    redirect_to model_file_path(model_file)
+    redirect_to model_file_path(model_file) #KTODOREF: here after we init we always just go to the version path (latest)
 
   end
 

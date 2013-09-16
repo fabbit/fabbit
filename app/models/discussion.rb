@@ -33,6 +33,7 @@ class Discussion < ActiveRecord::Base
   belongs_to :member
   belongs_to :annotation
 
+  default_scope order('created_at ASC')
   # Shortcut for getting a member's name
   def member_name
     self.member.name

@@ -16,7 +16,6 @@ $yellow: rgb(255, 255, 234);
 
 .container {
 	background: white;
-	height: 100%;
 	position: absolute;
 	margin-left: -475px;
 	left: 50%;
@@ -477,6 +476,9 @@ ul.dropdown.expanded li:hover {
 	opacity: .6;
 }
 
+.model #container #annotation_controller.status {
+	top: 25px;
+}
 .model #container #annotation_controller.status:hover {
 	opacity: 1;
 }
@@ -600,18 +602,20 @@ ul.dropdown.expanded li:hover {
 
 #annotations {
 	margin-top: 15px;
+	padding-bottom: 20px;
 }
 
+#annotation_list {
+	margin-top: 15px;
+}
 #annotation_list li {
-	margin: 5px 0px;
-	padding: 10px 10px;
+	padding: 5px 0px;
 	cursor: pointer;
 	width: 100%;
-	border-left: 3px solid white;
 }
 
-#annotation_list li.active {
-	border-left: 3px solid $blue;
+#annotation_list li.active .annotation-text{
+	color: $blue;
 }
 
 #annotation_list input{
@@ -619,21 +623,45 @@ ul.dropdown.expanded li:hover {
 	margin-top: 5px;
 }
 
-#annotation_list li.active .discussions {
-	color: $black;
-}
-#annotation_list li .discussions div {
-	display: inline;
+
+#annotation_list li .discussions {
+	display: none;
 }
 
-#annotation_list li .discussions .member {
+#annotation_list li.active .discussions {
+	color: $black;
+	display:inline;
+}
+
+#annotation_list .discussions input {
+	margin-top: 10px;
+	margin-left: 10px;
+	padding-left: 5px;
+}
+
+#annotation_list .discussions_list li {
+	margin: 0px;
+	margin-bottom: 5px;
+	padding: 10px 10px;
+}
+
+
+#annotation_list .discussions_list li div {
+	float: left;
+}
+
+#annotation_list li .member {
 	color: $gray;
 }
-#annotation_list li .discussions .member:after {
-	content: "said";
-	padding-left: 5px;
+
+#annotation_list li .member:after {
+	content: ":";
+	padding-left: 0px;
+	margin-left: -3px;
 	padding-right: 5px;
 }
+
+
 
 @media only screen and (max-width: 950px), only screen and (max-device-width: 950px) {
  	.container {
