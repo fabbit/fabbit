@@ -29,15 +29,12 @@
           var me = this;
           $("#annotation_list").on("click", "li", function(){
 
-            if ($(this).hasClass("active")) {
-              $(this).removeClass("active");
-            } else {
-
+           
               var id = this.id;
               id = id.split("-")[1];
               me.highlightAnnotation(id);
               viewer.highlightAnnotation(id);
-            }
+       
         
           });
 

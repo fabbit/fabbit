@@ -4,19 +4,19 @@
     <% @breadcrumbs.each do |crumb| %>
       <li><%= link_to crumb[:text], crumb[:link] %></li>
     <% end %>
-  <% if @model && !@full_version_view%>
-    <li class="revision_dropdown">
-      <ul class="subtitle revisions dropdown">
-        <%= render @model.versions %>
-        <li> <%= link_to "See all versions", model_file_versions_url(@model) %> </li>
-      </ul>
-    </li>
-  </ul>
-    <div class="add">
-      <% if @model_file and @model_file.member == current_member %>
-        <%= link_to image_tag("settings.png", :alt => "file settings"), model_file_versions_url(@model) %>  <!-- KTODO: ONLY VISIBLE TO THIS USER! -->
-      <% end %>
-    </div>
+  <% if @full_version_view%>
+      <li class="revision_dropdown">
+        <ul class="subtitle revisions dropdown">
+          <%= render @model_file.versions %>
+          <li> <%= link_to "See all versions", model_file_url(@model_file) %> </li>
+        </ul>
+      </li>
+    </ul>
+    <% if @model_file %>
+        <div class="add">
+          <%= link_to image_tag("settings.png", :alt => "file settings"), model_file_url(@model_file) %>  <!-- KTODO: ONLY VISIBLE TO THIS USER! -->
+        </div>
+    <% end %>
   <% else %>
   </ul>
 	<% end %>

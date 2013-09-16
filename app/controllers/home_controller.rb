@@ -4,11 +4,11 @@
 
 class HomeController < ApplicationController
 
-  skip_before_filter :live_dropbox_session, :refresh_name, :notifications
+  skip_before_filter :live_dropbox_session, :load_notifications
 
   # Renders home page or redirects to root folder if already logged in
   def home
-    # redirect_to navigate_path if cookies[:dropbox_session] and dropbox_session.authorized? and current_member?
+    # redirect if logged in
   end
 
   def help

@@ -54,6 +54,53 @@ class Member < ActiveRecord::Base
     self.groups.map { |group| group.projects }.flatten.compact.uniq
   end
 
+  def projects
+    (self.accessible_projects + self.participating_projects).uniq
+  end
+
+  # Get all notifications
+  def notifications(page=1, per_page=nil, show_unread=true)
+    my_annots = self.annotations
+    tracked_annots = self.tracked_annotations
+
+    annots = (my_annots + tracked_annots).uniq
+
+    my_discs = self.discussions
+    tracked_discs = self.tracked_discussions
+
+    discs = (my_discs + tracked_discs).uniq
+
+    proj = ProjectModelFile.all
+
+    notifications = []
+
+    annots.each do |item|
+      notifications << item.to_notification(self)
+    end
+
+    discs.each do |item|
+      notifications << item.to_notification(self)
+    end
+
+    proj.each do |item|
+      notifications << item.to_notification(self)
+    end
+
+    notifications = notifications.sort_by { |item| item[:time] }.reverse
+
+    if not show_unread
+      notifications = notifications[0..(self.notification.count - 1)]
+      notifications = [] if self.notification.count == 0
+    end
+
+    per_page ||= 8
+
+    head = per_page * (page - 1)
+    tail = per_page * page - 1
+    notifications[head..tail]
+  end
+
+
   private
 
     def add_to_default_group

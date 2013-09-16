@@ -6,23 +6,25 @@ require 'dropbox_sdk'
 
 class DropboxController < ApplicationController
 
-  skip_before_filter :live_dropbox_session, :refresh_name, :notifications, only: :new
+  skip_before_filter :live_dropbox_session, :load_notifications, only: :new
 
   # Connects Fabbit to a Dropbox account and start the session.
   # Creates a new Member or find the corresponding member, and assign it to current_member.
   def new
-    if not params[:oauth_token]
-      dbsession = DropboxSession.new(fabbit_dev_app_key, fabbit_dev_app_secret)
-      dbsession.get_request_token
-      cookies[:dropbox_session] = dbsession.serialize
-      redirect_to dbsession.get_authorize_url url_for(action: 'new')
+    if params[:code].nil?
+      redirect_to dropbox_session.start
     else
-      dbsession = dropbox_session
-      dbsession.get_access_token
-      cookies[:dropbox_session] = dbsession.serialize
 
+      result = dropbox_session.finish(params) # this returns [access_token, uid]
+      access_token = result[0]
+      uid = result[1]
+
+      # Save the access token
+      cookies[:access_token] = access_token
+
+      # Look up or create a Member
       member = Member.where(
-        dropbox_uid: dropbox_client.account_info["uid"].to_s
+        dropbox_uid: uid.to_s
       ).first_or_initialize
 
       # Update/assign name
@@ -32,7 +34,8 @@ class DropboxController < ApplicationController
         flash[:success] = "You've signed into Dropbox!"
         redirect_to navigate_path
       else
-        # TODO: Error
+        flash[:error] = "Something went wrong while loading your account."
+        redirect_to root_path
       end
     end
   end
@@ -42,14 +45,72 @@ class DropboxController < ApplicationController
   # === Variables
   # - @breadcrumbs: array for breadcrumbs
   # - @contents: return value of Dropbox content call, processed
+  # - @projects: the projects that the member is part of
+  # - @new_project: variable to hold a new project
+
   def navigate
     member = current_member
-    path = params[:dropbox_path] || "/"
+    path = params[:dropbox_path] || "/" # For root folder access, the params will be nil
     meta = dropbox_client.metadata(path)
+
     @breadcrumbs = to_breadcrumbs(meta["path"])
     @contents = process_contents(meta["contents"])
-    @projects = Project.all
+
+    @projects = current_member.projects
     @new_project = Project.new
   end
+
+  private # Helper methods for this controller
+
+    # Helper for property formatting a directory to a link.
+    def to_link(content)
+      content[0] == File::SEPARATOR ? content[1..-1] : content
+    end
+
+    # Extracts the filename from a given path
+    def to_filename(path)
+      File.basename(path)
+    end
+
+    # Process the path given to navigate
+    # - TODO: use File methods
+    def parse_path(path)
+      full_path = path
+      if path.nil?
+        full_path = '/'
+      end
+      if more_path
+        full_path += '/' + more_path
+      end
+      return full_path
+    end
+
+    # Process the contents returned by Dropbox
+    def process_contents(contents)
+      contents.map do |content|
+        link = navigate_url(to_link(content["path"]))
+        projects = []
+        model_file_id = nil
+
+        # If this is a file
+        if not content["is_dir"]
+          link = init_model_file_url(to_link(content["path"]))
+          model_file = current_member.model_files.where(path: to_link(content["path"])).first
+
+          if model_file
+            model_file_id = model_file.id
+          end
+        end
+
+        {
+          name: to_filename(content["path"]),
+          link: link,
+          is_dir: content["is_dir"],
+          model_file_id: model_file_id,
+        }
+      end
+    end
+
+  # end private
 
 end

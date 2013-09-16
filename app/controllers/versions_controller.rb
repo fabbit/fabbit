@@ -10,35 +10,13 @@ class VersionsController < ApplicationController
   def show
     @version = Version.find(params[:id])
     @model_file = @version.model_file
-    @model_file.content = @version.content # load_cached(@version)
+    @model_file.content = @version.content
     @member = current_member
     @breadcrumbs = to_breadcrumbs(@model_file)
+    @full_version_view = true;
     respond_to do |format|
       format.html
       format.js { render json: [@content, @version] }
-    end
-  end
-
-  # Displays all versions and Dropbox revisions of a ModelFile.
-  #
-  # === Responses
-  # - HTML: Renders the version index page
-  # - JSON: returns a JSON object of all the Versions
-  def index
-    @model_file = ModelFile.find(params[:model_file_id])
-    @model = @model_file
-    @versions = @model.versions
-    @dropbox_revisions = dropbox_client.revisions(@model.path)
-    @member = current_member
-    @breadcrumbs = to_breadcrumbs(@model)
-    @versions = @model.versions
-    @projects = Project.all
-    @history = get_history_for(@model_file)
-    @full_version_view = true
-
-    respond_to do |format|
-      format.html
-      format.json { render json: @versions }
     end
   end
 
@@ -55,7 +33,7 @@ class VersionsController < ApplicationController
     )
 
     if @version.save
-      @version.file = File.open(write_to_temp(dropbox_client.get_file(@version.path)), "rb") # cache(@version)
+      @version.content = dropbox_client.get_file(@version.path)
       @version.save
 
       @rev = {
@@ -101,7 +79,7 @@ class VersionsController < ApplicationController
   # Returns the contents of the Version file
   def contents
     @version = Version.find(params[:id])
-    @file = @version.content # load_cached(@version)
+    @file = @version.content
     respond_to do |format|
       format.js { render text: @file }
     end
