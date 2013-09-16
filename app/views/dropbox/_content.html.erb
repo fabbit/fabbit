@@ -1,6 +1,6 @@
-<li <%= raw content[:is_dir] ? "class='inset blue' " : "class='inset gray'" %> id="<%= encrypt_id(content[:model_file_id]) %>">
-  <div> <%= link_to content[:content], content[:link] %> </div>
-  <% if !content[:is_dir] and content[:model_file_id] and content[:member] == current_member %>
+<li <%= raw content[:is_dir] ? "class='inset blue' " : "class='inset gray'" %> id="<%= content[:model_file_id] %>">
+  <div> <%= link_to content[:name], content[:link] %> </div>
+  <% if !content[:is_dir] and content[:model_file_id] %>
     <div class="opener">
       <%= link_to image_tag("settings.png", :alt => "file settings"), model_file_versions_url(content[:model_file_id]) %>
     </div>
