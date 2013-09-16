@@ -39,16 +39,17 @@
 
           	//One expand add class and post
             function(){ 
-
             	$(this).parent().addClass("expanded")
-
-	    	 	//Do a post
-	           	$.ajax({
-	           		type: "PUT",
-	           		url: "<%= j notification_url(current_member.notification) %>",
-	           		data: {"count": $(".notifications .unread").size()},
-	           		error: AJAXerrorHandler
-	           	});          	
+              console.log(this);
+    	    	 	//Do a post
+              if ($(this).parent().parent().hasClass('notifications')) {
+           	    $.ajax({
+  	           		type: "PUT",
+  	           		url: "<%= j notification_url(current_member.notification) %>",
+  	           		data: {"count": $(".notifications .unread").size()},
+  	           		error: AJAXerrorHandler
+  	           	});  
+              }
             }, 
             //On collapse collapse, unless its permenant
             function(){ 
