@@ -27,15 +27,21 @@
 
         annotationUI.addBindings = function(viewer) {
           var me = this;
-          $("#annotation_list").on("click", "li", function(){
+          $("#annotation_list").on("click", "li", function(event){
 
-           
+              if ($(event.target).is('input')) {
+                return;
+              }
+
+              if ($(this).hasClass('active')) {
+                $(this).removeClass('active');
+                return;
+              }
+
               var id = this.id;
               id = id.split("-")[1];
               me.highlightAnnotation(id);
               viewer.highlightAnnotation(id);
-       
-        
           });
 
           $("#annotation_list li").on("keyup", "input", function(e){

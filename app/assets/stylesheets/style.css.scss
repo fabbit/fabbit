@@ -615,6 +615,17 @@ ul.dropdown.expanded li:hover {
 	width: 100%;
 }
 
+#annotation_list > li {
+	border: 1px solid lighten($gray, 40%);	
+	padding: 10px;
+	-moz-box-sizing: border-box; -webkit-box-sizing: border-box; box-sizing: border-box;
+	border-bottom: none;
+}
+
+#annotation_list > li:last-child {
+	border-bottom: 1px solid lighten($gray, 40%);
+}
+
 #annotation_list li.active .annotation-text{
 	color: $blue;
 }
@@ -636,8 +647,11 @@ ul.dropdown.expanded li:hover {
 
 #annotation_list .discussions input {
 	margin-top: 10px;
-	margin-left: 10px;
-	padding-left: 5px;
+	padding: 10px;
+	-moz-box-sizing: border-box; -webkit-box-sizing: border-box; box-sizing: border-box;
+	color: $blue;
+	border: 1px solid lighten($gray, 40%)
+
 }
 
 #annotation_list .discussions_list li {
