@@ -44,7 +44,7 @@
               viewer.highlightAnnotation(id);
           });
 
-          $("#annotation_list li").on("keyup", "input", function(e){
+          $("#annotation_list").on("keyup", "li input", function(e){
             if (e.which == 13) {
               var id = $(this).parent().parent().attr('id');
               id = id.split("-")[1];
