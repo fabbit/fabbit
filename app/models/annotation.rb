@@ -40,6 +40,9 @@ class Annotation < ActiveRecord::Base
   belongs_to :member
   has_many :discussions, dependent: :destroy
 
+  default_scope order('created_at DESC')
+
+
   # Generate a message and a link for notifications
   def to_notification(current_member)
     member_name = self.member == current_member ? "You" : "#{self.member.name}"

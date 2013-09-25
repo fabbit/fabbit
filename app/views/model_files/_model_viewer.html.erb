@@ -11,7 +11,8 @@
         var annotationUI = $("#annotations");
 
         annotationUI.addAnnotation = function(annotation_html) {
-          $("#annotation_list").append(annotation_html); 
+          $("#annotation_list").prepend(annotation_html); 
+          $("#annotation_list").children()[0].click(); //Activate the first one which we just added
         }
 
         annotationUI.highlightAnnotation = function(annotation_id) {
