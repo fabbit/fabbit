@@ -107,9 +107,13 @@ ul.dropdown li span {
 	margin-top: 5px;
 }
 
-//Only show date whn expanded
+//Only show date when expanded
 ul.dropdown li:first-child span {
 	display: none;
+}
+
+ul.dropdown.expanded.perm {
+	position: relative;
 }
 
 ul.dropdown.expanded li:first-child span {
