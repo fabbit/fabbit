@@ -57,7 +57,7 @@ modelViewer = function(sceneContainer, uniqueID, memberID, annotationUI) {
 
 		var oldpos = {x: camera.position.x, y: camera.position.y, z: camera.position.z};
 
-		tween = new TWEEN.Tween(oldpos).to(newPosition, 1000);
+		tween = new TWEEN.Tween(oldpos).to(newPosition, 500);
 		tween.onUpdate(function(){
 			camera.position.x = oldpos.x; camera.position.y = oldpos.y; camera.position.z = oldpos.z;
 		});
