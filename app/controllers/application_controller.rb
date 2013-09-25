@@ -16,8 +16,12 @@ class ApplicationController < ActionController::Base
 
   # Returns the Member corresponding to the active Dropbox user
   def current_member
-    @dropbox_uid ||= dropbox_client.account_info["uid"].to_s
-    @current_member ||= Member.where(dropbox_uid: @dropbox_uid).first
+    begin
+      @dropbox_uid ||= dropbox_client.account_info["uid"].to_s
+      @current_member ||= Member.where(dropbox_uid: @dropbox_uid).first
+    rescue DropboxError
+      sign_out
+    end
   end
 
   # Sign out of the application
@@ -31,10 +35,7 @@ class ApplicationController < ActionController::Base
   # Filter for checking that the Dropbox session is still live for every request
   # NOTE: how do I check for an expired session?
   def live_dropbox_session
-    if cookies[:access_token].nil?
-      sign_out
-      redirect_to new_dropbox_path
-    end
+    redirect_to new_dropbox_path if current_member.nil?
   end
 
   # == Controller helper methods

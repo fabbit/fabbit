@@ -1,7 +1,5 @@
 class ProjectsController < ApplicationController
 
-  before_filter :live_dropbox_session
-
   def show
     @project = Project.find(params[:id])
     @model_files = @project.model_files

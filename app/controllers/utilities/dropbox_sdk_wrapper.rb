@@ -21,7 +21,11 @@ module DropboxSdkWrapper
   # Shortcut for accessing the active DropboxClient object
   def dropbox_client
     if cookies[:access_token] # NOTE: how to check if expired?
-      @dropbox_client ||= DropboxClient.new(cookies[:access_token])
+      begin
+        @dropbox_client ||= DropboxClient.new(cookies[:access_token])
+      rescue DropboxAuthError
+        p "User not authenticated"
+      end
     end
   end
 
