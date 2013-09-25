@@ -1,10 +1,9 @@
 <div class="row navigate">
   <ul class="subtitle crumbs">
-    <li> <%= link_to "Your files", navigate_url %> </li>
     <% @breadcrumbs.each do |crumb| %>
-      <li><%= link_to crumb[:text], crumb[:link] %></li>
+      <li><%= link_to crumb[:title], crumb[:link] %></li>
     <% end %>
-  <% if @full_version_view%>
+  <% if @full_version_view %>
       <li class="revision_dropdown">
         <ul class="subtitle revisions dropdown">
           <%= render @model_file.versions %>

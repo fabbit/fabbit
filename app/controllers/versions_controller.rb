@@ -12,7 +12,7 @@ class VersionsController < ApplicationController
     @model_file = @version.model_file
     @model_file.content = @version.content
     @member = current_member
-    @breadcrumbs = to_breadcrumbs(@model_file)
+    @breadcrumbs = version_breadcrumbs(@version)
     @full_version_view = true;
     respond_to do |format|
       format.html
@@ -94,6 +94,19 @@ class VersionsController < ApplicationController
       if (@version and @version.member != current_member) or (@model_file and @model_file.member != current_member)
         redirect_to new_dropbox_path
       end
+    end
+
+    # Build breadcrumbs for the version view
+    def version_breadcrumbs(version)
+      breadcrumbs = []
+
+      # Link to model_file
+      breadcrumbs << {
+        title: version.model_file.name,
+        link: model_file_url(version.model_file)
+      }
+
+      return breadcrumbs
     end
 
 
