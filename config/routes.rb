@@ -21,7 +21,10 @@ Fabbit::Application.routes.draw do
     resources :model_files, only: [:index]
   end
 
-  resources :model_files, only: [:show]
+  resources :model_files, only: [:show] do
+    resources :versions, only: [:create, :destroy]
+  end
+
 
   resources :versions, only: [:show, :destroy] do
     resources :annotations, only: [:index, :create]
