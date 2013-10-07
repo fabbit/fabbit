@@ -3,57 +3,17 @@
     <div class="expand">
       expand all
     </div>
-    
-  <!--   STUFF I NEED!
-    //filename
-    //directory
-    //isfolder?
-    //isalreadyinproject?
-  --> 
 
     <ul class="row files list">
 
       <li class="folder open">
           <div class="action opener"></div>
           <div> Your Dropbox </div>
-
-          <ul class="row files list">
-
-              <li class="folder">
-                <div class="action opener">  </div>
-                <div class="name"> Folder 1 </div>
-
-                <ul class="row files list">
-
-                  <li class="file"> 
-                    <div class="action"> <input type="checkbox"> </div>
-                    <div class="name"> Nested file </div>
-                  </li>
-
-                  <li class="folder">
-                    <div class="action opener">  </div>
-                    <div class="name"> Folder 2 </div>
-
-                    <ul class="row files list">
-
-                      <li class="file"> 
-                        <div class="action"> <input type="checkbox"> </div>
-                        <div class="name"> Nested file </div>
-                      </li>
-
-                    </ul>
-                  </li>
-
-                </ul>
-              </li>
-
-              <li class="file">
-                <div class="action"> <input type="checkbox"> </div>
-                <div class="name"> Name </div>
-              </li>
-            </ul>
-          </ul>
+          
+          <%= render "layouts/directory", directory: @directories %>
+          
       </li>
+    </ul>
 
     <script>
 

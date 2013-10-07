@@ -63,6 +63,24 @@ class DropboxController < ApplicationController
     @new_project = Project.new
   end
 
+  # Recursively get information on all directories.
+  # Used for the add files UI.
+  #
+  # == Variables
+  # - @directories: An array of content hashes. Content hashes contain the following:
+  #   - path: the path of the content
+  #   - is_dir: true if the content is a directory
+  #   - content: another array of content; exists only if is_dir is true
+  #   - in_project: flag for if the content is a model file and is already in a project.
+  #     Requires access from a /projects/:id URL.
+  def directories
+    @directories = get_dir_info("/", params[:project_id])
+
+    respond_to do |format|
+      format.js
+    end
+  end
+
   private # Helper methods for this controller
 
     # Build the breadcrumbs for the page
@@ -131,6 +149,32 @@ class DropboxController < ApplicationController
           model_file_id: model_file_id,
         }
       end
+    end
+
+    # Recursively get information from the given path
+    def get_dir_info(path="/", project_id=nil, project=nil)
+      dropbox_content = dropbox_client.metadata(path)
+
+      content = Hash.new
+      content[:path] = to_link(dropbox_content["path"])
+      content[:name] = File.basename(content[:path])
+      content[:is_dir] = dropbox_content["is_dir"]
+
+      if project_id
+        project ||= Project.find(project_id)
+        model_file = ModelFile.where(path: content[:path]).first
+
+        content[:in_project] = project.model_files.include?(model_file)
+      end
+
+      if content[:is_dir]
+        content[:content] = Array.new
+        dropbox_content["contents"].each do |item|
+          content[:content] << get_dir_info(item["path"], project_id, project)
+        end
+      end
+
+      return content
     end
 
   # end private
