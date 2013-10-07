@@ -1,20 +1,22 @@
 <div class="section projects">
   <div class="row navigate">
-    <div class="add">  
-       <div class="subtitle green" id="add_project"> <span> + </span> Create new project  </div>
+    <div class="add">
+      <% if current_member.admin? %>
+         <div class="subtitle green" id="add_project"> <span> + </span> Create new project  </div>
 
-         <%= form_for @new_project, url: {action: :create, controller: :projects}, html: {class: "form", id: "project_form", remote: true} do |f| %>
-                <%= f.text_field :name,  :placeholder => "Project name", :value => "Default project", :size => "20" %>
-                <%= f.submit "Create project" %>
-        <% end %>
+           <%= form_for @new_project, url: {action: :create, controller: :projects}, html: {class: "form", id: "project_form", remote: true} do |f| %>
+                  <%= f.text_field :name,  :placeholder => "Project name", :value => "Default project", :size => "20" %>
+                  <%= f.submit "Create project" %>
+          <% end %>
 
-        <script>
-        $("#add_project").toggle(
-          function(){ $("#project_form").show(); $("#project_form").find('input[type=text]')[0].focus(); $(this).find('span').html("-"); },
-          function(){ $("#project_form").hide(); $(this).find('span').html("+"); }
-          )
-        </script>
-     </div>  <!-- TODO: Currently the entire css for breadcrumbs is very janky -->
+          <script>
+          $("#add_project").toggle(
+            function(){ $("#project_form").show(); $("#project_form").find('input[type=text]')[0].focus(); $(this).find('span').html("-"); },
+            function(){ $("#project_form").hide(); $(this).find('span').html("+"); }
+            )
+          </script>
+        </div>  <!-- TODO: Currently the entire css for breadcrumbs is very janky -->
+      <% end %>
 
     <ul class="subtitle crumbs green">
       <li> <a href="#">Your projects </a> </li>

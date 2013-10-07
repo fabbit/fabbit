@@ -42,6 +42,7 @@ ActiveRecord::Schema.define(:version => 20130826113326) do
   create_table "group_members", :force => true do |t|
     t.integer  "group_id"
     t.integer  "member_id"
+    t.boolean  "admin"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
   end

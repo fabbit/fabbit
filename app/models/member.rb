@@ -58,6 +58,10 @@ class Member < ActiveRecord::Base
     (self.accessible_projects + self.participating_projects).uniq
   end
 
+  def admin?(group=Group.first)
+    self.group_members.where(group_id: group.id).first.admin
+  end
+
   # Get all notifications
   def notifications(page=1, per_page=nil, show_unread=true)
     my_annots = self.annotations
