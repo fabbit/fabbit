@@ -52,4 +52,30 @@ class ApplicationController < ActionController::Base
     Breadcrumbs.clear
   end
 
+  # == Controller helpers
+
+  # Finds the model file owned by the current_member, or initializes a new one.
+  def find_or_initialize(path)
+    model_file = ModelFile.where(
+      member_id: current_member.id,
+      path: params[:filename],
+    ).first_or_initialize
+
+    version = nil
+    meta = dropbox_client.metadata(model_file.path)
+    if (model_file.new_record? or model_file.versions.count == 0) and model_file.save
+      version = model_file.versions.create!(
+        revision_number: meta["rev"],
+        details:         "First version",
+        revision_date:   meta["modified"].to_datetime
+      )
+
+      version.content = dropbox_client.get_file(version.path)
+    end
+
+    return model_file
+  end
+
+
+
 end

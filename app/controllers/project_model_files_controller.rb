@@ -31,4 +31,26 @@ class ProjectModelFilesController < ApplicationController
     end
   end
 
+  # Add multiple files to a project.
+  def add_all
+    project = Project.find(params[:project_id])
+
+    project.model_files.destroy_all
+
+    if params[:paths]
+      params[:paths].each do |path|
+        model_file = find_or_initialize(path)
+
+        project.model_files << model_file
+
+        current_member.notification.count += 1
+        current_member.notification.save
+      end
+    end
+
+    respond_to do |format|
+      format.js
+    end
+  end
+
 end

@@ -9,7 +9,9 @@ Fabbit::Application.routes.draw do
   resources :group_projects, only: [:create, :destroy]
 
   resources :projects, only: [:index, :new, :create]
-  resources :project_model_files, only: [:create, :destroy]
+  resources :project_model_files, only: [:create, :destroy] do
+    post :add_all
+  end
 
   resources :members, only: [:show] do
     resources :model_files, only: [:index]

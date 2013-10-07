@@ -29,30 +29,14 @@ class ModelFilesController < ApplicationController
   # Redirects immediately to a RESTful model file show page
   # - NOTE: Perhaps a loading screen should render here?
   def init_model_file
-    model_file = ModelFile.where(
-      member_id: current_member.id,
-      path: params[:filename],
-    ).first_or_initialize
-
-    version = nil
-    meta = dropbox_client.metadata(model_file.path)
-    if (model_file.new_record? or model_file.versions.count == 0) and model_file.save
-      version = model_file.versions.create!(
-        revision_number: meta["rev"],
-        details:         "First version",
-        revision_date:   meta["modified"].to_datetime
-      )
-
-      version.content = dropbox_client.get_file(version.path)
-    end
-
+    model_file = find_or_initialize(params[:filename])
 
     version = model_file.latest_version
     redirect_to version_path(version)
 
   end
 
-  private 
+  private
 
     # Retrieves all Versions and Dropbox revisions for a ModelFile, returning it in a unified format.
     def get_history_for(model_file)
@@ -69,5 +53,6 @@ class ModelFilesController < ApplicationController
       end
 
     end
-    
+
+  # end private
 end
