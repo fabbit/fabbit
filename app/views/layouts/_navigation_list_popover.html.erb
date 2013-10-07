@@ -16,3 +16,21 @@
       </div>
     </div>
   </div>
+
+<script>
+  $("#addfile_popover").on("click", ".submit", function(){
+    var listOfFiles = [];
+    $("#addfile_popover .files.list").find(".file").each(function(i,el){
+
+      var checkbox = $(el).find("input");
+
+      if ($(checkbox).is(':checked')) {
+        listOfFiles.push($($(el).find(".name")[0]).html());
+      }
+    });
+
+    //This is what we push
+    console.log(listOfFiles);
+  });
+
+</script>

@@ -1,4 +1,9 @@
-
+<div class="row navigate">
+  <ul class="subtitle crumbs">
+    <li> <%= link_to @model_file.name, @model_file.latest_version %> </li>
+    <li> Settings </li>
+  </ul>
+</div>
 
 <div class="section">
   <div class="row subtitle divider">
@@ -22,10 +27,8 @@
   </div>
 </div>
 
-
 <script>
 
-//TODO: Move this to its own file (partial for all versions)
 $(document).ready(function(){
 
 

@@ -27,7 +27,7 @@
 
                   <li class="file"> 
                     <div class="action"> <input type="checkbox"> </div>
-                    <div> Nested file </div>
+                    <div class="name"> Nested file </div>
                   </li>
 
                   <li class="folder">
@@ -38,7 +38,7 @@
 
                       <li class="file"> 
                         <div class="action"> <input type="checkbox"> </div>
-                        <div> Nested file </div>
+                        <div class="name"> Nested file </div>
                       </li>
 
                     </ul>
@@ -67,11 +67,9 @@
           var folderList = $(event.target).parent();
 
           if (! opened){
-            console.log("OPENING" + $($(folderList).find(".name")[0]).html());
             $(folderList).addClass("open");
             opened = true;
           } else {
-            console.log("CLOSING" + $($(folderList).find(".name")[0]).html());
             $(folderList).removeClass("open");
             opened = false;
           }

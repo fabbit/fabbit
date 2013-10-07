@@ -12,11 +12,11 @@
   	</div>
 
   		<script>
-  			//Error handling UI function
-  			function displayError(message){
+  		//Error handling UI function
+  		function displayError(message){
   				$("#errorMessage").html("Oops: " + message);
   				$("#errorMessage").fadeIn(300).delay(5000).fadeOut(300);
-  			}
+  		}
 
   			//Error handling AJAX function - to be used as callback for AJAX errors
 			function AJAXerrorHandler(request, textStatus, errorThrown) {
