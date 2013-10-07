@@ -396,7 +396,7 @@ ul.dropdown.expanded li:hover {
 }
 
 .navigate .green, .navigate ul.crumbs.green > li{
-	color: $green;
+	color: lighten($green, 30%);
 }
 
 .navigate ul.crumbs > li:before {
