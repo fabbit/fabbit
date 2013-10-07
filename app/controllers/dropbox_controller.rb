@@ -74,7 +74,8 @@ class DropboxController < ApplicationController
   #   - in_project: flag for if the content is a model file and is already in a project.
   #     Requires access from a /projects/:id URL.
   def directories
-    @directories = get_dir_info("/", params[:project_id])
+    @project = Project.find(params[:project_id])
+    @directories = get_dir_info("/", params[:project_id], @project)
     p @directories
     respond_to do |format|
       format.js

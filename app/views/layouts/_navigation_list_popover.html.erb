@@ -29,7 +29,7 @@
     });
 
     //This is what we push
-    $.post('/project_model_files', {"project_id": <%= @project.id %>, "paths":listOfFiles}, console(){
+    $.post('/project_model_files/add_all', {"project_id": <%= @project.id %>, "paths":listOfFiles}, console(){
       window.location.reload(true);
     });
 

@@ -10,7 +10,7 @@ Fabbit::Application.routes.draw do
 
   resources :projects, only: [:index, :new, :create]
   resources :project_model_files, only: [:create, :destroy] do
-    post :add_all
+    post :add_all, on: :collection
   end
 
   resources :members, only: [:show] do
