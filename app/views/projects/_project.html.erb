@@ -1,7 +1,6 @@
-<% if view == :nav_view %>
-  <li class="inset green" id="<%= encrypt_id(project.id) %>" >
-      <div> <%= link_to project.name, project %> </div>
-      <div> <%= pluralize(project.model_files.count, 'file') %> </div>
-      <div> <%= pluralize(project.members.count, 'member') %></div>
-  </li>
-<% end %>
+
+	  <li class="inset green" id="<%= encrypt_id(project.id) %>" >
+	      <div> <%= link_to project.name, project %> </div>
+	      <div> <%= pluralize(project.model_files.count, 'file') %> </div>
+	      <div> <%= pluralize(project.members.count, 'member') %></div>
+	  </li>

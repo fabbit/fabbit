@@ -1,6 +1,3 @@
-<ul class="subtitle crumbs">
-  <% Breadcrumbs.each do |crumb| %>
-      <li><%= link_to crumb[:title], crumb[:link] %></li>
-  <% end %>
-</ul>
-
+<% Breadcrumbs.each do |crumb| %>
+    <li><%= link_to crumb[:title], crumb[:link] %></li>
+<% end %>

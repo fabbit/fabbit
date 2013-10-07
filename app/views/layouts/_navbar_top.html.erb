@@ -1,8 +1,17 @@
 <div class="row navigate">
-  <%= render "layouts/breadcrumbs" %>
 
-  <% if @model_file %>
-    <%= render "versions/versions_dropdown" %>
-    <%= render "model_files/settings_icon" %>
-  <% end %>
+  <ul class="subtitle crumbs <%= "green" if @project %>">
+    <%= render "layouts/breadcrumbs" %>
+
+    <% if @model_file %>
+      <%= render "versions/versions_dropdown" %>
+    <% end %>
+  </ul>
+    <% if @model_file %>
+      <%= render "model_files/settings_icon" %>
+    <% end %>
+
+    <% if @project %>
+      <%= render "projects/add_files" %>
+    <% end %>
 </div>

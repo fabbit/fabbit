@@ -1,7 +1,7 @@
 $blue: #3079ed;
 $black: #1c1c1c;
-$green: rgb(37, 134, 37);
-$light_green: #E0FFE0;
+$green: #00a11d;
+$light_green: #bcf698;
 $gray: gray;
 $red: red;
 $yellow: rgb(255, 255, 234);
@@ -81,6 +81,40 @@ $yellow: rgb(255, 255, 234);
 	padding: 10px 0px;
 }
 
+.popover {
+	width: 100%;
+	height: 100%;
+	background: rgba(0, 0, 0, 0.6);
+	position: fixed;
+	z-index: 100;
+	left: 0;
+	top: 0;
+	display: none;
+}
+
+
+.popover .box {
+	border: 1px solid rgba(0,0,0,0.7);
+	background: white;
+	padding: 20px;
+	height: auto;
+	width: 500px;
+	left: 50%;
+	margin-left: -270px;
+	margin-top: 62px;
+	position: absolute;
+}
+
+.popover .box .closer {
+	position: absolute;
+	top: 10px;
+	right: 20px;
+	color: $gray;
+	cursor: pointer;
+}
+
+
+
 //Generic dropdown UI
 ul.dropdown {
 	position: absolute;
@@ -144,21 +178,17 @@ ul.dropdown.expanded li:hover {
 	background: #eee;
 }
 
-//Sectionsa are groupings of rows! (Basically a row but with a margin at the bottom)
-.section {
-	float: left;
-	clear: left;
-	width: 100%;
-	position: relative;
-}
-
-.row {
+//TODO: FIX GENERAL UI ELEMNTS
+.row, .section{
 	float:left;
 	clear:left;
 	width: 100%;
 	position: relative; //To have absolute elements
 }
 
+.row.space {
+	margin-bottom: 10px;
+}
 .title, h1{
 	color: $black;
 	font-size: 28px;
@@ -206,7 +236,7 @@ ul.dropdown.expanded li:hover {
 
 .inset.green {
 	background-color: $light_green;
-	border: 1px solid lighten($green, 20%);
+	border: 1px solid darken($light_green, 30%);
 	color: $green;
 }
 
@@ -417,6 +447,7 @@ ul.dropdown.expanded li:hover {
 	content: "v";
 }
 
+
 .files .inset{
 	position: relative;
 	width: 194px;
@@ -467,7 +498,96 @@ ul.dropdown.expanded li:hover {
 	width: 18px;
 }
 
+//FILE LIST NAVIGATION 
 
+.nav_list {
+	width: 100%;
+	padding: 10px 0px;
+}
+.nav_list .expand {
+	position: absolute;
+	right: 10px;
+	color: lighten($blue, 30%);
+	z-index: 2;
+	cursor: pointer;
+}
+
+.nav_list .files.list {
+	z-index: 1;
+}
+
+.popover .submit {
+	cursor:pointer;
+}
+
+.popover .nav_list {
+	float: left;
+	width: 100%;
+	background: #F4F8FF;
+	border-radius: 2px;
+	padding-left: 5px;
+	-moz-box-sizing: border-box; -webkit-box-sizing: border-box; box-sizing: border-box;
+}
+
+
+
+.files.list li {
+	width: 100%;
+	-moz-box-sizing: border-box; -webkit-box-sizing: border-box; box-sizing: border-box;
+	cursor: pointer;
+	padding-left: 0px;
+	float: left;
+	clear: left;
+}
+
+.files.list li div {
+	float: left;
+	margin-bottom: 5px;
+	height: 15px;
+}
+
+.files.list li div.action {
+	width: 20px;
+	position: relative;
+	top: -1px;
+	text-align: center;
+	opacity: 0.8;
+}
+
+.files.list li:hover div.action {
+	opacity: 1;
+}
+
+.files.list .folder {
+	color: $blue;
+}
+
+.files.list .folder .action.opener:before {
+	content:">";
+}
+
+
+.files.list .folder.open > .action.opener:before {
+	content:"v";
+}
+
+.files.list .folder ul {
+	display: none;
+}
+
+.files.list .folder.open > ul {
+	display: block;
+}
+
+.files.list .file {
+	color: $gray;
+}
+
+.files.list ul.files.list {
+	margin-left: 16px;
+}
+
+// MODEL PAGE
 .model #stlstring {
 	display: none;
 }

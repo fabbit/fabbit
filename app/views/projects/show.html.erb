@@ -1,4 +1,11 @@
-<%= render "layouts/navbar_top" %>
-<ul class="row files">
-  <%= render @model_files %>
-</ul>
+<div class="section projects">
+
+  <%= render "layouts/navbar_top" %>
+
+  <ul class="row files">
+    <%= render @model_files %>	
+  </ul>
+
+  <%= render "layouts/navigation_list_popover" %>
+
+</div>

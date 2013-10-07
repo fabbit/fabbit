@@ -1,0 +1,112 @@
+  <div class="nav_list">
+
+    <div class="expand">
+      expand all
+    </div>
+    
+  <!--   STUFF I NEED!
+    //filename
+    //directory
+    //isfolder?
+    //isalreadyinproject?
+  --> 
+
+    <ul class="row files list">
+
+      <li class="folder open">
+          <div class="action opener"></div>
+          <div> Your Dropbox </div>
+
+          <ul class="row files list">
+
+              <li class="folder">
+                <div class="action opener">  </div>
+                <div class="name"> Folder 1 </div>
+
+                <ul class="row files list">
+
+                  <li class="file"> 
+                    <div class="action"> <input type="checkbox"> </div>
+                    <div> Nested file </div>
+                  </li>
+
+                  <li class="folder">
+                    <div class="action opener">  </div>
+                    <div class="name"> Folder 2 </div>
+
+                    <ul class="row files list">
+
+                      <li class="file"> 
+                        <div class="action"> <input type="checkbox"> </div>
+                        <div> Nested file </div>
+                      </li>
+
+                    </ul>
+                  </li>
+
+                </ul>
+              </li>
+
+              <li class="file">
+                <div class="action"> <input type="checkbox"> </div>
+                <div class="name"> Name </div>
+              </li>
+            </ul>
+          </ul>
+      </li>
+
+    <script>
+
+      $(".files.list .folder").each(function(i, el) {
+
+        $(el).unbind("click");
+
+        var opened = false;
+
+        $(el).on("click", "> div",function(event){
+          var folderList = $(event.target).parent();
+
+          if (! opened){
+            console.log("OPENING" + $($(folderList).find(".name")[0]).html());
+            $(folderList).addClass("open");
+            opened = true;
+          } else {
+            console.log("CLOSING" + $($(folderList).find(".name")[0]).html());
+            $(folderList).removeClass("open");
+            opened = false;
+          }
+         
+       
+        });
+
+      });
+
+      var state = "open";
+      $(".expand").click(function(){
+
+        var opener = $(this);
+        var folders = $(".files.list").find(".folder");
+        console.log(folders);
+
+        if (state === "open") {
+         $.each(folders, function(i,folder){
+            if (! $(folder).hasClass('open')) { 
+              $(folder).addClass('open')
+            }
+            state = "close";
+            $(opener).html("collapse all");
+          });
+        } else {
+          $.each(folders, function(i,folder){
+            if ($(folder).hasClass('open')) { 
+              $(folder).removeClass('open')
+            };
+            state = "open";
+            $(opener).html("expand all");
+          });
+        }
+          
+      });
+    </script>
+
+</div>
