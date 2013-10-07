@@ -4,6 +4,8 @@ class NotificationsController < ApplicationController
     items = 20
 
     @notifications = current_member.notifications(page = 1, per_page = 30)
+    current_member.notification.count = 0
+    current_member.notification.save
   end
 
   def update
