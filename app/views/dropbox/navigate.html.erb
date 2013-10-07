@@ -1,8 +1,9 @@
-<div class="section">
+<%= render "layouts/project_list" %>
 
+<div class="section">
   <%= render "dropbox/breadcrumbs" %>
 
-  <ul class="row files">
+    <ul class="row files">
     <% @contents.each do |content| %>
       <%= render "dropbox/content", content: content %>
 
@@ -19,4 +20,8 @@
   </ul>
 </div>
 
-<%= render "layouts/project_list" %>
+</div>
+
+
+
+

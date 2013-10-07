@@ -1,7 +1,7 @@
 $blue: #3079ed;
 $black: #1c1c1c;
-$green: rgb(37, 134, 37);
-$light_green: #E0FFE0;
+$green: #00a11d;
+$light_green: #bcf698;
 $gray: gray;
 $red: red;
 $yellow: rgb(255, 255, 234);
@@ -236,8 +236,8 @@ ul.dropdown.expanded li:hover {
 
 .inset.green {
 	background-color: $light_green;
-	border: 1px solid lighten($green, 50%);
-	color: lighten($green, 20%);
+	border: 1px solid darken($light_green, 30%);
+	color: $green;
 }
 
 .inset .project_list {
@@ -396,7 +396,7 @@ ul.dropdown.expanded li:hover {
 }
 
 .navigate .green, .navigate ul.crumbs.green > li{
-	color: lighten($green, 30%);
+	color: $green;
 }
 
 .navigate ul.crumbs > li:before {
