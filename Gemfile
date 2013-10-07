@@ -17,13 +17,13 @@ gem 'pg'
 
 gem 'jquery-rails'
 
-gem 'thin'
-gem 'quiet_assets'
 
 gem 'paperclip'
 gem 'aws-sdk'
 
 group :development do
+  gem 'thin'
+  gem 'quiet_assets'
 end
 
 group :development, :test do
