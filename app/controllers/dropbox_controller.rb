@@ -75,7 +75,7 @@ class DropboxController < ApplicationController
   #     Requires access from a /projects/:id URL.
   def directories
     @directories = get_dir_info("/", params[:project_id])
-
+    p @directories
     respond_to do |format|
       format.js
     end
@@ -87,7 +87,7 @@ class DropboxController < ApplicationController
     def make_navigation_breadcrumbs(path)
 
       # Add root folder
-      Breadcrumbs.add title: "Home", link: navigate_url
+      Breadcrumbs.add title: "Your Dropbox", link: navigate_url
 
       # Add links to directories
 
@@ -158,6 +158,8 @@ class DropboxController < ApplicationController
       content = Hash.new
       content[:path] = to_link(dropbox_content["path"])
       content[:name] = File.basename(content[:path])
+      content[:name] = "Your Dropbox" if content[:path].blank?
+
       content[:is_dir] = dropbox_content["is_dir"]
 
       if project_id

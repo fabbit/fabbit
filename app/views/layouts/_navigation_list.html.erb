@@ -3,16 +3,9 @@
     <div class="expand">
       expand all
     </div>
-
-    <ul class="row files list">
-
-      <li class="folder open">
-          <div class="action opener"></div>
-          <div> Your Dropbox </div>
-          <%= render "layouts/directory", directory: @directories %>
-      </li>
-    </ul>
-
+    
+    <%= render "layouts/directory", directory: @directories %>
+    
     <script>
 
       $(".files.list .folder").each(function(i, el) {
@@ -25,11 +18,9 @@
           var folderList = $(event.target).parent();
 
           if (! opened){
-            console.log("OPENING" + $($(folderList).find(".name")[0]).html());
             $(folderList).addClass("open");
             opened = true;
           } else {
-            console.log("CLOSING" + $($(folderList).find(".name")[0]).html());
             $(folderList).removeClass("open");
             opened = false;
           }
