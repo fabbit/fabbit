@@ -1,7 +1,7 @@
 <div class="section projects">
   <div class="row navigate">
     <div class="add">  
-       <div class="subtitle green" id="add_project"> <span> + </span> Add a project   </div>
+       <div class="subtitle green" id="add_project"> <span> + </span> Create new project  </div>
 
          <%= form_for @new_project, url: {action: :create, controller: :projects}, html: {class: "form", id: "project_form", remote: true} do |f| %>
                 <%= f.text_field :name,  :placeholder => "Project name", :value => "Default project", :size => "20" %>
@@ -17,7 +17,7 @@
      </div>  <!-- TODO: Currently the entire css for breadcrumbs is very janky -->
 
     <ul class="subtitle crumbs green">
-      <li> <a href="#">Your projects </a>   </li>
+      <li> <a href="#">Your projects </a> </li>
     </ul>
   </div>
 

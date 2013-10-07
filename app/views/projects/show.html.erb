@@ -1,3 +1,26 @@
-<ul class="row files">
-  <%= render @model_files %>
-</ul>
+
+<div class="section projects">
+
+  <div class="row navigate">
+    <ul class="subtitle crumbs green">
+      <li> <a href="/navigate">Your projects </a> </li>
+      <li> Something else </li>
+    </ul>
+
+   <div class="add">  
+       <div class="subtitle green" id="add_project"> <span> + </span> Add files  </div>
+
+        <script>
+        $("#add_project").click(function(){ $("#addfile_popover").show(); });
+        </script>
+     </div>  <!-- TODO: Currently the entire css for breadcrumbs is very janky -->
+
+  </div>
+
+  <ul class="row files">
+  <%= render @model_files %>	
+  </ul>
+
+  <%= render "layouts/navigation_list_popover" %> 
+
+</div>

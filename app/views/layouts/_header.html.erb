@@ -35,6 +35,7 @@
 			});
 
         $(document).ready(function(){
+
           $(".dropdown li:first-child").toggle(
 
           	//One expand add class and post
@@ -57,6 +58,10 @@
             		$(this).parent().removeClass("expanded");
             	}
             );
+
+            $(".popover .box").on("click",".closer", function(el) {
+              $(this).parent().parent().hide();
+            });
         });
 
 
