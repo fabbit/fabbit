@@ -1,6 +1,5 @@
 <div class="add">
-     <div class="subtitle green" id="add_project"> <span> + </span> Add files  </div>
-
+     <div class="subtitle green" id="add_project"> <span> + </span> Manage files  </div>
       <script>
       $("#add_project").click(function(){
       	$.get("/directories", {"project_id": <%= @project.id %>});
