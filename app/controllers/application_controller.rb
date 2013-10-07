@@ -58,7 +58,7 @@ class ApplicationController < ActionController::Base
   def find_or_initialize(path)
     model_file = ModelFile.where(
       member_id: current_member.id,
-      path: params[:filename],
+      path: path,
     ).first_or_initialize
 
     version = nil
