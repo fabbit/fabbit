@@ -2,7 +2,9 @@
      <div class="subtitle green" id="add_project"> <span> + </span> Add files  </div>
 
       <script>
-      $("#add_project").click(function(){ $("#addfile_popover").show(); });
+      $("#add_project").click(function(){
+      	$.get("/directories", {"project_id": <%= @project.id %>});
+      });
       </script>
    </div>  <!-- TODO: Currently the entire css for breadcrumbs is very janky -->
 

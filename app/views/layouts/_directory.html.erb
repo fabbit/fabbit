@@ -1,22 +1,20 @@
+<% p directory %>
 <ul class="row files list">
-  <%= directories[:content].each do |content| %>
-
-    <% if content[:is_dir] %>
-      <li class="folder" data-path=<%= content[:path] %>>
+    <% if directory[:is_dir] %>
+      <li class="folder" data-path="<%= directory[:path] %>">
         <div class="action opener">  </div>
-        <div class="name"><%= content[:name] %></div>
+        <div class="name"><%= directory[:name] %></div>
 
-        <% content[:content].each do |item| %>
-          <%= render "layouts/directory", directories: item %>
+        <% directory[:content].each do |item| %>
+          <%= render "layouts/directory", directory: item %>
         <% end %>
       </li>
     <% else %>
-      <li class="file" data-path=<%= content[:path] %>>
+      <li class="file" data-path="<%= directory[:path] %>">
         <div class="action">
-          <input type="checkbox" <%= "checked" if content[:in_project] %>>
+          <input type="checkbox" <%= "checked" if directory[:in_project] %>>
         </div>
-        <div class="name"><%= content[:name] %></div>
+        <div class="name"><%= directory[:name] %></div>
       </li>
     <% end %>
-  <% end %>
 </ul>
