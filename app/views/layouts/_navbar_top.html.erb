@@ -1,0 +1,8 @@
+<div class="row navigate">
+  <%= render "layouts/breadcrumbs" %>
+
+  <% if @model_file %>
+    <%= render "versions/versions_dropdown" %>
+    <%= render "model_files/settings_icon" %>
+  <% end %>
+</div>

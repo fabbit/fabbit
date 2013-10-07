@@ -43,17 +43,20 @@ class DropboxController < ApplicationController
   # Parses directory path from URL to display and navigate through the current member's Dropbox.
   #
   # === Variables
-  # - @breadcrumbs: array for breadcrumbs
   # - @contents: return value of Dropbox content call, processed
   # - @projects: the projects that the member is part of
   # - @new_project: variable to hold a new project
+  #
+  # == Notes
+  # - generates breadcrumbs using the Breadcrumbs module
 
   def navigate
     member = current_member
     path = params[:dropbox_path] || "/" # For root folder access, the params will be nil
     meta = dropbox_client.metadata(path)
 
-    @breadcrumbs = navigation_breadcrumbs(meta["path"])
+    make_navigation_breadcrumbs(meta["path"]) # breadcrumbs
+
     @contents = process_contents(meta["contents"])
 
     @projects = current_member.projects
@@ -63,14 +66,10 @@ class DropboxController < ApplicationController
   private # Helper methods for this controller
 
     # Build the breadcrumbs for the page
-    def navigation_breadcrumbs(path)
-      breadcrumbs = []
+    def make_navigation_breadcrumbs(path)
 
       # Add root folder
-      breadcrumbs << {
-        title: "Home",
-        link: navigate_url
-      }
+      Breadcrumbs.add title: "Home", link: navigate_url
 
       # Add links to directories
 
@@ -80,14 +79,9 @@ class DropboxController < ApplicationController
       dirs.each do |dir|
         if not dir.blank?
           full_path = File.join(full_path, dir)
-          breadcrumbs << {
-            title: dir,
-            link: navigate_url(to_link(full_path))
-          }
+          Breadcrumbs.add title: dir, link: navigate_url(to_link(full_path))
         end
       end
-
-      return breadcrumbs
     end
 
     # Helper for property formatting a directory to a link.
