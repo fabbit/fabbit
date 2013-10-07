@@ -17,6 +17,7 @@ gem 'pg'
 
 gem 'jquery-rails'
 
+gem 'unicorn'
 
 gem 'paperclip'
 gem 'aws-sdk'
