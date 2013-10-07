@@ -58,8 +58,22 @@ class Member < ActiveRecord::Base
     (self.accessible_projects + self.participating_projects).uniq
   end
 
+  def files_in(project)
+    self.model_files.map do |model_file|
+      model_file if model_file.projects.include?(project)
+    end.compact
+  end
+
   def admin?(group=Group.first)
     self.group_members.where(group_id: group.id).first.admin
+  end
+
+  def make_admin_of(group)
+    if self.group_members.include?(group)
+      gm = self.group_members.where(group_id: group.id).first
+      gm.admin = true
+      gm.save
+    end
   end
 
   # Get all notifications

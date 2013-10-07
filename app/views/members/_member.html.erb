@@ -1,0 +1,6 @@
+<li class="inset blue">
+  <% if @project %>
+    <div> <%= link_to member.name, project_member_url(@project, member) %> </div>
+    <div> <%= member.files_in(@project).count %> files </div>
+  <% end %>
+</li>

@@ -2,11 +2,20 @@
 
   <%= render "layouts/navbar_top" %>
 
-  <ul class="row files">
-    <%= render @model_files %>	
-  </ul>
+  <% if current_member.admin? %>
+    <ul class="row files">
+      <%= render @project.members %>	
+    </ul>
 
-  <div class="popover" id="addfile_popover"> 
+  <% else %>
+    <ul class="row files">
+      <%= render @model_files %>	
+    </ul>
+
+  <% end %>
+
+
+  <div class="popover" id="addfile_popover">
 	  <div class="box">
 	  <div class="closer"> x </div>
 	  <div class="content">  
@@ -44,7 +53,7 @@ $(document).ready(function(){
     });
     
     //This is what we push
-    $.post('/project_model_files/add_all', {"project_id": 1, "paths":listOfFiles}, function(data){
+    $.post('/project_model_files/add_all', {"project_id": <%= @project.id %>, "paths":listOfFiles}, function(data){
       window.location.reload(true);
     });
 

@@ -19,8 +19,7 @@ Fabbit::Application.routes.draw do
   end
 
   resources :projects, only: [:show] do
-    resources :members, only: [:index]
-    resources :model_files, only: [:index]
+    resources :members, only: [:index, :show]
   end
 
   resources :model_files, only: [:show] do

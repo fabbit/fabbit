@@ -7,11 +7,12 @@
       <%= render "versions/versions_dropdown" %>
     <% end %>
   </ul>
-    <% if @model_file %>
-      <%= render "model_files/settings_icon" %>
-    <% end %>
 
-    <% if @project %>
-      <%= render "projects/add_files" %>
-    <% end %>
+  <% if @model_file %>
+    <%= render "model_files/settings_icon" %>
+  <% end %>
+
+  <% if @show_manage_project %>
+    <%= render "projects/add_files" %>
+  <% end %>
 </div>

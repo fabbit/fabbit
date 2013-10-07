@@ -4,7 +4,9 @@ class ProjectsController < ApplicationController
 
   def show
     @project = Project.find(params[:id])
-    @model_files = @project.model_files
+    @model_files = current_member.admin? ? @project.model_files : current_member.files_in(@project)
+
+    @show_manage_project = true
 
     make_project_breadcrumbs(@project)
   end
@@ -34,7 +36,7 @@ class ProjectsController < ApplicationController
 
     # Generate project breadcrumbs
     def make_project_breadcrumbs(project=nil)
-      Breadcrumbs.add title: "Your Projects", link: navigate_url
+      Breadcrumbs.add title: "Projects", link: navigate_url
 
       if project
         Breadcrumbs.add project
