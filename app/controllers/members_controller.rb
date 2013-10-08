@@ -15,6 +15,9 @@ class MembersController < ApplicationController
   # - @project: the project
   # - @member: the member
   # - @model_files: the files the member has under the project
+
+  before_filter :clear_breadcrumbs, only: [:show]
+
   def show
 
     if params[:project_id]

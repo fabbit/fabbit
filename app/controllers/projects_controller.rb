@@ -5,6 +5,7 @@
 class ProjectsController < ApplicationController
 
   before_filter :admin_member, only: :create
+  before_filter :clear_breadcrumbs, only: [:show, :index]
 
   # Display information about the project, including its members and model_files
   #
