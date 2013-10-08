@@ -1,7 +1,7 @@
 <div class="section projects">
   <div class="row navigate">
-    <div class="add">
       <% if current_member.admin? %>
+        <div class="add">
          <div class="subtitle green" id="add_project"> <span> + </span> Create new project  </div>
 
            <%= form_for @new_project, url: {action: :create, controller: :projects}, html: {class: "form", id: "project_form", remote: true} do |f| %>
@@ -19,12 +19,19 @@
       <% end %>
 
     <ul class="subtitle crumbs green">
-      <li> <a href="#">Your projects </a> </li>
+      <li> <a href="#">Projects </a> </li>
     </ul>
   </div>
 
   <ul class="row files">
-    <%= render @projects, view: :nav_view %>
+    <% if @projects.empty? %>
+      <li class="inset white">
+        <div> No projects available </div>
+        <div>  </div>
+      </li>
+    <% else %>
+      <%= render @projects, view: :nav_view %>
+    <% end %>
   </ul>
 
 </div>

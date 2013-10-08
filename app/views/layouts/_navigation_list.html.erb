@@ -8,6 +8,10 @@
     
     <script>
 
+      $(document).ready(function(){
+        $($('.nav_list > .files.list > .folder')[0]).addClass('open')
+      });
+
       $(".files.list .folder").each(function(i, el) {
 
         $(el).unbind("click");

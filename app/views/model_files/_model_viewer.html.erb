@@ -60,7 +60,11 @@
         //VIEWER ELEMENT FOR EVERYTHING (initialized with the ui object)
         var viewer = new modelViewer("#container", <%= @version.id %>, <%= @member.id %>, annotationUI);
         viewer.initialize();
+
         viewer.addModel("<%= escape_javascript(contents_version_url(@version)) %>");
+        $("#model_controller").append('<li> <span> Hide </span> Model 1 </li>');
+        viewer.addModel("<%= escape_javascript(contents_version_url(@version)) %>", [-5,5,5]);
+        $("#model_controller").append('<li> <span> Hide </span> Model 2 </li>');
 
         for (var key in annotations){ 
           viewer.registerAnnotation(key, annotations[key]);
@@ -70,6 +74,18 @@
             function(){ $("#annotation_controller").html("View annotations"); viewer.toggleAnnotations(); },
             function(){ $("#annotation_controller").html("Hide annotations"); viewer.toggleAnnotations(); }
         );
+
+        $("#model_controller li").toggle(
+          function() { 
+            var idx = $(this).index();
+            $(this).find('span').html("Show");
+            viewer.toggleModel(idx);
+          }, 
+          function() {
+            var idx = $(this).index();
+            $(this).find('span').html("Hide");
+            viewer.toggleModel(idx);
+          });
 
 
         Window.objectViewer = viewer;
@@ -83,6 +99,8 @@
   <div id="container">
       <div class="status"> <span id="loader_status"> </span> </div>
       <div id="annotation_controller" class="status" > Hide annotations </div>
+      <ul id="model_controller" class="status"> 
+      </ul>
   </div>
 
   <div id="annotations">

@@ -84,7 +84,6 @@ class DropboxController < ApplicationController
 
   private # Helper methods for this controller
 
-
     # Helper for property formatting a directory to a link.
     def to_link(content)
       content[0] == File::SEPARATOR ? content[1..-1] : content

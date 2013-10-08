@@ -3,7 +3,7 @@ $black: #1c1c1c;
 $green: #00a11d;
 $light_green: #bcf698;
 $gray: gray;
-$red: red;
+$red: rgb(250, 78, 78);
 $yellow: rgb(255, 255, 234);
 
  body {
@@ -103,6 +103,7 @@ $yellow: rgb(255, 255, 234);
 	margin-left: -270px;
 	margin-top: 62px;
 	position: absolute;
+	overflow-y: scroll;
 }
 
 .popover .box .closer {
@@ -113,6 +114,14 @@ $yellow: rgb(255, 255, 234);
 	cursor: pointer;
 }
 
+.popover#input_popover input {
+	padding: 10px;
+	border: 1px solid rgba(140,140,140,0.3);
+	width: 100%;
+	-moz-box-sizing: border-box; -webkit-box-sizing: border-box; box-sizing: border-box;
+
+
+}
 
 
 //Generic dropdown UI
@@ -216,11 +225,18 @@ ul.dropdown.expanded li:hover {
 	font-size: 22px;
 }
 
+
 .inset {
 	display: inline-block;
 	padding: 10px;
 	border-radius: 5px;
 
+}
+
+.inset.white {
+	border: 1px solid rgba(0,0,0,0.1);
+	background:  rgba(0,0,0,0.02);
+	color: rgba(0,0,0,0.1);
 }
 
 .inset.gray {
@@ -306,6 +322,10 @@ ul.dropdown.expanded li:hover {
 
 .header .subtitle {
 	color: $gray;
+}
+
+.header .subtitle.red {
+	color: $red;
 }
 
 ._page .dropdown {
@@ -474,6 +494,10 @@ ul.dropdown.expanded li:hover {
 	opacity: .6;
 }	
 
+.files .inset.white div, .files .inset.white {
+	cursor: default;
+}
+
 .files .inset div:first-child{
 	margin-bottom: 8px;
 }
@@ -481,6 +505,10 @@ ul.dropdown.expanded li:hover {
 
 .files .inset:hover div {
 	opacity: 1;
+}
+
+.files .inset.white:hover div, .files .inset.white:hover div:first-child {
+	opacity: 0.6;
 }
 
 .files .inset:hover div:first-child{
@@ -601,13 +629,25 @@ ul.dropdown.expanded li:hover {
 	margin-top: 10px;
 	margin-left: 10px;
 	color: #FFAF96;
-	opacity: .6;
+	cursor: pointer;
 }
 
+.model #container #model_controller.status {
+	top: 40px;
+}
 .model #container #annotation_controller.status {
 	top: 25px;
+	opacity: .6;
 }
 .model #container #annotation_controller.status:hover {
+	opacity: 1;
+}
+
+.model #container #model_controller.status li {
+	opacity: 0.6;
+}
+
+.model #container #model_controller.status li:hover {
 	opacity: 1;
 }
 

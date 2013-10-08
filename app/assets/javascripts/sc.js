@@ -13,7 +13,8 @@ modelViewer = function(sceneContainer, uniqueID, memberID, annotationUI) {
 
 	//Intersection variables
 	var plane;
-	var model;
+	var models = [];
+	//var model;
 	var annot;
 
 	//Camera tween
@@ -148,12 +149,16 @@ modelViewer = function(sceneContainer, uniqueID, memberID, annotationUI) {
 				return;
 			} 
 
-			intersect_response = model.intersects(ray);
-			if (intersect_response) {
-				//Add a new annotation on the point
-				postAnnotation(intersect_response);
-				return;
-			} 
+			for (var i=0; i< models.length; i++){
+				var model = models[i];
+				intersect_response = model.intersects(ray);
+				if (intersect_response) {
+					//Add a new annotation on the point
+					postAnnotation(intersect_response);
+					return;
+				} 
+			}
+			
 
 			intersect_response = plane.intersects(ray);
 			if (intersect_response) {
@@ -166,19 +171,20 @@ modelViewer = function(sceneContainer, uniqueID, memberID, annotationUI) {
 
 	function postAnnotation(point){
 		var name;
-		name = prompt("Please enter a title for this annotation:");
-		debug("Annotation name is " + name);
-		if (name === null || name === ""){
-			//BTODO: ERROR!?
-		} else {
+		name = getInput(Window.objectViewer.receiveAnnotation, point);
+	}
 
-			console.log("POST ANNOTATION AT " + point);
+	this.receiveAnnotation = function(name, point) {
+		console.log("Annotation name is " + name);
+		if (name === null || name === "" || typeof name === "undefined"){
+			displayError("Cannot create empty annotation");
+		} else {
+			debug("POST ANNOTATION AT " + point);
 			$.post('/versions/' + sceneID + '/annotations', {"camera": v3ToString(camera.position.clone()), "coordinates": v3ToString(point) , "text": name}, function(data){
 				//Do nothing on success
 			});
 		}
 	}
-
 	/* DATA MODELS/CLASSES */
 
 	//PLANE CLASS (subclass model?)
@@ -215,8 +221,10 @@ modelViewer = function(sceneContainer, uniqueID, memberID, annotationUI) {
 		var objectColor = "#C0D8F0";
 		var object;
 
+		var visible = true;
+
 		//model.loadModel()
-		this.load = function() {
+		this.load = function(object_position) {
 			
 			var loader = new THREE.STLLoader();
 			$(loaderStatus_element).html("Loading element");
@@ -233,11 +241,12 @@ modelViewer = function(sceneContainer, uniqueID, memberID, annotationUI) {
 				var scaleFactor = 25/boundedBy;			
 
 				//Move the mesh around
-				mesh.position.set(0 ,0,0); //TODO: Calculate position and rotation better
+				mesh.position.set(object_position[0], object_position[1], object_position[2]); //TODO: Calculate position and rotation better
 				mesh.rotation.set( 0, - Math.PI / 2, 0 );
 				mesh.scale.set(scaleFactor, scaleFactor, scaleFactor);
 				
 				object = mesh; //TODO: Do we need this anymore? For plane and stuff
+				console.log("ADDING MESH! to" + object_position);
 				scene.scene.add(mesh);
 
 			});
@@ -259,11 +268,27 @@ modelViewer = function(sceneContainer, uniqueID, memberID, annotationUI) {
 				return false;
 			}
 		}
+
+		this.toggleModelView = function() {
+			if (visible) {
+				scene.scene.remove(object);
+				visible = !visible;	
+			} else {
+				scene.scene.add(object);
+				visible = !visible;
+			}
+			
+		}
 	}
 
-	this.addModel = function(fileName){
-		model = new Model(fileName);
-		model.load();
+	this.addModel = function(fileName, position){
+
+		position = typeof position !== 'undefined' ? position : [0,0,0]
+
+		var model = new Model(fileName);
+		model.load(position);
+		models.push(model);
+
 	}
 
 	//ANNOTATIONS
@@ -353,6 +378,12 @@ modelViewer = function(sceneContainer, uniqueID, memberID, annotationUI) {
 
 	this.toggleAnnotations = function() {
 		annot.toggleAnnotationView();
+		animate();
+	}
+
+	this.toggleModel = function(i) {
+		var model = models[i];
+		model.toggleModelView();
 		animate();
 	}
 
