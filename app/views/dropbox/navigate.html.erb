@@ -4,19 +4,28 @@
   <%= render "layouts/navbar_top" %>
 
   <ul class="row files">
-    <% @contents.each do |content| %>
-      <%= render "dropbox/content", content: content %>
+    <% if @contents.empty? %>
+      <li class="inset white" >
+        <div> <a href="/"> No files created </a></div>
+        <div> Add files through Dropbox </div>
+      </li>
+    <% else %>
+      <% @contents.each do |content| %>
+        <%= render "dropbox/content", content: content %>
 
-      <script>
-        //This section makes the whole thing clickable - but we remove it for now because it fucks with the opener
-         $(".files .inset").click(function(){
-           var h = this.children[0].children[0];
-           console.log(h);
-           window.location = h;
-        });
-      </script>
+        <script>
+          //This section makes the whole thing clickable - but we remove it for now because it fucks with the opener
+           $(".files .inset").click(function(){
+             var h = this.children[0].children[0];
+             if ( h !== undefined) {
+              window.location = h; 
+             }
+             
+          });
+        </script>
 
-    <% end %>
+      <% end %>
+    <% end %> 
   </ul>
 </div>
 

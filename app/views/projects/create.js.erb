@@ -1,2 +1,7 @@
 $(".projects .files").append("<%= j render @project, view: :nav_view %>"); //Append new project to the row of projects
+$(".projects .files li").each(function(i, el){
+	if ($(el).hasClass("white")) {
+		el.remove();
+	}
+})
 $("#add_project").click(); //Click on the add project to close it

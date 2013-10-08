@@ -24,7 +24,14 @@
   </div>
 
   <ul class="row files">
-    <%= render @projects, view: :nav_view %>
+    <% if @projects.empty? %>
+      <li class="inset white">
+        <div> No projects available </div>
+        <div>  </div>
+      </li>
+    <% else %>
+      <%= render @projects, view: :nav_view %>
+    <% end %>
   </ul>
 
 </div>

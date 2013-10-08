@@ -223,6 +223,12 @@ ul.dropdown.expanded li:hover {
 
 }
 
+.inset.white {
+	border: 1px solid rgba(0,0,0,0.1);
+	background:  rgba(0,0,0,0.02);
+	color: rgba(0,0,0,0.1);
+}
+
 .inset.gray {
 	background-color: lighten($gray, 40%);
 	border: 1px solid lighten($gray, 20%);	
@@ -474,6 +480,10 @@ ul.dropdown.expanded li:hover {
 	opacity: .6;
 }	
 
+.files .inset.white div, .files .inset.white {
+	cursor: default;
+}
+
 .files .inset div:first-child{
 	margin-bottom: 8px;
 }
@@ -481,6 +491,10 @@ ul.dropdown.expanded li:hover {
 
 .files .inset:hover div {
 	opacity: 1;
+}
+
+.files .inset.white:hover div, .files .inset.white:hover div:first-child {
+	opacity: 0.6;
 }
 
 .files .inset:hover div:first-child{
