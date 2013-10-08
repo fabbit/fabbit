@@ -10,8 +10,59 @@
   			<img src="http://i.forbesimg.com/assets/img/loading_spinners/43px_on_transparent.gif"> Fabbit is busy! 
   		</div>
   	</div>
+    <div class="popover" id="input_popover">
+      <div class="box">
+        <div class="closer"> x </div>
+        <div class="content">
+          <div class="row space"> Add a new annotation </div>
+          <div class="row space"> <input type="text" placeholder="Enter annotation name" id="annot_input" /> </div>
+          <div class="row"> <div class="submit inset green" id="annot_submit" > Submit </div> </div>
+        </div>
+      </div>
+    </div>
 
   		<script>
+
+      //Input getting functions!
+
+      $(".popover .box").on("click",".closer", function(el) {
+        $(this).parent().parent().hide();
+      });
+
+      function getInput(callback,point) {
+        $("#input_popover").show();
+        $("#annot_input").focus();
+
+        $("#input_popover .box .closer").unbind("click");
+        $("#input_popover .box .closer").click(function(){
+          $("#annot_input").val("");
+          callback("", null);
+        });
+
+
+        function returnInput(){
+          var value = $($("#annot_input")[0]).val();
+          $("#input_popover").hide();
+          $("#annot_input").val("");
+          callback(value,point);
+        }
+        
+        $("#input_popover #annot_input").unbind("keypress");
+        $("#input_popover #annot_input").keypress(function(e){
+          if (e.which == 13) {
+            returnInput();
+          }
+        })
+
+        $("#input_popover #annot_submit").unbind("click");
+        $("#input_popover #annot_submit").click(function(){
+          returnInput();
+        });
+
+
+      }
+    
+
   		//Error handling UI function
   		function displayError(message){
   				$("#errorMessage").html("Oops: " + message);
@@ -34,36 +85,33 @@
 			    }
 			});
 
-        $(document).ready(function(){
+      //Dropdown functions!
+      $(document).ready(function(){
 
-          $(".dropdown li:first-child").toggle(
+        $(".dropdown li:first-child").toggle(
 
-          	//One expand add class and post
-            function(){ 
-            	$(this).parent().addClass("expanded");
-              $(this).removeClass("red");
-              console.log(this);
-    	    	 	//Do a post
-              if ($(this).parent().parent().hasClass('notifications')) {
-           	    $.ajax({
-  	           		type: "PUT",
-  	           		url: "<%= j notification_url(current_member.notification) %>",
-  	           		data: {"count": $(".notifications .unread").size()},
-  	           		error: AJAXerrorHandler
-  	           	});  
-              }
-            }, 
-            //On collapse collapse, unless its permenant
-            function(){ 
-            	if (!$(this).parent().hasClass('perm'))
-            		$(this).parent().removeClass("expanded");
-            	}
-            );
-
-            $(".popover .box").on("click",".closer", function(el) {
-              $(this).parent().parent().hide();
-            });
-        });
+        	//One expand add class and post
+          function(){ 
+          	$(this).parent().addClass("expanded");
+            $(this).removeClass("red");
+            console.log(this);
+  	    	 	//Do a post
+            if ($(this).parent().parent().hasClass('notifications')) {
+         	    $.ajax({
+	           		type: "PUT",
+	           		url: "<%= j notification_url(current_member.notification) %>",
+	           		data: {"count": $(".notifications .unread").size()},
+	           		error: AJAXerrorHandler
+	           	});  
+            }
+          }, 
+          //On collapse collapse, unless its permenant
+          function(){ 
+          	if (!$(this).parent().hasClass('perm'))
+          		$(this).parent().removeClass("expanded");
+          	}
+          );
+      });
 
 
   		</script>

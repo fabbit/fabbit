@@ -103,6 +103,7 @@ $yellow: rgb(255, 255, 234);
 	margin-left: -270px;
 	margin-top: 62px;
 	position: absolute;
+	overflow-y: scroll;
 }
 
 .popover .box .closer {
@@ -113,6 +114,14 @@ $yellow: rgb(255, 255, 234);
 	cursor: pointer;
 }
 
+.popover#input_popover input {
+	padding: 10px;
+	border: 1px solid rgba(140,140,140,0.3);
+	width: 100%;
+	-moz-box-sizing: border-box; -webkit-box-sizing: border-box; box-sizing: border-box;
+
+
+}
 
 
 //Generic dropdown UI
@@ -620,13 +629,25 @@ ul.dropdown.expanded li:hover {
 	margin-top: 10px;
 	margin-left: 10px;
 	color: #FFAF96;
-	opacity: .6;
+	cursor: pointer;
 }
 
+.model #container #model_controller.status {
+	top: 40px;
+}
 .model #container #annotation_controller.status {
 	top: 25px;
+	opacity: .6;
 }
 .model #container #annotation_controller.status:hover {
+	opacity: 1;
+}
+
+.model #container #model_controller.status li {
+	opacity: 0.6;
+}
+
+.model #container #model_controller.status li:hover {
 	opacity: 1;
 }
 
