@@ -4,7 +4,7 @@
 
 class GroupProjectsController < ApplicationController
 
-  before_filter: :admin_member
+  before_filter :admin_member
 
   # Add a project to a group
   #
