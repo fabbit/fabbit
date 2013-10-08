@@ -88,7 +88,7 @@ class DropboxController < ApplicationController
     def make_navigation_breadcrumbs(path)
 
       # Add root folder
-      Breadcrumbs.add title: "Your Dropbox", link: navigate_url
+      Breadcrumbs.add title: "Dropbox files", link: navigate_url
 
       # Add links to directories
 
