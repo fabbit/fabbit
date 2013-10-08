@@ -10,7 +10,7 @@
 	    </div>
 	    <div class="row">
 	      <div class="submit inset green" id="project_file_submit">
-	        Submit to project
+	        Update project 
 	      </div>
 	    </div>
 	  </div>
@@ -21,6 +21,9 @@
 
 $(document).ready(function(){
 
+	$("#addfile_popover .closer").click(function(){
+		$("#addfile_popover").hide();
+	});
 
   $("#project_file_submit").click(function(){
     console.log("CALLED");

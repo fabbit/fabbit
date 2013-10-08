@@ -52,7 +52,6 @@ THREE.STLLoader.prototype = {
 
         var geometry;
         geometry = scope.parse( event.target.response);
-
         scope.dispatchEvent( { type: 'load', content: geometry } );
 
       }, false );
@@ -63,9 +62,9 @@ THREE.STLLoader.prototype = {
 
       }, false );
 
-      request.addEventListener( 'error', function () {
-
+        request.addEventListener( 'error', function () {
         scope.dispatchEvent( { type: 'error', message: 'Couldn\'t load URL [' + url + ']' } );
+
       }, false );
 
       
@@ -78,9 +77,6 @@ THREE.STLLoader.prototype = {
 
   bin2str: function (buf) {
 
-    if (typeof(buf) === 'string') {
-      return buf;
-    }
     var array_buffer = new Uint8Array(buf);
     var str = '';
     for(var i = 0; i < buf.byteLength; i++) {
@@ -93,23 +89,46 @@ THREE.STLLoader.prototype = {
   isASCII: function(buf){
     
     if (typeof(buf) === 'string'){
+      
+      var ret = false; 
       var str = buf.substring(0,5);
+
+      if (str.indexOf("solid") >= 0) {
+        if (buf.indexOf("vertex") >= 0){
+          console.log("FOUND VERTEX RETURNING TRUE");
+          ret = [true, false]
+        } else {
+          ret = [false, false]
+        }
+      } else {
+        ret = [false, false]
+      }
+
     } else {
       var dv = new DataView(buf);
       var str = '';
       for(var i = 0; i < 10; i++) {
         str += String.fromCharCode(dv.getUint8(i, true)); // assume little-endian
       }
+      ret = [str.indexOf("solid") >= 0, true];
     }
-    var ret = str.indexOf("solid") >= 0;
+    
+    console.log("ISASCII Returning" + ret);
     return ret;
   },
 
   parse: function (buf) {
 
-    if(this.isASCII(buf))
+    var guesser = this.isASCII(buf);
+
+    if(guesser[0])
     {
-      var str = this.bin2str(buf);
+      if (guesser[1]) {
+         var str = this.bin2str(buf);
+       } else {
+          str = buf;
+      }
+     
       return this.parseASCII(str);
     }
     else
