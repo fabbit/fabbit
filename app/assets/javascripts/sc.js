@@ -175,8 +175,8 @@ modelViewer = function(sceneContainer, uniqueID, memberID, annotationUI) {
 	}
 
 	this.receiveAnnotation = function(name, point) {
-		console.log("Annotation name is " + name);
-		if (name === null || name === "" || typeof name === "undefined"){
+		
+		if (name === null || name === "" || typeof name === "undefined" || typeof point == undefined || point === null){
 			displayError("Cannot create empty annotation");
 		} else {
 			debug("POST ANNOTATION AT " + point);
