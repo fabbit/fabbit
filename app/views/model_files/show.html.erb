@@ -8,12 +8,12 @@
 
 <div class="section">
   <div class="row subtitle divider">
-    Cached versions
+    Revisions
   </div>
   <div class="row settings versions">
-    <ul> 
-      <% @history.each do |rev| %>
-        <%= render "layouts/version", :revision => rev%> <!-- TODO: we should probably change where this is stored -->
+    <ul>
+      <% @revisions.each do |revision| %>
+        <%= render "model_files/revision", :revision => revision %>
       <% end %>
     </ul>
 </div>
@@ -60,7 +60,7 @@ $(document).ready(function(){
     } else {
        $(this).removeClass('unmark');
     }
-    
+
   });
 
   //Add input on unmarked click
@@ -87,7 +87,7 @@ $(document).ready(function(){
     console.log(elJson);
     $.ajax({
       type: "POST",
-      url: '/model_files/' + "<%= @model.id  %>" + '/versions',
+      url: '/model_files/' + "<%= @model_file.id  %>" + '/versions',
       data: {
         "revision_number": elJson.id,
         "details": elJson.details,

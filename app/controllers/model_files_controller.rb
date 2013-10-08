@@ -4,25 +4,18 @@
 
 class ModelFilesController < ApplicationController
 
+  before_filter :owner_of_model_file
+
   # Displays information about a ModelFile
   #
-  # === Variables (TODO)
+  # === Variables
+  # - @model_file: the model file
+  # - @revisions: the formatted set of revisions (including versions)
+  # - @projects: the projects that the user can add the model_file to
   def show
     @model_file = ModelFile.find(params[:id])
-    @model = @model_file
-    @versions = @model.versions
-    @dropbox_revisions = dropbox_client.revisions(@model.path)
-    @member = current_member
-    @breadcrumbs = to_breadcrumbs(@model)
-    @versions = @model.versions
-    @projects = Project.all
-    @history = get_history_for(@model_file)
-    @full_version_view = false
-
-    respond_to do |format|
-      format.html
-      format.json { render json: @versions }
-    end
+    @projects = current_member.projects
+    @revisions = get_revisions_for(@model_file)
   end
 
   # Loads the requested model file
@@ -31,15 +24,19 @@ class ModelFilesController < ApplicationController
   def init_model_file
     model_file = find_or_initialize(params[:filename])
 
-    version = model_file.latest_version
-    redirect_to version_path(version)
-
+    redirect_to model_file.latest_version
   end
 
   private
 
     # Retrieves all Versions and Dropbox revisions for a ModelFile, returning it in a unified format.
-    def get_history_for(model_file)
+    #
+    # The format is a hash with the following values:
+    # - id: the id of the version, or the revision number if the revision is not a version
+    # - modified: the last modified time of the revision
+    # - version: the version object for the revision. nil if not a version
+    # - details: the details of the version. blank if not a version
+    def get_revisions_for(model_file)
       versions = model_file.versions
       dropbox_revisions = dropbox_client.revisions(model_file.path)
 
@@ -52,6 +49,11 @@ class ModelFilesController < ApplicationController
         }
       end
 
+    end
+
+    # Filter to check for ownership
+    def owner_of_model_file
+      redirect_to root_path unless current_member.owns?(ModelFile.find(params[:id]))
     end
 
   # end private

@@ -6,20 +6,16 @@ class VersionsController < ApplicationController
 
   before_filter :owner_member, only: [:index, :create, :destroy]
 
-  # Loads and renders using the Version retrieve_from_dropbox method
+  # Loads and renders the Version by loading its content.
+  #
+  # == Variables
+  # - @version: the version
+  # - @member: the version's owner
   def show
     @version = Version.find(params[:id])
-    @model_file = @version.model_file
-    @model_file.content = @version.content
-    @member = current_member
+    @member = @version.member
 
     Breadcrumbs.add @version
-
-    @full_version_view = true;
-    respond_to do |format|
-      format.html
-      format.js { render json: [@content, @version] }
-    end
   end
 
   # Creates a new Version of a file based on a Dropbox revision.
@@ -37,16 +33,10 @@ class VersionsController < ApplicationController
     if @version.save
       @version.content = dropbox_client.get_file(@version.path)
       @version.save
-
-      @rev = {
-        id: @version.id,
-        modified: @version.revision_date,
-        version: @version
-      }
-
     else
       @error = true
     end
+
     respond_to do |format|
       format.js do
         if @error
@@ -81,19 +71,21 @@ class VersionsController < ApplicationController
   # Returns the contents of the Version file
   def contents
     @version = Version.find(params[:id])
-    @file = @version.content
     respond_to do |format|
-      format.js { render text: @file }
+      format.js { render text: @version.content }
     end
   end
 
   private
 
-    # Filter for actions requiring ownership
+    # Filter for actions requiring ownership.
+    #
+    # NOTE: this is a more elaborate duplicate of the one in ModelFilesControllers. The two should
+    # be merged and placed in ApplicationController.
     def owner_member
-      @version = Version.find(params[:id]) if params[:id]
-      @model_file = ModelFile.find(params[:model_file_id]) if params[:model_file_id]
-      if (@version and @version.member != current_member) or (@model_file and @model_file.member != current_member)
+      version = Version.find(params[:id]) if params[:id]
+      model_file = ModelFile.find(params[:model_file_id]) if params[:model_file_id]
+      if (version and version.member != current_member) or (model_file and model_file.member != current_member)
         redirect_to new_dropbox_path
       end
     end

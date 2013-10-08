@@ -1,5 +1,4 @@
 <div class="row model">
-  <p id="stlstring"><%= @model_file.content %></p>
   <script>
 
     //We define this variable to be used by the annotation partial file!
@@ -66,7 +65,7 @@
         for (var key in annotations){ 
           viewer.registerAnnotation(key, annotations[key]);
         }
-        
+
         $("#annotation_controller").toggle(
             function(){ $("#annotation_controller").html("View annotations"); viewer.toggleAnnotations(); },
             function(){ $("#annotation_controller").html("Hide annotations"); viewer.toggleAnnotations(); }
@@ -79,7 +78,7 @@
         annotationUI.addBindings(Window.objectViewer);
         Window.annotationUI = annotationUI;
     });
-  
+
   </script>
   <div id="container">
       <div class="status"> <span id="loader_status"> </span> </div>

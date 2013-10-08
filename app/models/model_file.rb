@@ -52,6 +52,11 @@ class ModelFile < ActiveRecord::Base
     self.versions.order("revision_date DESC").first
   end
 
+  # String for latest submission
+  def submitted_at
+    self.latest_version.created_at.strftime("%a. %-m/%-d, %Y")
+  end
+
   # Find a version using a Dropbox revision number
   def version(revision_number)
     self.versions.find_by_revision_number(revision_number)

@@ -34,7 +34,7 @@
 class Annotation < ActiveRecord::Base
   attr_accessible :camera, :coordinates, :text
 
-  validates :version_id, :member_id, :camera, :coordinates, presence: true
+  validates :version_id, :member_id, presence: true
 
   belongs_to :version
   belongs_to :member

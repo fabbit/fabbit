@@ -43,16 +43,21 @@ class Project < ActiveRecord::Base
 
   after_create :add_to_default_group
 
+  # Get all members that have files in this project
   def members
     self.model_files.map { |model_file| model_file.member }.compact.uniq
   end
 
+  # Retrieve the project_model_file for the model_file in this project
   def project_model_file(model_file)
     self.project_model_files.where(model_file_id: model_file.id).first
   end
 
   private
 
+    # Add project to default group
+    # NOTE: in the future, projects should be added to the group from the group page that it was
+    # created at.
     def add_to_default_group
       group = Group.where(name: "Default").first_or_create!
       group.projects << self

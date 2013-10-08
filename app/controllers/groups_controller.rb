@@ -6,7 +6,9 @@ class GroupsController < ApplicationController
   #
   # == Variables
   #
-  # - @
+  # - @group: the group
+  # - @projects: projects that belong to the group
+  # - @new_project: for creating a new project
   def show
     @group = Group.find(params[:id])
     @projects = @group.projects

@@ -5,6 +5,7 @@
 #  id         :integer          not null, primary key
 #  group_id   :integer
 #  member_id  :integer
+#  admin      :boolean
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
 #

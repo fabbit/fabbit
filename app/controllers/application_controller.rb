@@ -1,6 +1,10 @@
-# Load controller helpers
 require 'utilities/dropbox_sdk_wrapper'
 require 'utilities/breadcrumbs'
+
+# == Description
+#
+# The main application controller. Contains mostly helper methods and modules, as well as
+# application-wide filters.
 
 class ApplicationController < ActionController::Base
   protect_from_forgery
@@ -11,7 +15,7 @@ class ApplicationController < ActionController::Base
 
   helper Breadcrumbs
 
-  helper_method :current_member, :sign_out
+  helper_method :debug_list, :current_member, :sign_out, :timestamp
 
   before_filter :live_dropbox_session, :load_notifications, :clear_breadcrumbs
 
@@ -33,23 +37,58 @@ class ApplicationController < ActionController::Base
     cookies[:access_token] = nil
   end
 
+  # List of things to inspect when debugging
+  def debug_list
+    @debug ||= Array.new
+  end
+
+  # Formatted time stamp with options
+  #
+  # Options:
+  # - field: the name of the time field. default is created_at.
+  # - length: can be either long or short. default is long.
+  # - only: time or date. default is neither.
+  def timestamp(model, options={})
+    datetime = options[:field] ? model.send(options[:field]) : model.created_at
+
+    time = datetime.strftime("%l:%M %p")
+    date = datetime.strftime("%a. %-m/%-d, %Y")
+
+    if options[:length] == :short
+      time = datetime.strftime("%H:%M")
+      date = datetime.strftime("%-m-%-d-%y")
+    end
+
+    if options[:only] == :time
+      return time
+    elsif options[:only] == :date
+      return date
+    else
+      return "#{date} #{time}"
+    end
+  end
+
   # == Filters
 
   # Filter for checking that the Dropbox session is still live for every request
-  # NOTE: how do I check for an expired session?
   def live_dropbox_session
     redirect_to new_dropbox_path if current_member.nil?
   end
 
   # Filter for loading notifications on each page for the header
   def load_notifications
-    @notifications = current_member.notifications(1, nil, false)
+    @notifications = current_member.notifications
   end
 
   # Clear breadcrumbs on refresh
   # TODO: handle module-side
   def clear_breadcrumbs
     Breadcrumbs.clear
+  end
+
+  # Filter for admin-only actions
+  def admin_member
+    redirect_to root_path if current_member.admin?
   end
 
   # == Controller helpers
@@ -74,6 +113,25 @@ class ApplicationController < ActionController::Base
     end
 
     return model_file
+  end
+
+  # Build the breadcrumbs for a directory from a path
+  def make_directory_breadcrumbs(path)
+
+    # Add root folder
+    Breadcrumbs.add title: "Your Dropbox", link: navigate_url
+
+    # Add links to directories
+
+    dirs = path.split(File::SEPARATOR)
+
+    full_path = ""
+    dirs.each do |dir|
+      if not dir.blank?
+        full_path = File.join(full_path, dir)
+        Breadcrumbs.add title: dir, link: navigate_url(to_link(full_path))
+      end
+    end
   end
 
 

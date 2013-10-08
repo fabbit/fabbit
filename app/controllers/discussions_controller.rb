@@ -22,7 +22,8 @@ class DiscussionsController < ApplicationController
   # Create a new Discussion for the current Member.
   #
   # === Variables
-  # - @discussion = the newly created discussion
+  # - @discussion: the newly created discussion
+  # - @error: true if there was an error
   #
   # === Responses
   # - JS: Return the member's name

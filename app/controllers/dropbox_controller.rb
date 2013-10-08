@@ -55,12 +55,12 @@ class DropboxController < ApplicationController
     path = params[:dropbox_path] || "/" # For root folder access, the params will be nil
     meta = dropbox_client.metadata(path)
 
-    make_navigation_breadcrumbs(meta["path"]) # breadcrumbs
-
     @contents = process_contents(meta["contents"])
 
     @projects = current_member.projects
     @new_project = Project.new
+
+    make_directory_breadcrumbs(meta["path"]) # breadcrumbs
   end
 
   # Recursively get information on all directories.
@@ -76,7 +76,7 @@ class DropboxController < ApplicationController
   def directories
     @project = Project.find(params[:project_id])
     @directories = get_dir_info("/", params[:project_id], @project)
-    p @directories
+
     respond_to do |format|
       format.js
     end
@@ -84,33 +84,10 @@ class DropboxController < ApplicationController
 
   private # Helper methods for this controller
 
-    # Build the breadcrumbs for the page
-    def make_navigation_breadcrumbs(path)
-
-      # Add root folder
-      Breadcrumbs.add title: "Your Dropbox", link: navigate_url
-
-      # Add links to directories
-
-      dirs = path.split(File::SEPARATOR)
-
-      full_path = ""
-      dirs.each do |dir|
-        if not dir.blank?
-          full_path = File.join(full_path, dir)
-          Breadcrumbs.add title: dir, link: navigate_url(to_link(full_path))
-        end
-      end
-    end
 
     # Helper for property formatting a directory to a link.
     def to_link(content)
       content[0] == File::SEPARATOR ? content[1..-1] : content
-    end
-
-    # Extracts the filename from a given path
-    def to_filename(path)
-      File.basename(path)
     end
 
     # Process the path given to navigate
@@ -144,7 +121,7 @@ class DropboxController < ApplicationController
         end
 
         {
-          name: to_filename(content["path"]),
+          name: File.basename(content["path"]),
           link: link,
           is_dir: content["is_dir"],
           model_file_id: model_file_id,

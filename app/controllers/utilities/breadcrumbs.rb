@@ -88,6 +88,5 @@ module Breadcrumbs
 
   def self.clear(&block)
     @breadcrumb_helper = BreadcrumbHelper.new
-    p "cleared"
   end
 end

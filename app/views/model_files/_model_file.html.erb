@@ -1,4 +1,8 @@
 <li class="inset gray" id="<%= encrypt_id(model_file.id) %>" >
     <div> <%= link_to model_file.name, model_file.latest_version %> </div>
+    <div> <%= "Submitted at #{timestamp(model_file)}" %> </div>
     <div> <%= "Owned by #{model_file.member.name}" %> </div>
+    <div class="opener">
+      <%= link_to image_tag("settings.png", :alt => "file settings"), model_file %>
+    </div>
 </li>

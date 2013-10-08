@@ -48,10 +48,6 @@ class Version < ActiveRecord::Base
   # Paperclip attachment
   has_attached_file :file
 
-  def retrieve_from_dropbox(dropbox_client)
-    dropbox_client.get_file(self.path, self.revision_number)
-  end
-
   def path
     self.model_file.path
   end
