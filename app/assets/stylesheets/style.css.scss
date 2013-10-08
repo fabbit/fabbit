@@ -3,7 +3,7 @@ $black: #1c1c1c;
 $green: #00a11d;
 $light_green: #bcf698;
 $gray: gray;
-$red: red;
+$red: rgb(250, 78, 78);
 $yellow: rgb(255, 255, 234);
 
  body {
@@ -216,6 +216,7 @@ ul.dropdown.expanded li:hover {
 	font-size: 22px;
 }
 
+
 .inset {
 	display: inline-block;
 	padding: 10px;
@@ -312,6 +313,10 @@ ul.dropdown.expanded li:hover {
 
 .header .subtitle {
 	color: $gray;
+}
+
+.header .subtitle.red {
+	color: $red;
 }
 
 ._page .dropdown {

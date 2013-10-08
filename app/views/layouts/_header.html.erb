@@ -40,7 +40,8 @@
 
           	//One expand add class and post
             function(){ 
-            	$(this).parent().addClass("expanded")
+            	$(this).parent().addClass("expanded");
+              $(this).removeClass("red");
               console.log(this);
     	    	 	//Do a post
               if ($(this).parent().parent().hasClass('notifications')) {

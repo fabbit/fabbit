@@ -1,5 +1,7 @@
 <% if dropdown %>
-  <li class="subtitle" id="notifications"> <%= pluralize current_member.notification.count, "notifs" %> </li>
+  <li class="subtitle <%= 'red' if current_member.notification.count > 0 %>"  id="notifications"  > 
+      <%= pluralize current_member.notification.count, "notifs" %> 
+  </li>
 <% else %>
   <li class="subtitle" id="notifications"> <%= pluralize notifications.count, "notifs" %> </li>
 <% end %>
