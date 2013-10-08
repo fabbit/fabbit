@@ -88,7 +88,7 @@ class ApplicationController < ActionController::Base
 
   # Filter for admin-only actions
   def admin_member
-    redirect_to root_path if current_member.admin?
+    redirect_to root_path if !current_member.admin?
   end
 
   # == Controller helpers

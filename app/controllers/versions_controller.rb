@@ -10,9 +10,11 @@ class VersionsController < ApplicationController
   #
   # == Variables
   # - @version: the version
+  # - @model_file: the model file of the version
   # - @member: the version's owner
   def show
     @version = Version.find(params[:id])
+    @model_file = @version.model_file
     @member = @version.member
 
     Breadcrumbs.add @version

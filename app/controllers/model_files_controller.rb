@@ -4,7 +4,7 @@
 
 class ModelFilesController < ApplicationController
 
-  before_filter :owner_of_model_file
+  before_filter :owner_of_model_file, only: [:show]
 
   # Displays information about a ModelFile
   #
