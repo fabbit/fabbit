@@ -100,9 +100,10 @@ class ApplicationController < ActionController::Base
       path: path,
     ).first_or_initialize
 
+    # Initialize the version if the model file does not have any versions
     version = nil
     meta = dropbox_client.metadata(model_file.path)
-    if (model_file.new_record? or model_file.versions.count == 0) and model_file.save
+    if model_file.save and model_file.versions.count == 0
       version = model_file.versions.create!(
         revision_number: meta["rev"],
         details:         "First version",

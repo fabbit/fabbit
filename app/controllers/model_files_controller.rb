@@ -5,6 +5,7 @@
 class ModelFilesController < ApplicationController
 
   before_filter :owner_of_model_file, only: [:show]
+  skip_before_filter :clear_breadcrumbs, only: [:init_model_file]
 
   # Displays information about a ModelFile
   #

@@ -5,6 +5,7 @@
 class VersionsController < ApplicationController
 
   before_filter :owner_member, only: [:index, :create, :destroy]
+  skip_before_filter :clear_breadcrumbs, only: [:show]
 
   # Loads and renders the Version by loading its content.
   #
