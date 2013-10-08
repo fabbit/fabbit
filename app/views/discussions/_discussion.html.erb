@@ -1,11 +1,11 @@
 <li id="discussion-<%=discussion.id%>">
   <div class='member'>
-    <%= discussion.member.name %>
+    <%= discussion.member.name %> 
+  </div>
+  <div class='time'>
+	on <%= timestamp(discussion, length: :short) %>: 
   </div>
   <div class='text'>
     <%= discussion.text %>
-  </div>
-  <div class='time'>
-    <%= timestamp(discussion, length: :short) %>
   </div>
 </li>

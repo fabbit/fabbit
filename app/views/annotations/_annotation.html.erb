@@ -1,7 +1,7 @@
 <li id='annotation-<%= annotation.id %>'>
-  <span class="member"> <%= annotation.member.name %> </span>
+  <span class="member"><%= annotation.member.name %></span>
+  <span class="time"> on <%= timestamp(annotation, length: :short) %>: </span> 
   <span class="annotation-text"> <%= annotation.text %> </span> 
-  <span class="annotation-time"> <%= timestamp(annotation, length: :short) %> </span> 
 
   <div class="discussions">
   	<ul class='discussions_list'>

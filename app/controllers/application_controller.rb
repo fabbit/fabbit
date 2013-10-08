@@ -52,11 +52,11 @@ class ApplicationController < ActionController::Base
     datetime = options[:field] ? model.send(options[:field]) : model.created_at
 
     time = datetime.strftime("%l:%M %p")
-    date = datetime.strftime("%a. %-m/%-d, %Y")
+    date = datetime.strftime("%a. %-m/%-d")
 
     if options[:length] == :short
       time = datetime.strftime("%H:%M")
-      date = datetime.strftime("%-m-%-d-%y")
+      date = datetime.strftime("%a, %m/%d")
     end
 
     if options[:only] == :time

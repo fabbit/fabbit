@@ -500,16 +500,11 @@ ul.dropdown.expanded li:hover {
 
 .files .inset div:first-child{
 	margin-bottom: 8px;
+	opacity: 0.8;
 }
 
 
-.files .inset:hover div {
-	opacity: 1;
-}
 
-.files .inset.white:hover div, .files .inset.white:hover div:first-child {
-	opacity: 0.6;
-}
 
 .files .inset:hover div:first-child{
 	opacity: 1;
@@ -835,12 +830,17 @@ ul.dropdown.expanded li:hover {
 	color: $gray;
 }
 
-#annotation_list li .member:after {
-	content: ":";
-	padding-left: 0px;
-	margin-left: -3px;
-	padding-right: 5px;
+#annotation_list .discussions_list .member {
+	margin-right: 4px;
 }
+#annotation_list li .time {
+	color: lighten($gray, 20%);
+}
+
+#annotation_list .discussions_list .time {
+	margin-right: 4px;
+}
+
 
 
 
