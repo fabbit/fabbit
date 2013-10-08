@@ -6,6 +6,7 @@ class MembersController < ApplicationController
       @project = Project.find(params[:project_id])
       @member = Member.find(params[:id])
       @model_files = @member.files_in(@project)
+      @show_manage_project = true
 
       Breadcrumbs.add title: "Projects", link: navigate_url
       Breadcrumbs.add title: @project.name, link: @project
