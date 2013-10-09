@@ -112,8 +112,10 @@ ActiveRecord::Schema.define(:version => 20130826113326) do
 
   create_table "projects", :force => true do |t|
     t.string   "name"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
+    t.boolean  "notify",     :default => false
+    t.boolean  "share",      :default => false
+    t.datetime "created_at",                    :null => false
+    t.datetime "updated_at",                    :null => false
   end
 
   create_table "sessions", :force => true do |t|

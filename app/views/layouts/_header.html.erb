@@ -75,11 +75,10 @@
 
 	    </ul>
 	</div>
-	<div class="right member"> 
+	<div class="right member">
 		<ul class="dropdown">
 			<li class="subtitle" id="me"> <%= current_member.name %> </li>
-			<li> Your account </li>
-			<li> Logout </li>
+      <li> <%= link_to "Logout", signout_url, method: "delete" %> </li>
 		</ul>
 	</div>
 </div>

@@ -60,6 +60,11 @@ class Version < ActiveRecord::Base
     self.model_file.member
   end
 
+  # Check if the version is shareable
+  def share?
+    self.projects.map {|p| p.share}.reduce {|r,e| r&&e}
+  end
+
   def content
     Paperclip.io_adapters.for(self.file).read
   end

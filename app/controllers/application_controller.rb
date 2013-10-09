@@ -17,7 +17,7 @@ class ApplicationController < ActionController::Base
 
   helper_method :debug_list, :current_member, :sign_out, :timestamp
 
-  before_filter :live_dropbox_session, :load_notifications
+  before_filter :live_dropbox_session, :load_notifications, :clear_breadcrumbs
 
   # == View helper methods
 

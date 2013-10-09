@@ -5,6 +5,7 @@
 class VersionsController < ApplicationController
 
   before_filter :owner_member, only: [:index, :create, :destroy]
+  before_filter :not_shared_project, only: [:show]
 
   # Loads and renders the Version by loading its content.
   #
@@ -89,6 +90,16 @@ class VersionsController < ApplicationController
       model_file = ModelFile.find(params[:model_file_id]) if params[:model_file_id]
       if (version and version.member != current_member) or (model_file and model_file.member != current_member)
         redirect_to new_dropbox_path
+      end
+    end
+
+    # Only allow admins and owner to view if a project is not shared
+    def not_shared_project
+      if params[:id] and !current_member.admin?
+        version = Version.find(params[:id])
+        if !version.model_file.projects.map { |project| project.share }.reduce{ |r,e| r && e }
+          redirect_to root_path unless current_member.owns?(version.model_file)
+        end
       end
     end
 

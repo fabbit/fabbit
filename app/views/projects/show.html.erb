@@ -2,9 +2,13 @@
   <%= render "layouts/navbar_top" %>
 
   <ul class="row files">
-    <%= render @project.members %>	
+    <% if @project.share or current_member.admin? %>
+      <%= render @project.members %>	
+    <% else %>
+      <%= render current_member.files_in(@project) %>	
+    <% end %>
   </ul>
-  
+
 <%= render "layouts/addfile_popover" %>
 
 </div>

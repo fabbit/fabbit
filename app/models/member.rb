@@ -112,6 +112,23 @@ class Member < ActiveRecord::Base
       proj = self.projects.map do |project|
         project.project_model_files
       end.flatten.compact.uniq
+
+      # Remove annotations and discussions belonging to projects that don't want to be notified
+      unnotify_annots = self.projects.map do |project|
+        project.model_files if !project.notify
+      end.flatten.compact.uniq.map do |model_files|
+        model_files.versions
+      end.flatten.map do |version|
+        version.annotations
+      end.flatten
+
+      unnotify_discs = unnotify_annots.map do |annot|
+        annot.discussions
+      end
+
+      annots -= unnotify_annots
+      discs -= unnotify_discs
+
     end
 
     notifications = []

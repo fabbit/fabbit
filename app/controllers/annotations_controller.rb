@@ -48,6 +48,12 @@ class AnnotationsController < ApplicationController
     else
       current_member.notification.count += 1
       current_member.notification.save
+
+      if version.share?
+        owner = version.member
+        owner.notification.count += 1
+        owner.notification.save
+      end
     end
 
     respond_to do |format|

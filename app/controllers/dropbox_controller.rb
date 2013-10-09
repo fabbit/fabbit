@@ -83,6 +83,12 @@ class DropboxController < ApplicationController
     end
   end
 
+  # Sign out of the application
+  def signout
+    sign_out
+    redirect_to root_path
+  end
+
   private # Helper methods for this controller
 
     # Helper for property formatting a directory to a link.
