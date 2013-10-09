@@ -89,7 +89,7 @@ class Version < ActiveRecord::Base
 
     # Write a file to the tmp folder
     def write_to_temp(content)
-      dir = File.join(temp_dir, rand_file_name)
+      dir = File.join(temp_dir, self.name)
       File.open(dir, 'wb') {|f| f.write(content) }
       return dir
     end
