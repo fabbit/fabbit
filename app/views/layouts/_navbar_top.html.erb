@@ -3,7 +3,7 @@
   <ul class="subtitle crumbs <%= "green" if @project %>">
     <%= render "layouts/breadcrumbs" %>
 
-    <% if @model_file and current_member.owns?(@model_file) # change to only hide see all %>
+    <% if @model_file %>
       <%= render "versions/versions_dropdown" %>
     <% end %>
   </ul>

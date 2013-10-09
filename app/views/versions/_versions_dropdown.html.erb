@@ -1,6 +1,8 @@
 <li class="revision_dropdown">
   <ul class="subtitle revisions dropdown">
     <%= render @model_file.versions %>
-    <li> <%= link_to "See all versions", model_file_url(@model_file) %> </li>
+    <% if current_member.owns?(@model_file) %>
+      <li> <%= link_to "See all versions", model_file_url(@model_file) %> </li>
+    <% end %>
   </ul>
 </li>
