@@ -12,19 +12,19 @@
     <% else %>
       <% @contents.each do |content| %>
         <%= render "dropbox/content", content: content %>
-
-        <script>
-          //This section makes the whole thing clickable - but we remove it for now because it fucks with the opener
-           $(".files .inset").click(function(){
-             var h = this.children[0].children[0];
-             if ( h !== undefined) {
-              window.location = h; 
-             }
-             
-          });
-        </script>
-
       <% end %>
+     
+     <script>
+        //This section makes the whole thing clickable - but we remove it for now because it fucks with the opener
+         $(".files .inset").click(function(){
+           var h = this.children[0].children[0];
+           if ( h !== undefined) {
+            window.location = h; 
+           }
+           
+        });
+      </script>
+
     <% end %> 
   </ul>
 </div>

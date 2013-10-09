@@ -473,23 +473,24 @@ ul.dropdown.expanded li:hover {
 
 
 .files .inset{
+	float: left;
 	position: relative;
 	width: 194px;
 	height: 150px;
-	padding-top: 60px;
-	margin-right: 20px;
-	margin-top: 10px;
+	margin-right: 22px;
 	margin-bottom: 10px;
+	margin-top: 10px;
+	padding-top: 60px;
 	text-align: center;
 	overflow: visible;
 	cursor:pointer;
 	-moz-box-sizing: border-box; -webkit-box-sizing: border-box; box-sizing: border-box;
 
 }
-.files .inset:nth-child(4),.files .inset:nth-child(8),.files .inset:nth-child(12),{
-    margin-right: 0px;
-}
 
+.files .inset:nth-child(4), .files .inset:nth-child(8), .files .inset:nth-child(12){
+	margin-right: 0px;
+}
 .files .inset div{
 	opacity: .6;
 }	
