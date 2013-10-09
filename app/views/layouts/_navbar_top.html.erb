@@ -8,9 +8,16 @@
     <% end %>
   </ul>
 
+   
   <% if @model_file and current_member.owns?(@model_file) %>
     <%= render "model_files/settings_icon" %>
   <% end %>
+
+
+  <% if @model_file and current_member.admin? %>
+    <%= render "model_files/download_icon" %>
+  <% end %>
+
 
   <% if @show_manage_project %>
     <%= render "projects/add_files" %>

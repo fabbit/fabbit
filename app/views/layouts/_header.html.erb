@@ -77,16 +77,18 @@
 
   		</script>
   	<div class="logo title"> <%= link_to Fabbit, navigate_url %> </div>
-  	<div class="right notifications">
-		<ul class="dropdown">
-        	<%= render "notifications/notifications", notifications: @notifications, dropdown: true %>
-        	<li> <%= link_to "See all notifications", notifications_url %> </li>
+    <% if current_member.admin? %>
+    	<div class="right notifications">
+  		<ul class="dropdown">
+          	<%= render "notifications/notifications", notifications: @notifications, dropdown: true %>
+          	<li> <%= link_to "See all notifications", notifications_url %> </li>
 
-	    </ul>
-	</div>
+  	    </ul>
+  	   </div>
+    <% end %>
 	<div class="right member">
 		<ul class="dropdown">
-			<li class="subtitle" id="me"> <%= current_member.name %> </li>
+			<li class="subtitle" id="me"> <script> var s = "<%= current_member.name %>"; document.write(s.split(" ")[0]); </script> </li>
       <li> <%= link_to "Logout", signout_url, method: "delete" %> </li>
 		</ul>
 	</div>
