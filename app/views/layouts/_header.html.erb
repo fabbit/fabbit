@@ -14,6 +14,15 @@
 
   		<script>
 
+      $('body').click(function(event){
+        console.log(event.target);
+        $(".dropdown").each(function(i,el){
+          if (!$(el).hasClass('perm'))
+              $(el).removeClass("expanded");
+            
+        });
+
+      });
 
   		//Error handling UI function
   		function displayError(message){
@@ -77,7 +86,7 @@
 	</div>
 	<div class="right member"> 
 		<ul class="dropdown">
-			<li class="subtitle" id="me"> <%= current_member.name %> </li>
+			<li class="subtitle" id="me"> <script> var s = "<%= current_member.name %>"; document.write(s.split(" ")[0]) </script> </li>
 			<li> Your account </li>
 			<li> Logout </li>
 		</ul>
