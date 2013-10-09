@@ -27,7 +27,7 @@ class ProjectModelFile < ActiveRecord::Base
     project_name = self.project.name
     {
       message: "#{member_name} added file #{file_name} to #{project_name}",
-      link: "/model_files/#{self.model_file.id}",
+      link: "/versions/#{self.model_file.latest_version.id}",
       time: self.created_at,
     }
   end
