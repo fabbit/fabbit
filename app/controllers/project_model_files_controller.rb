@@ -3,7 +3,7 @@
 # Controller for adding model files to projects
 class ProjectModelFilesController < ApplicationController
 
-  skip_before_filter :load_notifications, :clear_breadcrumbs
+  skip_before_filter :load_notifications
 
   # Add a ModelFile to a Project.
   #

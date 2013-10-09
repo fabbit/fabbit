@@ -76,17 +76,17 @@ module Breadcrumbs
 
   end
 
-  @breadcrumb_helper = BreadcrumbHelper.new
+  @@breadcrumb_helper = BreadcrumbHelper.new
 
   def self.add(object)
-    @breadcrumb_helper.add(object)
+    @@breadcrumb_helper.add(object)
   end
 
   def self.each(&block)
-    @breadcrumb_helper.each(&block)
+    @@breadcrumb_helper.each(&block)
   end
 
   def self.clear(&block)
-    @breadcrumb_helper = BreadcrumbHelper.new
+    @@breadcrumb_helper = BreadcrumbHelper.new
   end
 end
