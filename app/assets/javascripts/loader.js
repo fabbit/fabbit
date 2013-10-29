@@ -1,7 +1,9 @@
 /**
+ * The pre-existing STL loader that hasbeen edited for usage in Fabbit.
+ *
  * @author aleeper / http://adamleeper.com/
  * @author mrdoob / http://mrdoob.com/
- *
+ * 
  * Description: A THREE loader for STL ASCII files, as created by Solidworks and other CAD programs.
  *
  * Supports both binary and ASCII encoded files, with automatic detection of type.
@@ -32,49 +34,42 @@ THREE.STLLoader.prototype = {
 
   constructor: THREE.STLLoader,
 
+  //Load function called by loader.log(fileName);
 
-  load: function ( url, isString) {
+  load: function (url) {
 
     var scope = this;
-    var isString = (typeof isString === 'undefined') ? false: isString; //if isString is not passed, assume false!
 
-    if (isString){
+    //We perform a get Request to get the URL from wherever it is stored!
+    var request = new XMLHttpRequest();
 
-      url = url.trim();
-      var g = scope.parse(url);
-      scope.dispatchEvent({type: 'load', content: g});
+    //This event listeneris called once the request is finished loading
+    request.addEventListener( 'load', function ( event ) {
 
-    } else {
-      
-      //if its not a string then load it the regular way
-      var request = new XMLHttpRequest();
-      request.addEventListener( 'load', function ( event ) {
+      //Once we get the contents of the file, we parse it. Then we dispatch a load event to the caller
+      var geometry;
+      geometry = scope.parse( event.target.response);
+      scope.dispatchEvent( { type: 'load', content: geometry } );
 
-        var geometry;
-        geometry = scope.parse( event.target.response);
-        scope.dispatchEvent( { type: 'load', content: geometry } );
+    }, false );
 
-      }, false );
+    request.addEventListener( 'progress', function ( event ) {
+      scope.dispatchEvent( { type: 'progress', loaded: event.loaded, total: event.total } );
+    }, false );
 
-      request.addEventListener( 'progress', function ( event ) {
+    request.addEventListener( 'error', function () {
+      scope.dispatchEvent( { type: 'error', message: 'Couldn\'t load URL [' + url + ']' } );
+    }, false );
 
-        scope.dispatchEvent( { type: 'progress', loaded: event.loaded, total: event.total } );
+    //Send the request with custom paramaters for fabbit (x-user-defined)
+    request.open( 'GET', url, true );
+    request.overrideMimeType('text/plain; charset=x-user-defined');
+    request.send( null );
 
-      }, false );
 
-        request.addEventListener( 'error', function () {
-        scope.dispatchEvent( { type: 'error', message: 'Couldn\'t load URL [' + url + ']' } );
-
-      }, false );
-
-      
-      request.open( 'GET', url, true );
-      request.overrideMimeType('text/plain; charset=x-user-defined');
-      request.send( null );
-
-    }
   },
 
+  //Take a binary file and return it in a ASCII format
   bin2str: function (buf) {
 
     var array_buffer = new Uint8Array(buf);
@@ -86,53 +81,64 @@ THREE.STLLoader.prototype = {
 
   },
 
+  /** 
+   * @buf = file buffer or string
+   * ret [is_ascii_stl, is_string_file]
+   * Given the contents of a file (buf), we see if the file is an ASCII stl file or a BINARY stl file AND whether its in binary form or string form
+   * ASCII stl files start with the word "solid" and then have a plaintext description of their contents including some "vertex"'s'
+   * Binary stl files should not start with "solid", but sometimes they do. They definitely should not have any "vertex" descriptions
+  */
   isASCII: function(buf){
     
+    var is_ascii_stl;
+    var is_buffer_file;
+
+    //If the buffer comes in as a simple string (Get request from server usually returns this);
     if (typeof(buf) === 'string'){
       
-      var ret = false; 
+      is_buffer_file = false;
       var str = buf.substring(0,5);
 
+      //Check for solid string existance and then for vertex descriptions,
       if (str.indexOf("solid") >= 0) {
         if (buf.indexOf("vertex") >= 0){
-          console.log("FOUND VERTEX RETURNING TRUE");
-          ret = [true, false]
+          is_ascii_stl = true; 
         } else {
-          ret = [false, false]
+          is_ascii_stl = false;
         }
       } else {
-        ret = [false, false]
+        is_ascii_stl = false; 
       }
 
-    } else {
+    } else { 
+
+      //Comes in as a DataView so it is not a string
+      is_buffer_file =true;
       var dv = new DataView(buf);
       var str = '';
       for(var i = 0; i < 10; i++) {
         str += String.fromCharCode(dv.getUint8(i, true)); // assume little-endian
       }
-      ret = [str.indexOf("solid") >= 0, true];
+      is_ascii_stl = str.indexOf("solid") >= 0;
     }
-    
-    console.log("ISASCII Returning" + ret);
-    return ret;
+
+    return [is_ascii_stl, is_buffer_file];
   },
 
   parse: function (buf) {
 
-    var guesser = this.isASCII(buf);
-
-    if(guesser[0])
+    var find_type = this.isASCII(buf);
+    if(find_type[0]) //IE: it is a string file
     {
-      if (guesser[1]) {
-         var str = this.bin2str(buf);
+      if (find_type[1]) { 
+        //It is a binary string file so we convert to ascii
+        var str = this.bin2str(buf);
        } else {
+        //It is an ascii string file so ready to be parsed
           str = buf;
       }
-     
       return this.parseASCII(str);
-    }
-    else
-    {
+    } else {
       return this.parseBinaryFile(buf);
     }
 
@@ -174,7 +180,6 @@ THREE.STLLoader.prototype = {
     geometry.computeCentroids();
     geometry.computeBoundingSphere();
     return geometry;
-
   },
 
   parseBinaryFile: function(input) {
