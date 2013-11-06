@@ -1,41 +1,43 @@
-/**
- * The pre-existing STL loader that hasbeen edited for usage in Fabbit.
- *
- * @author aleeper / http://adamleeper.com/
- * @author mrdoob / http://mrdoob.com/
- * 
- * Description: A THREE loader for STL ASCII files, as created by Solidworks and other CAD programs.
- *
- * Supports both binary and ASCII encoded files, with automatic detection of type.
- *
- * Limitations: Binary decoding ignores header. There doesn't seem to be much of a use for it.
- *        There is perhaps some question as to how valid it is to always assume little-endian-ness.
- *        ASCII decoding assumes file is UTF-8. Seems to work for the examples...
- *
- * Usage:
- *  var loader = new THREE.STLLoader();
- *  loader.addEventListener( 'load', function ( event ) {
- *
- *    var geometry = event.content;
- *    scene.add( new THREE.Mesh( geometry ) );
- *
- *  } );
- *  loader.load( './models/stl/slotted_disk.stl' );
- */
 
+/** 
+* The STLLoader class can be given a url and used to parse the file.
+* Originally by http://adamleeper.com/ & http://mrdoob.com/ edited for Fabbit
+* </br> 
+* The file can be an ASCII STL file or a Binary STL file. The file can be a raw string dump or in binary format.
+* 
+* Usage:
+* <pre>
+*  var loader = new THREE.STLLoader();
+*  loader.addEventListener( 'load', function ( event ) {
+*
+*    var geometry = event.content;
+*    scene.add( new THREE.Mesh( geometry ) );
+*
+*  } );
+*  loader.load( './models/stl/slotted_disk.stl' );
+* </pre>
 
+* @class STLLoader
+* @constructor
+*/
 THREE.STLLoader = function () {
 
   THREE.EventDispatcher.call( this );
 
 };
 
+
 THREE.STLLoader.prototype = {
 
   constructor: THREE.STLLoader,
 
-  //Load function called by loader.log(fileName);
-
+  /** 
+  Load function called by loader.log(fileName);
+   
+  @method load
+  @param {String} url URL to get the fileName
+  @return {Null} null No return value, issues a load event when completed
+  **/
   load: function (url) {
 
     var scope = this;
@@ -65,11 +67,39 @@ THREE.STLLoader.prototype = {
     request.open( 'GET', url, true );
     request.overrideMimeType('text/plain; charset=x-user-defined');
     request.send( null );
-
-
   },
 
-  //Take a binary file and return it in a ASCII format
+  /**
+  The parse function does most of the grunt work for the loader, using other functions to figure out the type of file to be parsed
+
+  @method parse
+  @return {String} contents returns the string form of the contents
+  **/
+  parse: function (buf) {
+
+    var find_type = this.isASCII(buf);
+    if(find_type[0]) //IE: it is a string file
+    {
+      if (find_type[1]) { 
+        //It is a binary string file so we convert to ascii
+        var str = this.bin2str(buf);
+       } else {
+        //It is an ascii string file so ready to be parsed
+          str = buf;
+      }
+      return this.parseASCII(str);
+    } else {
+      return this.parseBinaryFile(buf);
+    }
+  },
+
+  /**
+  Returns the string contents for a given file buffer
+
+  @method bin2str
+  @param {Buffer} buf
+  @return {String} str
+  **/
   bin2str: function (buf) {
 
     var array_buffer = new Uint8Array(buf);
@@ -78,16 +108,17 @@ THREE.STLLoader.prototype = {
       str += String.fromCharCode(array_buffer[i]); // implicitly assumes little-endian
     }
     return str
-
   },
 
   /** 
-   * @buf = file buffer or string
-   * ret [is_ascii_stl, is_string_file]
-   * Given the contents of a file (buf), we see if the file is an ASCII stl file or a BINARY stl file AND whether its in binary form or string form
-   * ASCII stl files start with the word "solid" and then have a plaintext description of their contents including some "vertex"'s'
-   * Binary stl files should not start with "solid", but sometimes they do. They definitely should not have any "vertex" descriptions
-  */
+  Given the contents of a file (buf), we see if the file is an ASCII stl file or a BINARY stl file AND whether its in binary form or string form
+  ASCII stl files start with the word "solid" and then have a plaintext description of their contents including some "vertex"'s'
+  Binary stl files should not start with "solid", but sometimes they do. They definitely should not have any "vertex" descriptions
+  
+  @method isASCII
+  @param {String} File Buffer for file or String contents of file
+  @return {Array} Returns [is_ascii_stl, is_string_file] returns whether or not the file is an ASCII stl file or a BIN stl file in string or buffer form
+  **/
   isASCII: function(buf){
     
     var is_ascii_stl;
@@ -125,25 +156,7 @@ THREE.STLLoader.prototype = {
     return [is_ascii_stl, is_buffer_file];
   },
 
-  parse: function (buf) {
-
-    var find_type = this.isASCII(buf);
-    if(find_type[0]) //IE: it is a string file
-    {
-      if (find_type[1]) { 
-        //It is a binary string file so we convert to ascii
-        var str = this.bin2str(buf);
-       } else {
-        //It is an ascii string file so ready to be parsed
-          str = buf;
-      }
-      return this.parseASCII(str);
-    } else {
-      return this.parseBinaryFile(buf);
-    }
-
-  },
-
+  //Helper function to parse ascii stl files in string format, unedited from original
   parseASCII: function ( data ) {
 
     var geometry = new THREE.Geometry();
@@ -182,6 +195,7 @@ THREE.STLLoader.prototype = {
     return geometry;
   },
 
+  //Helper function to parse binary stl files in binary format, unedited from original
   parseBinaryFile: function(input) {
  
     input = new BinaryReader(input);
@@ -242,6 +256,7 @@ THREE.STLLoader.prototype = {
     return geometry;
   },
 
+  //Helper function to parse binary stl files in ascii format, unedited from original
   parseBinary: function (buf) {
 
     // STL binary format specification, as per http://en.wikipedia.org/wiki/STL_(file_format)

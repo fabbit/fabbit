@@ -51,14 +51,14 @@
               var discussionText = $(this).val();
               $.post('/annotations/' + id + '/discussions', {"member_id":0, "text": discussionText}, function(data){
                 //Do nothing on success
-              })
+              }).error(AJAXerrorHandler);
             }
           })
 
         }
 
         //VIEWER ELEMENT FOR EVERYTHING (initialized with the ui object)
-        var viewer = new modelViewer("#container", <%= @version.id %>, <%= @member.id %>, annotationUI);
+        var viewer = new modelViewer("#container", <%= @version.id %>, annotationUI);
         viewer.initialize();
 
         viewer.addModel("<%= escape_javascript(contents_version_url(@version)) %>");

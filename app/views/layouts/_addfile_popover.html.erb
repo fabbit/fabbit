@@ -42,7 +42,7 @@ $(document).ready(function(){
     //This is what we push
     $.post('/project_model_files/add_all', {"project_id": <%= @project.id %>, "paths":listOfFiles}, function(data){
       window.location.reload(true);
-    });
+    }).error(AJAXerrorHandler);
 
   });
 });

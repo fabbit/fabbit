@@ -19,7 +19,7 @@
     console.log("Commiting project" + id);
     $.post('/project_model_files/', {"project_id": id, "model_file_id": model_file_id}, function(data) {
       //Do nothing
-    });
+    }).error(AJAXerrorHandler);
 
   });
 
