@@ -1,25 +1,23 @@
 
 /** 
-* The STLLoader class can be given a url and used to parse the file.
-* Originally by http://adamleeper.com/ & http://mrdoob.com/ edited for Fabbit
-* </br> 
-* The file can be an ASCII STL file or a Binary STL file. The file can be a raw string dump or in binary format.
-* 
-* Usage:
-* <pre>
-*  var loader = new THREE.STLLoader();
-*  loader.addEventListener( 'load', function ( event ) {
-*
-*    var geometry = event.content;
-*    scene.add( new THREE.Mesh( geometry ) );
-*
-*  } );
-*  loader.load( './models/stl/slotted_disk.stl' );
-* </pre>
+The STLLoader class can be given a url and used to parse the file.
+Originally by http://adamleeper.com/ & http://mrdoob.com/ edited for Fabbit
+</br> 
+The file can be an ASCII STL file or a Binary STL file. The file can be a raw string dump or in binary format.
 
-* @class STLLoader
-* @constructor
-*/
+Usage:
+<pre>
+ var loader = new THREE.STLLoader();
+ loader.addEventListener( 'load', function ( event ) {
+   var geometry = event.content;
+   scene.add( new THREE.Mesh( geometry ) );
+ });
+ loader.load( './models/stl/slotted_disk.stl' );
+</pre>
+
+@class STLLoader
+@constructor
+**/
 THREE.STLLoader = function () {
 
   THREE.EventDispatcher.call( this );

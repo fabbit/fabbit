@@ -1,4 +1,9 @@
 /**
+All classes and functions that pertain to the javascript for Model Viewing, loading and annotating
+@module ModelView
+**/
+
+/**
 The modelViewer class is the way to view your model files and add annotations to it.
 </br> It instantiates a scene in a renderer, and adds a plane and lighting to it. It is controlled by a controls class, and multiple models can be added to it.
 Usage:
@@ -7,6 +12,7 @@ Usage:
 	viewer.initalize(); //Once the rest of the code is done
 	viewer.addModel(model_url, (3,4,5));
 </pre>
+@modul ModelView
 @class ModelViewer
 @constructor
 @param {String} sceneContainer The id for the HTML element to which the render will be appended
