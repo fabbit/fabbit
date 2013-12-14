@@ -62,7 +62,7 @@ class Version < ActiveRecord::Base
 
   # Check if the version is shareable
   def share?
-    self.model_files.projects.map {|p| p.share}.reduce {|r,e| r&&e}
+    self.model_file.projects.map {|p| p.share}.reduce {|r,e| r&&e}
   end
 
   def content

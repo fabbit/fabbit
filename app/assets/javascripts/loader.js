@@ -8,7 +8,7 @@ The file can be an ASCII STL file or a Binary STL file. The file can be a raw st
 Usage:
 <pre>
  var loader = new THREE.STLLoader();
- loader.addEventListener( 'load', function ( event ) {
+ loader.addEventListener( 'load', function ( event ) {}
    var geometry = event.content;
    scene.add( new THREE.Mesh( geometry ) );
  });
